@@ -11,7 +11,7 @@ with open('style.css') as f:
 # Konfigurasi Variabel Lokasi
 daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH", "KOTA SINGKAWANG", "KAB. SAMBAS", 
             "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
-            "KAB. KAYONG UTARA", "KAB. KETAPANG", "BPK"]
+            "KAB. KAYONG UTARA", "KAB. KETAPANG"]
 
 pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 
