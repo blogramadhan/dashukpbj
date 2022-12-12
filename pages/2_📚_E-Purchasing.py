@@ -15,36 +15,36 @@ daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH"
 
 pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 
-if pilih == "PROV. KALBAR":
-    kodeRUP = "D197"
-if pilih == "KOTA PONTIANAK":
-    kodeRUP = "D199"
-if pilih == "KAB. KUBU RAYA":
-    kodeRUP = "D202"
-if pilih == "KAB. MEMPAWAH":
-    kodeRUP = "D552"
-if pilih == "KOTA SINGKAWANG":
-    kodeRUP = "D200"
-if pilih == "KAB. SAMBAS":
-    kodeRUP = "D208"
 if pilih == "KAB. BENGKAYANG":
     kodeRUP = "D206"
-if pilih == "KAB. LANDAK":
-    kodeRUP = "D205"
-if pilih == "KAB. SANGGAU":
-    kodeRUP = "D204"
-if pilih == "KAB. SEKADAU":
-    kodeRUP = "D198"
-if pilih == "KAB. SINTANG":
-    kodeRUP = "D211"
-if pilih == "KAB. MELAWI":
-    kodeRUP = "D210"
-if pilih == "KAB. KAPUAS HULU":
+elif pilih == "KAB. KAPUAS HULU":
     kodeRUP = "D209"
-if pilih == "KAB. KAYONG UTARA":
+elif pilih == "KAB. KAYONG UTARA":
     kodeRUP = "D207"
-if pilih == "KAB. KETAPANG":
-    kodeRUP = "D201"    
+elif pilih == "KAB. KETAPANG":
+    kodeRUP = "D201"
+elif pilih == "KAB. KUBU RAYA":
+    kodeRUP = "D202"
+elif pilih == "KAB. LANDAK":
+    kodeRUP = "D205"
+elif pilih == "KAB. MELAWI":
+    kodeRUP = "D210"
+elif pilih == "KAB. MEMPAWAH":
+    kodeRUP = "D552"
+elif pilih == "KAB. SAMBAS":
+    kodeRUP = "D208"
+elif pilih == "KAB. SANGGAU":
+    kodeRUP = "D204"
+elif pilih == "KAB. SEKADAU":
+    kodeRUP = "D198"
+elif pilih == "KAB. SINTANG":
+    kodeRUP = "D211"
+elif pilih == "KOTA PONTIANAK":
+    kodeRUP = "D199"
+elif pilih == "KOTA SINGKAWANG":
+    kodeRUP = "D200"
+elif pilih == "PROV. KALBAR":
+    kodeRUP = "D197"    
 
 # Fungsi-fungsi buatan
 def convert_trxkatalog(dftrx):
@@ -57,11 +57,11 @@ def convert_trxdaring(dftrxdaring):
     return dftrxdaring.to_csv().encode('utf')
 
 # Dataset
-DatasetKatalog = "data/katalogdetail.parquet"
-DatasetProdukKatalog = "data/prodkatalog.parquet"
-DatasetTokoDaring = "data/daring.parquet"
+DatasetKatalog = "data/epurchasing/katalogdetail.parquet"
+DatasetProdukKatalog = "data/epurchasing/prodkatalog.parquet"
+DatasetTokoDaring = "data/epurchasing/daring.parquet"
 
-                                     ## Data E-KATALOG
+## Data E-KATALOG
 #df_kat = pd.read_excel(DatasetKatalog, engine='openpyxl')
 #df_prod = pd.read_excel(DatasetProdukKatalog, engine='openpyxl')
 df_kat = pd.read_parquet(DatasetKatalog)
