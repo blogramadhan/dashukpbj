@@ -10,6 +10,15 @@ st.title("Dashboard UKPBJ")
 st.write("Dashboard ini dibuat untuk menyajikan data ITKP dan transaksi E-Purchasing di Provinsi Kalimantan Barat. \
         Untuk dapat menggunakan dashboard ini, silahkan memilih UKPBJ yang diinginkan di menu sebelah kiri")
 
+hide_st_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    </style>
+"""
+
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 # Buat session pilihan UKPBJ
 #daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH", "KOTA SINGKAWANG", "KAB. SAMBAS", 
 #            "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
