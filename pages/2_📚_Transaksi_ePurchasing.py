@@ -22,7 +22,7 @@ daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH"
             "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
             "KAB. KAYONG UTARA", "KAB. KETAPANG"]
 
-tahuns =    ["2022", "2023"]
+tahuns =    [2022, 2023]
 
 pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 tahun = st.sidebar.selectbox("Pilih Tahun :", tahuns)
@@ -69,9 +69,10 @@ def convert_trxdaring(dftrxdaring):
     return dftrxdaring.to_csv().encode('utf')
 
 # Dataset
-DatasetKatalog = "data/epurchasing/katalogdetail.parquet"
-DatasetProdukKatalog = "data/epurchasing/prodkatalog.parquet"
-DatasetTokoDaring = "data/epurchasing/daring.parquet"
+if tahun == 2022:
+    DatasetKatalog = f"data/epurchasing/katalogdetail{str(tahun)}.parquet"
+    DatasetProdukKatalog = f"data/epurchasing/prodkatalog{str(tahun)}.parquet"
+    DatasetTokoDaring = f"data/epurchasing/daring{str(tahun)}.parquet"
 
 ## Data E-KATALOG
 #df_kat = pd.read_excel(DatasetKatalog, engine='openpyxl')
@@ -184,7 +185,7 @@ with tab1:
 
 ## Tab Toko Daring
 with tab2:
-    
+
     ## Mulai Tampilkan Data Toko Daring
     st.subheader("TRANSAKSI TOKO DARING - " + pilih)
 
