@@ -73,6 +73,9 @@ if tahun == 2022:
     DatasetKatalog = f"data/epurchasing/katalogdetail{str(tahun)}.parquet"
     DatasetProdukKatalog = f"data/epurchasing/prodkatalog{str(tahun)}.parquet"
     DatasetTokoDaring = f"data/epurchasing/daring{str(tahun)}.parquet"
+if tahun == 2023:
+    st.error('BELUM ADA TRANSAKSI DI E-PURCHASING DI TAHUN YANG ANDA PILIH ...')    
+
 
 ## Data E-KATALOG
 #df_kat = pd.read_excel(DatasetKatalog, engine='openpyxl')
