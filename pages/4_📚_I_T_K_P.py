@@ -24,32 +24,48 @@ pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 tahun = st.sidebar.selectbox("Pilih Tahun :", tahuns)
 
 if pilih == "KAB. BENGKAYANG":
-    kodeRUP = "D206"
+    kodeFolder = "BKY"
 elif pilih == "KAB. KAPUAS HULU":
-    kodeRUP = "D209"
+    kodeFolder = "KPH"
 elif pilih == "KAB. KAYONG UTARA":
-    kodeRUP = "D207"
+    kodeFolder = "KKU"
 elif pilih == "KAB. KETAPANG":
-    kodeRUP = "D201"
+    kodeFolder = "KTP"
 elif pilih == "KAB. KUBU RAYA":
-    kodeRUP = "D202"
+    kodeFolder = "KKR"
 elif pilih == "KAB. LANDAK":
-    kodeRUP = "D205"
+    kodeFolder = "LDK"
 elif pilih == "KAB. MELAWI":
-    kodeRUP = "D210"
+    kodeFolder = "MLW"
 elif pilih == "KAB. MEMPAWAH":
-    kodeRUP = "D552"
+    kodeFolder = "MPW"
 elif pilih == "KAB. SAMBAS":
-    kodeRUP = "D208"
+    kodeFolder = "SBS"
 elif pilih == "KAB. SANGGAU":
-    kodeRUP = "D204"
+    kodeFolder = "SGU"
 elif pilih == "KAB. SEKADAU":
-    kodeRUP = "D198"
+    kodeFolder = "SKD"
 elif pilih == "KAB. SINTANG":
-    kodeRUP = "D211"
+    kodeFolder = "STG"
 elif pilih == "KOTA PONTIANAK":
-    kodeRUP = "D199"
+    kodeFolder = "PTK"
 elif pilih == "KOTA SINGKAWANG":
-    kodeRUP = "D200"
+    kodeFolder = "SKW"
 elif pilih == "PROV. KALBAR":
-    kodeRUP = "D197"    
+    kodeFolder = "PROV"
+
+
+# Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
+tab1, tab2 = st.tabs(["ITKP UKPBJ", "ITKP PD"])
+
+# Tab ITKP UKPBJ
+with tab1:
+
+    ## Mulai tampilkan data ITKP UKPBJ
+    st.subheader(f"DATA ITKP - {pilih}")
+
+# Tab ITKP PD
+with tab2:
+
+    ## Mulai tampilkan data ITKP Perangkat Daerah
+    st.subheader("DATA ITKP - PERANGKAT DAERAH")
