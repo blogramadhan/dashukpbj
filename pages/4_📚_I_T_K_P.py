@@ -66,10 +66,10 @@ tab1, tab2 = st.tabs(["ITKP UKPBJ", "ITKP PD"])
 with tab1:
 
     ## Mulai tampilkan data ITKP UKPBJ
-    st.subheader(f"DATA ITKP - {pilih}")
+    st.subheader(f"DATA ITKP TAHUN {tahun} - {pilih}")
 
 # Tab ITKP PD
 with tab2:
 
     ## Mulai tampilkan data ITKP Perangkat Daerah
-    st.subheader("DATA ITKP - PERANGKAT DAERAH")
+    st.subheader(f"DATA ITKP TAHUN {tahun} - PERANGKAT DAERAH")
