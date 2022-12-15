@@ -88,10 +88,10 @@ with tab1:
     ### Data Katalog
 
     ## Mulai tampilkan data ITKP UKPBJ
-    st.subheader(f"DATA ITKP TAHUN {tahun} - {pilih}")
+    #st.subheader(f"DATA ITKP TAHUN {tahun} - {pilih}")
 
     ## Tampilan pemanfaatan SIRUP
-    st.markdown(f"## **PEMANFAATAN SIRUP**")
+    st.markdown(f"## **PEMANFAATAN SIRUP - {tahun}**")
     ### RUP struktur anggaran
     st.markdown(f"### Struktur Anggaran")
     belanja_pengadaan = df_rsap['belanja_pengadaan'].sum()
