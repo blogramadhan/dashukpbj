@@ -188,4 +188,4 @@ with tab3:
     opd = st.selectbox("Pilih Perangkat Daerah :", opds)
 
     ### Tampilan RUP Perangkat Daerah
-    st.markdown(f"## **RUP {opd} - {tahun}")
+    st.markdown(f"## **RUP {opd} - {tahun}**")
