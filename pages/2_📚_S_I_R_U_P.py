@@ -215,7 +215,7 @@ with tab3:
     rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
     jumlah_total_rup_pd = rup_pdppsql.shape[0] + rup_pdswsql.shape[0]
     nilai_total_rup_pd = rup_pdppsql['jumlahpagu'].sum() + rup_pdswsql['jumlahpagu'].sum()
-    nilai_total_rup_pd_print = format_currency(nilai_total_rup, 'Rp. ', locale='id_ID')
+    nilai_total_rup_pd_print = format_currency(nilai_total_rup_pd, 'Rp. ', locale='id_ID')
 
     pir1, pir2, pir3 = st.columns(3)
     pir1.metric("", "Jumlah Total")
