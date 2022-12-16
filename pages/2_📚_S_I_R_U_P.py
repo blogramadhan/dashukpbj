@@ -181,11 +181,11 @@ with tab2:
 with tab3:
     # Tab RUP OPD
 
-    ### Tampilan RUP OPD
-    st.markdown(f"## **RUP OPD - {tahun}**")
-
     sql_rupopd = """
         SELECT DISTINCT(nama_satker) FROM df_rsap;
     """
     opds = con.execute(sql_rupopd).df()
     opd = st.selectbox("Pilih Perangkat Daerah :", opds)
+
+    ### Tampilan RUP Perangkat Daerah
+    st.markdown(f"## **RUP {opd} - {tahun}")
