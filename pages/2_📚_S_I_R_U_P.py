@@ -114,11 +114,14 @@ with tab1:
     belanja_operasional_print = format_currency(belanja_operasional, 'Rp. ', locale='id_ID')
     belanja_modal = df_rsap['belanja_modal'].sum()
     belanja_modal_print = format_currency(belanja_modal, 'Rp. ', locale='id_ID')
+    belanja_total = df_rsap['total_belanja'].sum()
+    belanja_total_print = format_currency(belanja_total, 'Rp. ', locale='id_ID')
 
-    sa1, sa2, sa3 = st.columns(3)
+    sa1, sa2, sa3, sa4 = st.columns(4)
     sa1.metric("Belanja Pengadaan", belanja_pengadaan_print)
     sa2.metric("Belanja Operasional", belanja_operasional_print)
     sa3.metric("Belanja Modal", belanja_modal_print)
+    sa4.metric("Belanja Total", belanja_total_print)
 
     ### Posisi input RUP
     st.markdown("### Posisi Input RUP")
