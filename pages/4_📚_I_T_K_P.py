@@ -94,12 +94,11 @@ with tab1:
 
     ### Data RUP paket swakelola
     df_sw = pd.read_parquet(DatasetSIRUPSW)
-
+    df_sw_umumkan = df_sw[df_sw['statusumumkan'] == 'Terumumkan']
+    df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
 
     ### Data struktur anggaran RUP
     df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
-    df_sw_umumkan = df_sw[df_sw['statusumumkan'] == 'Terumumkan']
-    df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
 
     ### Data Tender
 
@@ -154,6 +153,16 @@ with tab1:
     pirsw1.metric("", "Paket Swakelola")
     pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
     pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_print)
+
+    ### Persentase input RUP
+    ## Persentase RUP
+    persen_capaian_rup = (nilai_total_rup / belanja_pengadaan)
+    persen_capaian_rup_print = "{:.2%}".format(persen_capaian_rup)
+
+    pr1, pr2, pr3 = st.columns(3)
+    pr1.metric("", "Persentase Capaian RUP")
+    pr2.metric("Persentase Capaian RUP", persen_capaian_rup_print)
+    pr3.metric("", "")
 
 # Tab ITKP PD
 with tab2:
