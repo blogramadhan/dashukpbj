@@ -1,9 +1,5 @@
 import streamlit as st
 
-# Setting CSS
-with open('style.css') as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
 # Hilangkan menu Streamlit di sudut kanan atas
 hide_st_style = """
     <style>
