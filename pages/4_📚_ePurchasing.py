@@ -87,7 +87,6 @@ df_kat_loc_nasional = df_kat_loc[df_kat_loc['jenis_katalog'] == "Nasional"]
 df_prod_loc = df_prod[df_prod['kd_klpd'] == kodeRUP]
 
 ## Data Toko Daring
-#df_daring = pd.read_excel(DatasetTokoDaring, engine='openpyxl')
 df_daring = pd.read_parquet(DatasetTokoDaring)
 df_daring_loc = df_daring[df_daring['kd_klpd'] == kodeRUP]
 
