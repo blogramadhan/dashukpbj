@@ -167,7 +167,6 @@ with tab2:
     sql_sa = """
         SELECT nama_satker, SUM(belanja_operasi) AS belanja_operasi, SUM(belanja_modal) AS belanja_modal, SUM(belanja_pengadaan) AS belanja_pengadaan, SUM(total_belanja) AS total_belanja 
         FROM df_rsap 
-        WHERE belanja_pengadaan != 0 AND total_belanja != 0 
         GROUP BY nama_satker
         ORDER BY total_belanja DESC;
     """
