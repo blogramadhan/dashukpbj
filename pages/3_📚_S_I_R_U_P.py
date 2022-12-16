@@ -111,7 +111,7 @@ df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
 ######### 
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
-tab1, tab2, tab3 = st.tabs(["RUP KALBAR", "RUP PERANGKAT DAERAH"])
+tab1, tab2 = st.tabs(["RUP KALBAR", "RUP PERANGKAT DAERAH"])
 
 with tab1:
     # Tab pemanfaatan SIRUP
