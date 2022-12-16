@@ -93,7 +93,7 @@ df_sw_inisiasi = con.execute(f"SELECT * FROM '{DatasetSIRUPSW}' WHERE statusumum
 
 ### Data struktur anggaran RUP
 #df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
-df_rsap = con.execute(f"SELECT * FROM '{DatasetSIRUPDSARSAP}").df()
+df_rsap = con.execute(f"SELECT * FROM '{DatasetSIRUPDSARSAP}'").df()
 
 ######### 
 
