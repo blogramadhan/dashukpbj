@@ -208,3 +208,16 @@ with tab3:
     sa1.metric("Belanja Pengadaan", belanja_pengadaan_pd_print)
     sa2.metric("Belanja Operasional", belanja_operasional_pd_print)
     sa3.metric("Belanja Modal", belanja_modal_pd_print)
+
+    ### Posisi input RUP
+    st.markdown(f"### Posisi Input RUP")
+    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE nama_satker = '{opd}'").df()
+    rup_pdswsql = con.execute(f"SELECT * FROM df_sq_umumkan WHERE nama_satker = '{opd}'").df()
+    jumlah_total_rup_pd = rup_pdppsql.shape[0] + rup_pdswsql.shape[0]
+    nilai_total_rup_pd = rup_pdppsql['jumlahpagu'].sum() + rup_pdswsql['jumlahpagu'].sum()
+    nilai_total_rup_pd_print = format_currency(nilai_total_rup, 'Rp. ', locale='id_ID')
+
+    pir1, pir2, pir3 = st.columns(3)
+    pir1.metric("", "Jumlah Total")
+    pir2.metric("Jumlah Total Paket RUP", jumlah_total_rup_pd)
+    pir3.metric("Nilai Total Paket RUP", nilai_total_rup_pd_print)
