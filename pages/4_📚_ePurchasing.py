@@ -77,8 +77,6 @@ if tahun == 2023:
     st.error('BELUM ADA TRANSAKSI DI E-PURCHASING DI TAHUN YANG ANDA PILIH ...')
 
 ## Data E-KATALOG
-#df_kat = pd.read_excel(DatasetKatalog, engine='openpyxl')
-#df_prod = pd.read_excel(DatasetProdukKatalog, engine='openpyxl')
 df_kat = pd.read_parquet(DatasetKatalog)
 df_prod = pd.read_parquet(DatasetProdukKatalog)
 
