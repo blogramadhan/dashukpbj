@@ -96,8 +96,9 @@ df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
 df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
 
 ### Data Tender
-df_dts = pd.read_parquet(DatasetTENDERDTS)
-df_dtks = pd.read_parquet(DatasetTENDERDTKS)
+if tahun == 2022:
+    df_dts = pd.read_parquet(DatasetTENDERDTS)
+    df_dtks = pd.read_parquet(DatasetTENDERDTKS)
 
 ### Data Non Tender
 df_dnts = pd.read_parquet(DatasetNTENDERDNTS)
@@ -216,31 +217,28 @@ with tab2:
     ets2.metric("Jumlah e-Tendering (Seleksi)", jumlah_etendering_seleksi)
     ets3.metric("Nilai e-Tendering (Seleksi)", nilai_etendering_seleksi_print) 
 
-    if df_dts.empty == False:
-        ### Realisasi e-Tendering
-        st.markdown(f"### Realisasi e-Tendering")
+    ### Realisasi e-Tendering
+    st.markdown(f"### Realisasi e-Tendering")
 
-        jumlah_total_realisasi_etendering = df_dts.shape[0]
-        nilai_total_realisasi_etendering = df_dts['pagu'].sum()
-        nilai_total_realisasi_etendering_print = format_currency(nilai_total_realisasi_etendering, 'Rp. ', locale='id_ID')
+    jumlah_total_realisasi_etendering = df_dts.shape[0]
+    nilai_total_realisasi_etendering = df_dts['pagu'].sum()
+    nilai_total_realisasi_etendering_print = format_currency(nilai_total_realisasi_etendering, 'Rp. ', locale='id_ID')
 
-        ret1, ret2, ret3 = st.columns(3)
-        ret1.metric("", "Realisasi E-Tendering")
-        ret2.metric("Jumlah Total Realisasi E-Tendering", jumlah_total_realisasi_etendering)
-        ret3.metric("Nilai Total Realisasi E-Tendering", nilai_total_realisasi_etendering_print)           
+    ret1, ret2, ret3 = st.columns(3)
+    ret1.metric("", "Realisasi E-Tendering")
+    ret2.metric("Jumlah Total Realisasi E-Tendering", jumlah_total_realisasi_etendering)
+    ret3.metric("Nilai Total Realisasi E-Tendering", nilai_total_realisasi_etendering_print)           
 
-        ### Persentase e-Tendering
-        st.markdown(f"### Persentase e-Tendering")
+    ### Persentase e-Tendering
+    st.markdown(f"### Persentase e-Tendering")
 
-        persen_capaian_etendering = (nilai_total_realisasi_etendering / nilai_total_etendering)
-        persen_capaian_etendering_print = "{:.2%}".format(persen_capaian_etendering)
+    persen_capaian_etendering = (nilai_total_realisasi_etendering / nilai_total_etendering)
+    persen_capaian_etendering_print = "{:.2%}".format(persen_capaian_etendering)
 
-        pe1, pe2, pe3 = st.columns(3)
-        pe1.metric("", "Persentase E-Tendering")
-        pe2.metric("", "")
-        pe3.metric("Persentase E-Tendering", persen_capaian_etendering_print)
-    else:
-        st.error(f"Data realisasi belum ada")    
+    pe1, pe2, pe3 = st.columns(3)
+    pe1.metric("", "Persentase E-Tendering")
+    pe2.metric("", "")
+    pe3.metric("Persentase E-Tendering", persen_capaian_etendering_print)
 
 with tab3:
     # Tab pemanfaatan non e-Tendering
