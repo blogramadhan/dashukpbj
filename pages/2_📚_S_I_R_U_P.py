@@ -211,7 +211,7 @@ with tab3:
 
     ### Posisi input RUP
     st.markdown(f"### Posisi Input RUP")
-    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE nama_satker = '{opd}'").df()
+    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
     rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE nama_satker = '{opd}'").df()
     jumlah_total_rup_pd = rup_pdppsql.shape[0] + rup_pdswsql.shape[0]
     nilai_total_rup_pd = rup_pdppsql['jumlahpagu'].sum() + rup_pdswsql['jumlahpagu'].sum()
