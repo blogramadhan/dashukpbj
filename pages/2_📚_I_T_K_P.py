@@ -58,60 +58,63 @@ elif pilih == "KOTA SINGKAWANG":
 elif pilih == "PROV. KALBAR":
     kodeFolder = "PROV"
 
+# Persiapan Dataset
+## Dataset ITKP UKPBJ
+DatasetSIRUPDP = f"data/ITKP/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPSW = f"data/ITKP/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP = f"data/ITKP/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+DatasetTENDERDTS = f"data/ITKP/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+DatasetTENDERDTKS = f"data/ITKP/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
+DatasetNTENDERDNTS = f"data/ITKP/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
+DatasetKATALOG = f"data/ePurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
+DatasetDARING = f"data/ePurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
+
+### Data RUP paket penyedia
+df_pp = pd.read_parquet(DatasetSIRUPDP)
+df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]
+df_pp_belum_umumkan = df_pp[df_pp['statusumumkan'].isin(['Draf', 'Draf Lengkap', 'Final Draft'])] 
+df_pp_umumkan_umk = df_pp_umumkan[df_pp_umumkan['statususahakecil'] == 'UsahaKecil']
+df_pp_umumkan_pdn = df_pp_umumkan[df_pp_umumkan['statuspdn'] == 'PDN']
+
+df_pp_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender', 'Tender Cepat', 'Seleksi'])]
+df_pp_tender = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender'])]
+df_pp_tender_cepat = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender Cepat'])]
+df_pp_seleksi = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Seleksi'])]
+
+df_pp_non_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung', 'Penunjukan Langsung'])]
+df_pp_pengadaan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung'])]
+df_pp_penunjukan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Penunjukan Langsung'])]
+
+df_pp_epurchasing = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['e-Purchasing'])]
+
+### Data RUP paket swakelola
+df_sw = pd.read_parquet(DatasetSIRUPSW)
+df_sw_umumkan = df_sw[df_sw['statusumumkan'] == 'Terumumkan']
+df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
+
+### Data struktur anggaran RUP
+df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
+
+### Data Tender
+df_dts = pd.read_parquet(DatasetTENDERDTS)
+df_dtks = pd.read_parquet(DatasetTENDERDTKS)
+
+### Data Non Tender
+df_dnts = pd.read_parquet(DatasetNTENDERDNTS)
+
+### Data Katalog
+df_katalog = pd.read_parquet(DatasetKATALOG)
+
+### Data Daring
+df_daring = pd.read_parquet(DatasetDARING)
+
+######### 
+
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
 tab1, tab2, tab3 = st.tabs(["SIRUP", "E-TENDERING", "NON E-TENDERING"])
 
-# Tab ITKP UKPBJ
 with tab1:
-    
-    ## Dataset ITKP UKPBJ
-    DatasetSIRUPDP = f"data/ITKP/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-    DatasetSIRUPSW = f"data/ITKP/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-    DatasetSIRUPDSARSAP = f"data/ITKP/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-    DatasetTENDERDTS = f"data/ITKP/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-    DatasetTENDERDTKS = f"data/ITKP/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
-    DatasetNTENDERDNTS = f"data/ITKP/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
-    DatasetKATALOG = f"data/ePurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
-    DatasetDARING = f"data/ePurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
-
-    ### Data RUP paket penyedia
-    df_pp = pd.read_parquet(DatasetSIRUPDP)
-    df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]
-    df_pp_belum_umumkan = df_pp[df_pp['statusumumkan'].isin(['Draf', 'Draf Lengkap', 'Final Draft'])] 
-    df_pp_umumkan_umk = df_pp_umumkan[df_pp_umumkan['statususahakecil'] == 'UsahaKecil']
-    df_pp_umumkan_pdn = df_pp_umumkan[df_pp_umumkan['statuspdn'] == 'PDN']
-
-    df_pp_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender', 'Tender Cepat', 'Seleksi'])]
-    df_pp_tender = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender'])]
-    df_pp_tender_cepat = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender Cepat'])]
-    df_pp_seleksi = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Seleksi'])]
-
-    df_pp_non_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung', 'Penunjukan Langsung'])]
-    df_pp_pengadaan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung'])]
-    df_pp_penunjukan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Penunjukan Langsung'])]
-
-    df_pp_epurchasing = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['e-Purchasing'])]
-
-    ### Data RUP paket swakelola
-    df_sw = pd.read_parquet(DatasetSIRUPSW)
-    df_sw_umumkan = df_sw[df_sw['statusumumkan'] == 'Terumumkan']
-    df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
-
-    ### Data struktur anggaran RUP
-    df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
-
-    ### Data Tender
-    df_dts = pd.read_parquet(DatasetTENDERDTS)
-    df_dtks = pd.read_parquet(DatasetTENDERDTKS)
-
-    ### Data Non Tender
-    df_dnts = pd.read_parquet(DatasetNTENDERDNTS)
-
-    ### Data Katalog
-    df_katalog = pd.read_parquet(DatasetKATALOG)
-
-    ### Data Daring
-    df_daring = pd.read_parquet(DatasetDARING)
+    # Tab pemanfaatan SIRUP
 
     ### Tampilan pemanfaatan SIRUP
     st.markdown(f"## **PEMANFAATAN SIRUP - {tahun}**")
@@ -168,7 +171,8 @@ with tab1:
     pr2.metric("", "")
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
 
-    #####################################################################
+with tab2:
+    # Tab pemanfaatan e-Tendering
 
     ### Tampilan Pemanfaatan e-Tendering
     st.markdown(f"## **PEMANFAATAN E-TENDERING - {tahun}**")
@@ -235,7 +239,8 @@ with tab1:
     pe2.metric("", "")
     pe3.metric("Persentase E-Tendering", persen_capaian_etendering_print)    
 
-    #####################################################################
+with tab3:
+    # Tab pemanfaatan non e-Tendering
 
     ### Tampilan pemanfaatan non e-Tendering
     st.markdown(f"## **PEMANFAATAN NON e-TENDERING - {tahun}**")
@@ -268,20 +273,4 @@ with tab1:
     netpnl1, netpnl2, netpnl3 = st.columns(3)
     netpnl1.metric("", "Penunjukan Langsung")
     netpnl2.metric("Jumlah Non E-Tendering (Penunjukan Langsung)", jumlah_penunjukan_langsung)
-    netpnl3.metric("Nilai Non E-Tendering (Penunjukan Langsung)", nilai_penunjukan_langsung_print)       
-
-    ### Realisasi non e-Tendering
-
-
-# Tab ITKP PD
-with tab2:
-
-    ## Dataset ITKP PD
-
-    ## Mulai tampilkan data ITKP Perangkat Daerah
-    st.subheader(f"DATA ITKP TAHUN {tahun} - PERANGKAT DAERAH")
-
-# Tab Non E-Tendering
-with tab3:
-
-    st.subheader(f"Data non e-Tendering")
+    netpnl3.metric("Nilai Non E-Tendering (Penunjukan Langsung)", nilai_penunjukan_langsung_print)
