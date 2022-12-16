@@ -217,7 +217,7 @@ with tab2:
     ets3.metric("Nilai e-Tendering (Seleksi)", nilai_etendering_seleksi_print) 
 
     ### Realisasi e-Tendering
-    if df_dts:
+    if df_dts is True:
         st.markdown(f"### Realisasi e-Tendering")
 
         jumlah_total_realisasi_etendering = df_dts.shape[0]
@@ -232,7 +232,7 @@ with tab2:
         st.error("Data realisasi e-Tendering belum ada")
 
     ### Persentase e-Tendering
-    if df_dts:
+    if df_dts is True:
         st.markdown(f"### Persentase e-Tendering")
 
         persen_capaian_etendering = (nilai_total_realisasi_etendering / nilai_total_etendering)
