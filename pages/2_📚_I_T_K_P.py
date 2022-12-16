@@ -167,8 +167,8 @@ with tab1:
     persen_capaian_rup_print = "{:.2%}".format(persen_capaian_rup)
 
     pr1, pr2, pr3 = st.columns(3)
-    pr1.metric("", "Persentase Capaian RUP")
-    pr2.metric("", "")
+    pr1.metric("", "")
+    pr2.metric("", "Persentase Capaian RUP")
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
 
 with tab2:
@@ -235,8 +235,8 @@ with tab2:
     persen_capaian_etendering_print = "{:.2%}".format(persen_capaian_etendering)
 
     pe1, pe2, pe3 = st.columns(3)
-    pe1.metric("", "Persentase E-Tendering")
-    pe2.metric("", "")
+    pe1.metric("", "")
+    pe2.metric("", "Persentase E-Tendering")
     pe3.metric("Persentase E-Tendering", persen_capaian_etendering_print)
 
 with tab3:
