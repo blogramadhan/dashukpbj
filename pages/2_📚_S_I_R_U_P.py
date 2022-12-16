@@ -103,7 +103,7 @@ with tab1:
     # Tab pemanfaatan SIRUP
 
     ### Tampilan pemanfaatan SIRUP
-    st.markdown(f"## **RUP {pilih} - {tahun}**")
+    st.markdown(f"## **RUP - {pilih} - {tahun}**")
 
     ### RUP struktur anggaran
     st.markdown(f"### Struktur Anggaran")
