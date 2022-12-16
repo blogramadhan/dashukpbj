@@ -167,7 +167,7 @@ with tab1:
     persen_capaian_rup_print = "{:.2%}".format(persen_capaian_rup)
 
     pr1, pr2, pr3 = st.columns(3)
-    pr1.metric("", "")
+    #pr1.metric("", "")
     pr2.metric("", "Persentase Capaian RUP")
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
 
