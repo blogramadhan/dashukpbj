@@ -71,29 +71,47 @@ DatasetSIRUPDSARSAP = f"data/ITKP/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet
 #DatasetKATALOG = f"data/ePurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
 #DatasetDARING = f"data/ePurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
 
-### Data RUP paket penyedia
+### Query Data RUP paket penyedia
 df_pp = pd.read_parquet(DatasetSIRUPDP)
 #df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]
+#df_pp_belum_umumkan = df_pp[df_pp['statusumumkan'].isin(['Draf', 'Draf Lengkap', 'Final Draft'])]
+#df_pp_umumkan_umk = df_pp_umumkan[df_pp_umumkan['statususahakecil'] == 'UsahaKecil']
+#df_pp_umumkan_pdn = df_pp_umumkan[df_pp_umumkan['statuspdn'] == 'PDN']
+
+#df_pp_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender', 'Tender Cepat', 'Seleksi'])]
+#df_pp_tender = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender'])]
+#df_pp_tender_cepat = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender Cepat'])]
+#df_pp_seleksi = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Seleksi'])]
+
+#df_pp_non_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung', 'Penunjukan Langsung'])]
+#df_pp_pengadaan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung'])]
+#df_pp_penunjukan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Penunjukan Langsung'])]
+
+#df_pp_epurchasing = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['e-Purchasing'])]
+
+
 df_pp_umumkan = con.execute("SELECT * FROM df_pp WHERE statusumumkan = 'Terumumkan'").df()
-df_pp_belum_umumkan = df_pp[df_pp['statusumumkan'].isin(['Draf', 'Draf Lengkap', 'Final Draft'])] 
-df_pp_umumkan_umk = df_pp_umumkan[df_pp_umumkan['statususahakecil'] == 'UsahaKecil']
-df_pp_umumkan_pdn = df_pp_umumkan[df_pp_umumkan['statuspdn'] == 'PDN']
+df_pp_belum_umumkan = con.execute("SELECT * FROM df_pp WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
+df_pp_umumkan_umk = con.execute("SELECT * FROM df_pp_umumkan WHERE statususahakecil = 'UsahaKecil'").df()
+df_pp_umumkan_pdn = con.execute("SELECT * FROM df_pp_umumkan WHERE statuspdn = 'PDN'").df()
 
-df_pp_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender', 'Tender Cepat', 'Seleksi'])]
-df_pp_tender = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender'])]
-df_pp_tender_cepat = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender Cepat'])]
-df_pp_seleksi = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Seleksi'])]
+df_pp_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Tender','Tender Cepat','Seleksi')").df()
+df_pp_tender = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender'").df()
+df_pp_tender_cepat = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender Cepat'").df()
+df_pp_seleksi = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Seleksi'").df()
 
-df_pp_non_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung', 'Penunjukan Langsung'])]
-df_pp_pengadaan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung'])]
-df_pp_penunjukan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Penunjukan Langsung'])]
+df_pp_non_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Pengadaan Langsung','Penunjukan Langsung')").df()
+df_pp_pengadaan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Pengadaan Langsung'").df()
+df_pp_penunjukan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Penunjukan Langsung'").df()
 
-df_pp_epurchasing = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['e-Purchasing'])]
+df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
 ### Data RUP paket swakelola
 df_sw = pd.read_parquet(DatasetSIRUPSW)
-df_sw_umumkan = df_sw[df_sw['statusumumkan'] == 'Terumumkan']
-df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
+#df_sw_umumkan = df_sw[df_sw['statusumumkan'] == 'Terumumkan']
+#df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
+df_sw_umumkan = con.execute("SELECT * FROM df_sw WHERE statusumumkan = 'Terumumkan'").df()
+df_sw_inisiasi = con.execute("SELECT * FROM df_sw WHERE statusumumkan = 'Terinisiasi'").df()
 
 ### Data struktur anggaran RUP
 df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
@@ -124,11 +142,14 @@ with tab1:
 
     ### RUP struktur anggaran
     st.markdown(f"### Struktur Anggaran")
-    belanja_pengadaan = df_rsap['belanja_pengadaan'].sum()
+    #belanja_pengadaan = df_rsap['belanja_pengadaan'].sum()
+    belanja_pengadaan = con.execute("SELECT SUM(belanja_pengadaan) FROM df_rsap")
     belanja_pengadaan_print = format_currency(belanja_pengadaan, 'Rp. ', locale='id_ID')
-    belanja_operasional = df_rsap['belanja_operasi'].sum()
+    #belanja_operasional = df_rsap['belanja_operasi'].sum()
+    belanja_operasional = con.execute("SELECT SUM(belanja_operasi) FROM df_rsap")
     belanja_operasional_print = format_currency(belanja_operasional, 'Rp. ', locale='id_ID')
-    belanja_modal = df_rsap['belanja_modal'].sum()
+    #belanja_modal = df_rsap['belanja_modal'].sum()
+    belanja_modal = con.execute("SELECT SUM(belanja_modal) FROM df_rsap")
     belanja_modal_print = format_currency(belanja_modal, 'Rp. ', locale='id_ID')
 
     sa1, sa2, sa3 = st.columns(3)
