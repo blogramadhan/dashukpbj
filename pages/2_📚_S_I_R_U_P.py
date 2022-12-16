@@ -189,3 +189,22 @@ with tab3:
 
     ### Tampilan RUP Perangkat Daerah
     st.markdown(f"## **RUP - {opd} - {tahun}**")
+
+    ### RUP struktur anggaran
+    st.markdown(f"### Struktur Anggaran")
+    belanja_pengadaan_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
+    belanja_pengadaan_pd = belanja_pengadaan_pdsql['belanja_pengadaan'].sum()
+    belanja_pengadaan_pd_print = format_currency(belanja_pengadaan_pd, 'Rp. ', locale='id_ID')
+    
+    belanja_operasional_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
+    belanja_operasional_pd = belanja_operasional_pdsql['belanja_operasi'].sum()
+    belanja_operasional_pd_print = format_currency(belanja_operasional_pd, 'Rp. ', locale='id_ID')
+    
+    belanja_modal_pdsql = con.execute("SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
+    belanja_modal_pd = belanja_modal_pdsql['belanja_modal'].sum()
+    belanja_modal_pd_print = format_currency(belanja_modal_pd, 'Rp. ', locale='id_ID')
+
+    sa1, sa2, sa3 = st.columns(3)
+    sa1.metric("Belanja Pengadaan", belanja_pengadaan_pd_print)
+    sa2.metric("Belanja Operasional", belanja_operasional_pd_print)
+    sa3.metric("Belanja Modal", belanja_modal_pd_print)
