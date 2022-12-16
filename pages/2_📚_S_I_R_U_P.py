@@ -132,7 +132,7 @@ df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
 ######### 
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
-tab1, tab2 = st.tabs(["RUP KALBAR", "RUP PERANGKAT DAERAH"])
+tab1, tab2 = st.tabs(["RUP KALBAR", "STRUKTUR ANGGARAN"])
 
 with tab1:
     # Tab pemanfaatan SIRUP
@@ -196,7 +196,7 @@ with tab2:
     # Tab pemanfaatan e-Tendering
 
     ### Tampilan Pemanfaatan e-Tendering
-    st.markdown(f"## **RUP PERANGKAT DAERAH - {tahun}**")
+    st.markdown(f"## **STRUKTUR ANGGARAN PERANGKAT DAERAH - {tahun}**")
  
     sql_sa = """
         SELECT nama_satker, SUM(belanja_pengadaan) AS belanja_pengadaan, SUM(total_belanja) AS total_belanja 
