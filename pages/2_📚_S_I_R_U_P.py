@@ -219,5 +219,5 @@ with tab3:
 
     pir1, pir2, pir3 = st.columns(3)
     pir1.metric("", "Jumlah Total")
-    pir2.metric("Jumlah Total Paket RUP", rup_pdppsql.shape[0])
+    pir2.metric("Jumlah Total Paket RUP", jumlah_total_rup_pd)
     pir3.metric("Nilai Total Paket RUP", nilai_total_rup_pd_print)
