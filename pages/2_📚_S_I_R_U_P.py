@@ -221,3 +221,13 @@ with tab3:
     pir1.metric("", "Jumlah Total")
     pir2.metric("Jumlah Total Paket RUP", jumlah_total_rup_pd)
     pir3.metric("Nilai Total Paket RUP", nilai_total_rup_pd_print)
+
+    jumlah_rup_umumkan_pd = rup_pdppsql.shape[0]
+    nilai_rup_umumkan_pd = rup_pdppsql['jumlahpagu'].sum()
+    nilai_rup_umumkan_pd_print = format_currency(nilai_rup_umumkan_pd, 'Rp. ', locale='id_ID')
+
+    pirpp1, pirpp2, pirpp3 = st.columns(3)
+    pirpp1.metric("","Paket Penyedia")
+    pirpp2.metric("Jumlah Total Paket RUP", jumlah_rup_umumkan_pd)
+    pirpp3.metric("Nilai Total Paket RUP", nilai_rup_umumkan_pd_print)
+
