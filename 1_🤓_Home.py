@@ -1,5 +1,15 @@
 import streamlit as st
 
+st.set_page_config(
+    page_title="Dashboard UKPBJ",
+    page_icon="👋",
+    layout="wide"
+)
+
+# Setting CSS
+with open('style.css') as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
 # Hilangkan menu Streamlit di sudut kanan atas
 hide_st_style = """
     <style>
@@ -8,12 +18,6 @@ hide_st_style = """
     </style>
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
-
-st.set_page_config(
-    page_title="Dashboard UKPBJ",
-    page_icon="👋",
-    layout="wide"
-)
 
 st.title("Dashboard UKPBJ")
 st.write("Dashboard ini dibuat untuk menyajikan data ITKP dan transaksi E-Purchasing di Provinsi Kalimantan Barat. \
