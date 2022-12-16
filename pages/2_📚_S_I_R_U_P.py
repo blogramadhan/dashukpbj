@@ -188,7 +188,7 @@ with tab1:
     persen_capaian_rup_print = "{:.2%}".format(persen_capaian_rup)
 
     pr1, pr2, pr3 = st.columns(3)
-    #pr1.metric("", "")
+    pr1.metric("", "")
     pr2.metric("", "Persentase Capaian RUP")
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
 
@@ -198,5 +198,11 @@ with tab2:
     ### Tampilan Pemanfaatan e-Tendering
     st.markdown(f"## **RUP PERANGKAT DAERAH - {tahun}**")
  
-    ### Pengumuman e-Tendering
-    st.markdown(f"### Pilih Perangkat Daerah")
+    sql_sa = """
+        SELECT nama_satker, SUM(belanja_pengadaan) AS belanja_pengadaan, SUM(total_belanja) AS total_belanja 
+        FROM df_rsap 
+        WHERE belanja_pengadaan != 0 AND total_belanja != 0 
+        GROUP BY nama_satker;
+    """
+    posisi_sa = con.execute(sql_sa).df()
+    st.dataframe(posisi_sa)
