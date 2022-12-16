@@ -192,18 +192,20 @@ with tab1:
     nilai_etendering_tender_cepat_print = format_currency(nilai_etendering_tender_cepat, 'Rp. ', locale='id_ID')
 
     ettc1, ettc2, ettc3 = st.columns(3)
-    ettc1.metric("", "E-Tendering (Tender Cepat)")
-    ettc2.metric("Jumlah E-Tendering (Tender Cepat", jumlah_etendering_tender_cepat)
-    ettc3.metric("Nilai E-Tendering (Tender Cepat)", nilai_etendering_tender_cepat_print)
+    ettc1.metric("", "e-Tendering (Tender Cepat)")
+    ettc2.metric("Jumlah e-Tendering (Tender Cepat", jumlah_etendering_tender_cepat)
+    ettc3.metric("Nilai e-Tendering (Tender Cepat)", nilai_etendering_tender_cepat_print)
 
     jumlah_etendering_seleksi = df_pp_seleksi.shape[0]
     nilai_etendering_seleksi = df_pp_seleksi['jumlahpagu'].sum()
     nilai_etendering_seleksi_print = format_currency(nilai_etendering_seleksi, 'Rp. ', locale='id_ID')
 
     ets1, ets2, ets3 = st.columns(3)
-    ets1.metric("", "E-Tendering (Seleksi)")
-    ets2.metric("Jumlah E-Tendering (Seleksi)", jumlah_etendering_seleksi)
-    ets3.metric("Nilai E-Tendering (Seleksi)", nilai_etendering_seleksi_print)    
+    ets1.metric("", "e-Tendering (Seleksi)")
+    ets2.metric("Jumlah e-Tendering (Seleksi)", jumlah_etendering_seleksi)
+    ets3.metric("Nilai e-Tendering (Seleksi)", nilai_etendering_seleksi_print) 
+    
+       
 
 # Tab ITKP PD
 with tab2:
