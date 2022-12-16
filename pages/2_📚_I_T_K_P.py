@@ -243,7 +243,7 @@ with tab3:
     # Tab pemanfaatan non e-Tendering
 
     ### Tampilan pemanfaatan non e-Tendering
-    st.markdown(f"## **PEMANFAATAN NON e-TENDERING - {tahun}**")
+    st.markdown(f"## **PEMANFAATAN NON E-TENDERING - {tahun}**")
 
     ### Pengumuman non e-Tendering
     st.markdown(f"### Pengumuman non e-Tendering")
