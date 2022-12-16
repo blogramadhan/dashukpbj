@@ -107,7 +107,7 @@ with tab1:
     st.markdown(f"## **RUP - {pilih} - {tahun}**")
 
     ### RUP struktur anggaran
-    st.markdown(f"### Struktur Anggaran")
+    st.markdown("### Struktur Anggaran")
     belanja_pengadaan = df_rsap['belanja_pengadaan'].sum()
     belanja_pengadaan_print = format_currency(belanja_pengadaan, 'Rp. ', locale='id_ID')
     belanja_operasional = df_rsap['belanja_operasi'].sum()
@@ -121,7 +121,7 @@ with tab1:
     sa3.metric("Belanja Modal", belanja_modal_print)
 
     ### Posisi input RUP
-    st.markdown(f"### Posisi Input RUP")
+    st.markdown("### Posisi Input RUP")
     jumlah_total_rup = df_pp_umumkan.shape[0] + df_sw_umumkan.shape[0]
     nilai_total_rup = df_pp_umumkan['jumlahpagu'].sum() + df_sw_umumkan['jumlahpagu'].sum()
     nilai_total_rup_print = format_currency(nilai_total_rup, 'Rp. ', locale='id_ID')
@@ -143,7 +143,7 @@ with tab1:
     jumlah_rup_sw_umumkan = df_sw_umumkan.shape[0]
     nilai_rup_sw_umumkan = df_sw_umumkan['jumlahpagu'].sum()
     nilai_rup_sw_umumkan_print = format_currency(nilai_rup_sw_umumkan, 'Rp. ', locale='id_ID')
-    
+
     pirsw1, pirsw2, pirsw3 = st.columns(3)
     pirsw1.metric("", "Paket Swakelola")
     pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
@@ -163,7 +163,7 @@ with tab2:
 
     ### Tampilan Struktur Anggaran Perangkat Daerah
     st.markdown(f"## **STRUKTUR ANGGARAN - {pilih} - PERANGKAT DAERAH - {tahun}**")
- 
+
     sql_sa = """
         SELECT nama_satker, SUM(belanja_operasi) AS belanja_operasi, SUM(belanja_modal) AS belanja_modal, SUM(belanja_pengadaan) AS belanja_pengadaan, SUM(total_belanja) AS total_belanja 
         FROM df_rsap 
@@ -187,15 +187,15 @@ with tab3:
     st.markdown(f"## **RUP - {opd} - {tahun}**")
 
     ### RUP struktur anggaran
-    st.markdown(f"### Struktur Anggaran")
+    st.markdown("### Struktur Anggaran")
     belanja_pengadaan_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
     belanja_pengadaan_pd = belanja_pengadaan_pdsql['belanja_pengadaan'].sum()
     belanja_pengadaan_pd_print = format_currency(belanja_pengadaan_pd, 'Rp. ', locale='id_ID')
-    
+
     belanja_operasional_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
     belanja_operasional_pd = belanja_operasional_pdsql['belanja_operasi'].sum()
     belanja_operasional_pd_print = format_currency(belanja_operasional_pd, 'Rp. ', locale='id_ID')
-    
+
     belanja_modal_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
     belanja_modal_pd = belanja_modal_pdsql['belanja_modal'].sum()
     belanja_modal_pd_print = format_currency(belanja_modal_pd, 'Rp. ', locale='id_ID')
@@ -206,7 +206,7 @@ with tab3:
     sa3.metric("Belanja Modal", belanja_modal_pd_print)
 
     ### Posisi input RUP
-    st.markdown(f"### Posisi Input RUP")
+    st.markdown("### Posisi Input RUP")
     rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
     rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
     jumlah_total_rup_pd = rup_pdppsql.shape[0] + rup_pdswsql.shape[0]
@@ -230,7 +230,7 @@ with tab3:
     jumlah_rup_sw_umumkan_pd = rup_pdswsql.shape[0]
     nilai_rup_sw_umumkan_pd = rup_pdswsql['jumlahpagu'].sum()
     nilai_rup_sw_umumkan_pd_print = format_currency(nilai_rup_sw_umumkan_pd, 'Rp. ', locale='id_ID')
-    
+
     pirsw1, pirsw2, pirsw3 = st.columns(3)
     pirsw1.metric("", "Paket Swakelola")
     pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan_pd)
