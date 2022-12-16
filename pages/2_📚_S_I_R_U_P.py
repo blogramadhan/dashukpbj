@@ -67,10 +67,10 @@ DatasetSIRUPSW = f"data/ITKP/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP = f"data/ITKP/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 
 ### Query Data RUP paket penyedia
-df_pp = pd.read_parquet(DatasetSIRUPDP)
+#df_pp = pd.read_parquet(DatasetSIRUPDP)
 
-df_pp_umumkan = con.execute("SELECT * FROM df_pp WHERE statusumumkan = 'Terumumkan'").df()
-df_pp_belum_umumkan = con.execute("SELECT * FROM df_pp WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
+df_pp_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'").df()
+df_pp_belum_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
 df_pp_umumkan_umk = con.execute("SELECT * FROM df_pp_umumkan WHERE statususahakecil = 'UsahaKecil'").df()
 df_pp_umumkan_pdn = con.execute("SELECT * FROM df_pp_umumkan WHERE statuspdn = 'PDN'").df()
 
@@ -86,13 +86,14 @@ df_pp_penunjukan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metod
 df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
 ### Data RUP paket swakelola
-df_sw = pd.read_parquet(DatasetSIRUPSW)
+#df_sw = pd.read_parquet(DatasetSIRUPSW)
 
-df_sw_umumkan = con.execute("SELECT * FROM df_sw WHERE statusumumkan = 'Terumumkan'").df()
-df_sw_inisiasi = con.execute("SELECT * FROM df_sw WHERE statusumumkan = 'Terinisiasi'").df()
+df_sw_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPSW}' WHERE statusumumkan = 'Terumumkan'").df()
+df_sw_inisiasi = con.execute(f"SELECT * FROM '{DatasetSIRUPSW}' WHERE statusumumkan = 'Terinisiasi'").df()
 
 ### Data struktur anggaran RUP
-df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
+#df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
+df_rsap = con.execute(f"SELECT * FROM '{DatasetSIRUPDSARSAP}").df()
 
 ######### 
 
