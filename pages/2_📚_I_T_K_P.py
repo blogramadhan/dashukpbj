@@ -236,7 +236,7 @@ with tab1:
     pe3.metric("Persentase E-Tendering", persen_capaian_etendering_print)    
 
     ### Tampilan pemanfaatan non e-Tendering
-    st.markdown(f"## **PEMANFAATAN NON e-TENDERING - {tahun}")
+    st.markdown(f"## **PEMANFAATAN NON e-TENDERING - {tahun}**")
 
     ### Pengumuman non e-Tendering
     st.markdown(f"### Pengumuman non e-Tendering")
@@ -269,7 +269,7 @@ with tab1:
     netpnl3.metric("Nilai Non E-Tendering (Penunjukan Langsung)", nilai_penunjukan_langsung_print)       
 
     ### Realisasi non e-Tendering
-    
+
 
 # Tab ITKP PD
 with tab2:
