@@ -161,7 +161,7 @@ with tab2:
     # Tab Struktur Anggaran Perangkat Daerah
 
     ### Tampilan Struktur Anggaran Perangkat Daerah
-    st.markdown(f"## **STRUKTUR ANGGARAN PERANGKAT DAERAH - {tahun}**")
+    st.markdown(f"## **STRUKTUR ANGGARAN - {pilih} - PERANGKAT DAERAH - {tahun}**")
  
     sql_sa = """
         SELECT nama_satker, SUM(belanja_operasi) AS belanja_operasi, SUM(belanja_modal) AS belanja_modal, SUM(belanja_pengadaan) AS belanja_pengadaan, SUM(total_belanja) AS total_belanja 
