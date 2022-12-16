@@ -155,7 +155,6 @@ with tab1:
     pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_print)
 
     ### Persentase input RUP
-    ## Persentase RUP
     persen_capaian_rup = (nilai_total_rup / belanja_pengadaan)
     persen_capaian_rup_print = "{:.2%}".format(persen_capaian_rup)
 
@@ -163,6 +162,48 @@ with tab1:
     pr1.metric("", "Persentase Capaian RUP")
     pr2.metric("", "")
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
+
+    ### Tampilan Pemanfaatan e-Tendering
+    st.markdown(f"## **PEMANFAATAN E-TENDERING - {tahun}**")
+ 
+    ### Pengumuman e-Tendering
+    st.markdown(f"### Pengumuman e-Tendering")
+
+    jumlah_total_etendering = df_pp_etendering.shape[0]
+    nilai_total_etendering = df_pp_etendering['jumlahpagu'].sum()
+    nilai_total_etendering_print = format_currency(nilai_total_etendering, 'Rp. ', locale='id_ID')
+
+    et1, et2, et3 = st.columns(3)
+    et1.metric("", "Jumlah Total")
+    et2.metric("Jumlah Total e-Tendering", jumlah_total_etendering)
+    et3.metric("Nilai Total e-Tendering", nilai_total_etendering_print)
+
+    jumlah_etendering_tender = df_pp_tender.shape[0]
+    nilai_etendering_tender = df_pp_tender['jumlahpagu'].sum()
+    nilai_etendering_tender_print = format_currency(nilai_etendering_tender, 'Rp. ', locale='id_ID')
+
+    ett1, ett2, ett3 = st.columns(3)
+    ett1.metric("", "e-Tendering (Tender)")
+    ett2.metric("Jumlah e-Tendering (Tender)", jumlah_etendering_tender)
+    ett3.metric("Nilai e-Tendering (Tender)", nilai_etendering_tender_print)
+
+    jumlah_etendering_tender_cepat = df_pp_tender_cepat.shape[0]
+    nilai_etendering_tender_cepat = df_pp_tender_cepat['jumlahpagu'].sum()
+    nilai_etendering_tender_cepat_print = format_currency(nilai_etendering_tender_cepat, 'Rp. ', locale='id_ID')
+
+    ettc1, ettc2, ettc3 = st.columns(3)
+    ettc1.metric("", "E-Tendering (Tender Cepat)")
+    ettc2.metric("Jumlah E-Tendering (Tender Cepat", jumlah_etendering_tender_cepat)
+    ettc3.metric("Nilai E-Tendering (Tender Cepat)", nilai_etendering_tender_cepat_print)
+
+    jumlah_etendering_seleksi = df_pp_seleksi.shape[0]
+    nilai_etendering_seleksi = df_pp_seleksi['jumlahpagu'].sum()
+    nilai_etendering_seleksi_print = format_currency(nilai_etendering_seleksi, 'Rp. ', locale='id_ID')
+
+    ets1, ets2, ets3 = st.columns(3)
+    ets1.metric("", "E-Tendering (Seleksi)")
+    ets2.metric("Jumlah E-Tendering (Seleksi)", jumlah_etendering_seleksi)
+    ets3.metric("Nilai E-Tendering (Seleksi)", nilai_etendering_seleksi_print)    
 
 # Tab ITKP PD
 with tab2:
