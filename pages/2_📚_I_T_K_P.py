@@ -101,10 +101,17 @@ with tab1:
     df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
 
     ### Data Tender
+    df_dts = pd.read_parquet(DatasetTENDERDTS)
+    df_dtks = pd.read_parquet(DatasetTENDERDTKS)
 
     ### Data Non Tender
+    df_dnts = pd.read_parquet(DatasetNTENDERDNTS)
 
     ### Data Katalog
+    df_katalog = pd.read_parquet(DatasetKATALOG)
+
+    ### Data Daring
+    df_daring = pd.read_parquet(DatasetDARING)
 
     ## Mulai tampilkan data ITKP UKPBJ
     #st.subheader(f"DATA ITKP TAHUN {tahun} - {pilih}")
@@ -204,8 +211,65 @@ with tab1:
     ets1.metric("", "e-Tendering (Seleksi)")
     ets2.metric("Jumlah e-Tendering (Seleksi)", jumlah_etendering_seleksi)
     ets3.metric("Nilai e-Tendering (Seleksi)", nilai_etendering_seleksi_print) 
+
+    ### Realisasi e-Tendering
+    st.markdown(f"### Realisasi e-Tendering")
+
+    jumlah_total_realisasi_etendering = df_dts.shape[0]
+    nilai_total_realisasi_etendering = df_dts['pagu'].sum()
+    nilai_total_realisasi_etendering_print = format_currency(nilai_total_realisasi_etendering, 'Rp. ', locale='id_ID')
+
+    ret1, ret2, ret3 = st.columns(3)
+    ret1.metric("", "Realisasi E-Tendering")
+    ret2.metric("Jumlah Total Realisasi E-Tendering", jumlah_total_realisasi_etendering)
+    ret3.metric("Nilai Total Realisasi E-Tendering", nilai_total_realisasi_etendering_print)           
+
+    ### Persentase e-Tendering
+    st.markdown(f"### Persentase e-Tendering")
+
+    persen_capaian_etendering = (nilai_total_realisasi_etendering / nilai_total_etendering)
+    persen_capaian_etendering_print = "{:.2%}".format(persen_capaian_etendering)
+
+    pe1, pe2, pe3 = st.columns(3)
+    pe1.metric("", "Persentase E-Tendering")
+    pe2.metric("", "")
+    pe3.metric("Persentase E-Tendering", persen_capaian_etendering_print)    
+
+    ### Tampilan pemanfaatan non e-Tendering
+    st.markdown(f"## **PEMANFAATAN NON e-TENDERING - {tahun}")
+
+    ### Pengumuman non e-Tendering
+    st.markdown(f"### Pengumuman non e-Tendering")
+
+    jumlah_total_non_etendering = df_pp_non_etendering.shape[0]
+    nilai_total_non_etendering = df_pp_non_etendering['jumlahpagu'].sum()
+    nilai_total_non_etendering_print = format_currency(nilai_total_non_etendering, 'Rp. ', locale='id_ID')
+
+    net1, net2, net3 = st.columns(3)
+    net1.metric("", "Jumlah Total")
+    net2.metric("Jumlah Total Non E-Tendering", jumlah_total_non_etendering)
+    net3.metric("Nilai Total Non E-Tendering", nilai_total_non_etendering_print)
+
+    jumlah_pengadaan_langsung = df_pp_pengadaan_langsung.shape[0]
+    nilai_pengadaan_langsung = df_pp_pengadaan_langsung['jumlahpagu'].sum()
+    nilai_pengadaan_langsung_print = format_currency(nilai_pengadaan_langsung, 'Rp. ', locale='id_ID')
+
+    netpl1, netpl2, netpl3 = st.columns(3)
+    netpl1.metric("", "Pengadaan Langsung")
+    netpl2.metric("Jumlah Non E-Tendering (Pengadaan Langsung)", jumlah_pengadaan_langsung)
+    netpl3.metric("Nilai Non E-Tendering (Pengadaan Langsung)", nilai_pengadaan_langsung_print)
+
+    jumlah_penunjukan_langsung = df_pp_penunjukan_langsung.shape[0]
+    nilai_penunjukan_langsung = df_pp_penunjukan_langsung['jumlahpagu'].sum()
+    nilai_penunjukan_langsung_print = format_currency(nilai_penunjukan_langsung, 'Rp. ', locale='id_ID')
+
+    netpnl1, netpnl2, netpnl3 = st.columns(3)
+    netpnl1.metric("", "Penunjukan Langsung")
+    netpnl2.metric("Jumlah Non E-Tendering (Penunjukan Langsung)", jumlah_penunjukan_langsung)
+    netpnl3.metric("Nilai Non E-Tendering (Penunjukan Langsung)", nilai_penunjukan_langsung_print)       
+
+    ### Realisasi non e-Tendering
     
-       
 
 # Tab ITKP PD
 with tab2:
