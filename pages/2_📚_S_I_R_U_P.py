@@ -202,7 +202,8 @@ with tab2:
         SELECT nama_satker, SUM(belanja_pengadaan) AS belanja_pengadaan, SUM(total_belanja) AS total_belanja 
         FROM df_rsap 
         WHERE belanja_pengadaan != 0 AND total_belanja != 0 
-        GROUP BY nama_satker;
+        GROUP BY nama_satker
+        ORDER BY total_belanja DESC;
     """
     posisi_sa = con.execute(sql_sa).df()
     st.dataframe(posisi_sa)
