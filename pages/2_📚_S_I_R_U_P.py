@@ -71,8 +71,8 @@ DatasetSIRUPDSARSAP = f"data/ITKP/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet
 
 df_pp_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'").df()
 df_pp_belum_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
-df_pp_umumkan_umk = con.execute(f"SELECT * FROM '{df_pp_umumkan}' WHERE statususahakecil = 'UsahaKecil'").df()
-df_pp_umumkan_pdn = con.execute(f"SELECT * FROM '{df_pp_umumkan}' WHERE statuspdn = 'PDN'").df()
+df_pp_umumkan_umk = con.execute("SELECT * FROM df_pp_umumkan WHERE statususahakecil = 'UsahaKecil'").df()
+df_pp_umumkan_pdn = con.execute("SELECT * FROM df_pp_umumkan WHERE statuspdn = 'PDN'").df()
 
 df_pp_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Tender','Tender Cepat','Seleksi')").df()
 df_pp_tender = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender'").df()
