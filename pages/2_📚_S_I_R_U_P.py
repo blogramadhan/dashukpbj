@@ -1,3 +1,4 @@
+import duckdb
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -60,6 +61,7 @@ elif pilih == "PROV. KALBAR":
 
 # Persiapan Dataset
 ## Dataset ITKP UKPBJ
+con = duckdb.connect()
 DatasetSIRUPDP = f"data/ITKP/{kodeFolder}/sirupdp{str(tahun)}.parquet"
 DatasetSIRUPSW = f"data/ITKP/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP = f"data/ITKP/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
@@ -71,7 +73,8 @@ DatasetSIRUPDSARSAP = f"data/ITKP/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet
 
 ### Data RUP paket penyedia
 df_pp = pd.read_parquet(DatasetSIRUPDP)
-df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]
+#df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]
+df_pp_umumkan = con.execute("SELECT * FROM df_pp WHERE statusumumkan = 'Terumumkan'").df()
 df_pp_belum_umumkan = df_pp[df_pp['statusumumkan'].isin(['Draf', 'Draf Lengkap', 'Final Draft'])] 
 df_pp_umumkan_umk = df_pp_umumkan[df_pp_umumkan['statususahakecil'] == 'UsahaKecil']
 df_pp_umumkan_pdn = df_pp_umumkan[df_pp_umumkan['statuspdn'] == 'PDN']
