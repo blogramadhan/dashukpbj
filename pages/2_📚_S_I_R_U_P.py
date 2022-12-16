@@ -206,4 +206,4 @@ with tab2:
         ORDER BY total_belanja DESC;
     """
     posisi_sa = con.execute(sql_sa).df()
-    st.dataframe(posisi_sa)
+    st.table(posisi_sa)
