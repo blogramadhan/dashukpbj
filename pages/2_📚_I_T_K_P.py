@@ -108,7 +108,8 @@ if tahun == 2022:
     df_katalog = pd.read_parquet(DatasetKATALOG)
 
 ### Data Daring
-df_daring = pd.read_parquet(DatasetDARING)
+if tahun == 2022:
+    df_daring = pd.read_parquet(DatasetDARING)
 
 ######### 
 
