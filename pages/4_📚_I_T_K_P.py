@@ -75,11 +75,31 @@ with tab1:
     DatasetKATALOG = f""
 
     ### Data RUP paket penyedia
+    df_pp = pd.read_parquet(DatasetSIRUPDP)
+    df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]
+    df_pp_belum_umumkan = df_pp[df_pp['statusumumkan'].isin(['Draf', 'Draf Lengkap', 'Final Draft'])] 
+    df_pp_umumkan_umk = df_pp_umumkan[df_pp_umumkan['statususahakecil'] == 'UsahaKecil']
+    df_pp_umumkan_pdn = df_pp_umumkan[df_pp_umumkan['statuspdn'] == 'PDN']
+
+    df_pp_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender', 'Tender Cepat', 'Seleksi'])]
+    df_pp_tender = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender'])]
+    df_pp_tender_cepat = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Tender Cepat'])]
+    df_pp_seleksi = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Seleksi'])]
+
+    df_pp_non_etendering = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung', 'Penunjukan Langsung'])]
+    df_pp_pengadaan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Pengadaan Langsung'])]
+    df_pp_penunjukan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['Penunjukan Langsung'])]
+
+    df_pp_epurchasing = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['e-Purchasing'])]
 
     ### Data RUP paket swakelola
+    df_sw = pd.read_parquet(DatasetSIRUPSW)
+
 
     ### Data struktur anggaran RUP
     df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
+    df_sw_umumkan = df_sw[df_sw['statusumumkan'] == 'Terumumkan']
+    df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
 
     ### Data Tender
 
@@ -105,6 +125,35 @@ with tab1:
     sa1.metric("Belanja Pengadaan", belanja_pengadaan_print)
     sa2.metric("Belanja Operasional", belanja_operasional_print)
     sa3.metric("Belanja Modal", belanja_modal_print)
+
+    ### Posisi input RUP
+    st.markdown(f"### Posisi Input RUP")
+    jumlah_total_rup = df_pp_umumkan.shape[0] + df_sw_umumkan.shape[0]
+    nilai_total_rup = df_pp_umumkan['jumlahpagu'].sum() + df_sw_umumkan['jumlahpagu'].sum()
+    nilai_total_rup_print = format_currency(nilai_total_rup, 'Rp. ', locale='id_ID')
+
+    pir1, pir2, pir3 = st.columns(3)
+    pir1.metric("", "Jumlah Total")
+    pir2.metric("Jumlah Total Paket RUP", jumlah_total_rup)
+    pir3.metric("Nilai Total Paket RUP", nilai_total_rup_print)
+
+    jumlah_rup_umumkan = df_pp_umumkan.shape[0]
+    nilai_rup_umumkan = df_pp_umumkan['jumlahpagu'].sum()
+    nilai_rup_umumkan_print = format_currency(nilai_rup_umumkan, 'Rp. ', locale='id_ID')
+
+    pirpp1, pirpp2, pirpp3 = st.columns(3)
+    pirpp1.metric("","Paket Penyedia")
+    pirpp2.metric("Jumlah Total Paket RUP", jumlah_rup_umumkan)
+    pirpp3.metric("Nilai Total Paket RUP", nilai_rup_umumkan_print)
+
+    jumlah_rup_sw_umumkan = df_sw_umumkan.shape[0]
+    nilai_rup_sw_umumkan = df_sw_umumkan['jumlahpagu'].sum()
+    nilai_rup_sw_umumkan_print = format_currency(nilai_rup_sw_umumkan, 'Rp. ', locale='id_ID')
+    
+    pirsw1, pirsw2, pirsw3 = st.columns(3)
+    pirsw1.metric("", "Paket Swakelola")
+    pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
+    pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_print)
 
 # Tab ITKP PD
 with tab2:
