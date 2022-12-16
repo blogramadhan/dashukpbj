@@ -4,3 +4,4 @@ babel
 openpyxl
 seaborn
 matplotlib
+os

@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 from babel.numbers import format_currency
 
 # Setting CSS
@@ -59,7 +60,7 @@ elif pilih == "PROV. KALBAR":
     kodeFolder = "PROV"
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
-tab1, tab2 = st.tabs(["ITKP UKPBJ", "ITKP PD"])
+tab1, tab2, tab3 = st.tabs(["SIRUP", "E-TENDERING", "NON E-TENDERING"])
 
 # Tab ITKP UKPBJ
 with tab1:
@@ -113,11 +114,9 @@ with tab1:
     ### Data Daring
     df_daring = pd.read_parquet(DatasetDARING)
 
-    ## Mulai tampilkan data ITKP UKPBJ
-    #st.subheader(f"DATA ITKP TAHUN {tahun} - {pilih}")
-
-    ## Tampilan pemanfaatan SIRUP
+    ### Tampilan pemanfaatan SIRUP
     st.markdown(f"## **PEMANFAATAN SIRUP - {tahun}**")
+
     ### RUP struktur anggaran
     st.markdown(f"### Struktur Anggaran")
     belanja_pengadaan = df_rsap['belanja_pengadaan'].sum()
@@ -169,6 +168,8 @@ with tab1:
     pr1.metric("", "Persentase Capaian RUP")
     pr2.metric("", "")
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
+
+    #####################################################################
 
     ### Tampilan Pemanfaatan e-Tendering
     st.markdown(f"## **PEMANFAATAN E-TENDERING - {tahun}**")
@@ -235,6 +236,8 @@ with tab1:
     pe2.metric("", "")
     pe3.metric("Persentase E-Tendering", persen_capaian_etendering_print)    
 
+    #####################################################################
+
     ### Tampilan pemanfaatan non e-Tendering
     st.markdown(f"## **PEMANFAATAN NON e-TENDERING - {tahun}**")
 
@@ -278,3 +281,8 @@ with tab2:
 
     ## Mulai tampilkan data ITKP Perangkat Daerah
     st.subheader(f"DATA ITKP TAHUN {tahun} - PERANGKAT DAERAH")
+
+# Tab Non E-Tendering
+with tab3:
+
+    st.subheader(f"Data non e-Tendering")
