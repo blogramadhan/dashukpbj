@@ -231,3 +231,20 @@ with tab3:
     pirpp2.metric("Jumlah Total Paket RUP", jumlah_rup_umumkan_pd)
     pirpp3.metric("Nilai Total Paket RUP", nilai_rup_umumkan_pd_print)
 
+    jumlah_rup_sw_umumkan_pd = rup_pdswsql.shape[0]
+    nilai_rup_sw_umumkan_pd = rup_pdswsql['jumlahpagu'].sum()
+    nilai_rup_sw_umumkan_pd_print = format_currency(nilai_rup_sw_umumkan_pd, 'Rp. ', locale='id_ID')
+    
+    pirsw1, pirsw2, pirsw3 = st.columns(3)
+    pirsw1.metric("", "Paket Swakelola")
+    pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan_pd)
+    pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_pd_print)
+
+    ### Persentase input RUP
+    persen_capaian_rup_pd = (nilai_total_rup_pd / belanja_pengadaan_pd)
+    persen_capaian_rup_pd_print = "{:.2%}".format(persen_capaian_rup_pd)
+
+    pr1, pr2, pr3 = st.columns(3)
+    pr1.metric("", "")
+    pr2.metric("", "Persentase Capaian RUP")
+    pr3.metric("Persentase Capaian RUP", persen_capaian_rup_pd_print)
