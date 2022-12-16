@@ -22,7 +22,7 @@ daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH"
             "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
             "KAB. KAYONG UTARA", "KAB. KETAPANG"]
 
-tahuns = [2022, 2023]
+tahuns = [2022, 2021, 2020]
 
 pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 tahun = st.sidebar.selectbox("Pilih Tahun :", tahuns)
@@ -96,20 +96,17 @@ df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
 df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
 
 ### Data Tender
-if tahun == 2022:
-    df_dts = pd.read_parquet(DatasetTENDERDTS)
-    df_dtks = pd.read_parquet(DatasetTENDERDTKS)
+df_dts = pd.read_parquet(DatasetTENDERDTS)
+df_dtks = pd.read_parquet(DatasetTENDERDTKS)
 
 ### Data Non Tender
 df_dnts = pd.read_parquet(DatasetNTENDERDNTS)
 
 ### Data Katalog
-if tahun == 2022:
-    df_katalog = pd.read_parquet(DatasetKATALOG)
+df_katalog = pd.read_parquet(DatasetKATALOG)
 
 ### Data Daring
-if tahun == 2022:
-    df_daring = pd.read_parquet(DatasetDARING)
+df_daring = pd.read_parquet(DatasetDARING)
 
 ######### 
 
