@@ -109,7 +109,7 @@ with tab1:
     ### RUP struktur anggaran
     st.markdown(f"### Struktur Anggaran")
     #belanja_pengadaan = df_rsap['belanja_pengadaan'].sum()
-    belanja_pengadaan = con.execute("SELECT SUM(belanja_pengadaan) FROM df_rsap").fetchall()
+    belanja_pengadaan = con.execute("SELECT SUM(belanja_pengadaan) FROM df_rsap").df()
     belanja_pengadaan_print = format_currency(belanja_pengadaan, 'Rp. ', locale='id_ID')
     belanja_operasional = df_rsap['belanja_operasi'].sum()
     belanja_operasional_print = format_currency(belanja_operasional, 'Rp. ', locale='id_ID')
