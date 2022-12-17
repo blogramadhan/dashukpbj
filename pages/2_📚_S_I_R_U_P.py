@@ -60,7 +60,7 @@ elif pilih == "PROV. KALBAR":
     kodeFolder = "PROV"
 
 # Persiapan Dataset
-## Dataset ITKP UKPBJ
+## Dataset SIRUP
 con = duckdb.connect()
 DatasetSIRUPDP = f"data/ITKP/{kodeFolder}/sirupdp{str(tahun)}.parquet"
 DatasetSIRUPSW = f"data/ITKP/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
