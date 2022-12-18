@@ -22,6 +22,7 @@
 import duckdb
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
 from babel.numbers import format_currency
@@ -193,7 +194,9 @@ with tab1:
     with mph1:
         st.table(df_mp_hitung)
     with mph2:
-        st.markdown("#### Grafik Jumlah Metode Pengadaan")
+        #st.markdown("#### Grafik Jumlah Metode Pengadaan")
+        figmph = px.pie(df_mp_hitung, values='JUMLAH_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Jumlah Paket')
+        st.plotly_chart(figmph, theme="streamlit", use_conatiner_width=True)
 
     st.markdown("#### Metode Pengadaan - Nilai Paket")
     mpn1, mpn2 = st.columns((3,7))

@@ -5,3 +5,4 @@ babel
 openpyxl
 seaborn
 matplotlib
+plotly.express
