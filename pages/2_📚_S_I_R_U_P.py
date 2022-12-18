@@ -222,7 +222,7 @@ with tab1:
     with jph2:
         st.markdown(":")
     with jph3:
-        figjph = px.pie(df_jp_hitung, values='JUMLAH_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Jumlah Paket', hole=.3, width=500, height=500)
+        figjph = px.pie(df_jp_hitung, values='JUMLAH_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Jumlah Paket', hole=.3, width=700, height=700)
         st.plotly_chart(figjph, theme="streamlit", use_conatiner_width=True)
 
     st.markdown("#### Jenis Pengadaan - Nilai Paket")
@@ -232,7 +232,7 @@ with tab1:
     with jpn2:
         st.markdown(":")
     with jpn3:
-        figjpn = px.pie(df_jp_nilai, values='NILAI_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Nilai Paket', hole=.3, width=500, height=500)
+        figjpn = px.pie(df_jp_nilai, values='NILAI_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Nilai Paket', hole=.3, width=700, height=700)
         st.plotly_chart(figjpn, theme='streamlit', use_container_width=True)
 
 with tab2:
