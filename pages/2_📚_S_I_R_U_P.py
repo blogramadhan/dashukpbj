@@ -208,7 +208,7 @@ with tab1:
         st.markdown(":")
     with mpn3:
         figmpn = px.pie(df_mp_nilai, values='NILAI_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
-        st.plotly_chart(figmpn, theme='streamlit', use_container_width=True)
+        st.plotly_chart(figmpn, theme='None', use_container_width=True)
 
 with tab2:
     # Tab Struktur Anggaran Perangkat Daerah
@@ -326,4 +326,4 @@ with tab3:
         st.markdown(":")
     with mpn3:
         figmpn = px.pie(df_mp_nilai, values='NILAI_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
-        st.plotly_chart(figmpn, theme='streamlit', use_container_width=True)
+        st.plotly_chart(figmpn, theme='None', use_container_width=True)
