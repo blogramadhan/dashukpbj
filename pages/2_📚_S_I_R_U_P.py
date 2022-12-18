@@ -190,7 +190,7 @@ with tab1:
     df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
 
     st.markdown("#### Metode Pengadaan - Jumlah Paket")
-    mph1, mph2 = st.columns((5,5))
+    mph1, mph2 = st.columns((4,6))
     with mph1:
         st.table(df_mp_hitung)
     with mph2:
