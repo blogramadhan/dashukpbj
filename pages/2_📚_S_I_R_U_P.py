@@ -300,3 +300,30 @@ with tab3:
     pr1.metric("", "")
     pr2.metric("", "Persentase Capaian RUP")
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_pd_print)
+
+    ### Metode Pengadaan
+    st.markdown("### Metode Pengadaan")
+
+    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(METODEPENGADAAN) AS JUMLAH_PAKET FROM rup_pdppsql WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+    df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM rup_pdppsql WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+
+    st.markdown("#### Metode Pengadaan - Jumlah Paket")
+    mph1, mph2, mph3 = st.columns((4,1,5))
+    with mph1:
+        st.table(df_mp_hitung)
+    with mph2:
+        st.markdown(":")
+    with mph3:
+        #st.markdown("#### Grafik Jumlah Metode Pengadaan")
+        figmph = px.pie(df_mp_hitung, values='JUMLAH_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
+        st.plotly_chart(figmph, theme="streamlit", use_conatiner_width=True)
+
+    st.markdown("#### Metode Pengadaan - Nilai Paket")
+    mpn1, mpn2, mpn3 = st.columns((4,1,5))
+    with mpn1:
+        st.table(df_mp_nilai)
+    with mpn2:
+        st.markdown(":")
+    with mpn3:
+        figmpn = px.pie(df_mp_nilai, values='NILAI_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
+        st.plotly_chart(figmpn, theme='streamlit', use_container_width=True)
