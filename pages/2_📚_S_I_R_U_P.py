@@ -326,11 +326,13 @@ with tab3:
     pr2.metric("", "Persentase Capaian RUP")
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_pd_print)
 
-    ### Metode Pengadaan
+    ### Metode dan Jenis Pengadaan
     st.markdown("### Metode Pengadaan")
 
-    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(METODEPENGADAAN) AS JUMLAH_PAKET FROM rup_pdppsql WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM rup_pdppsql WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
     df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM rup_pdppsql WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+    df_jp_hitung = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, COUNT(jenispengadaan) AS JUMLAH_PAKET FROM rup_pdppsql WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
+    df_jp_nilai = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM rup_pdppsql WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
 
     st.markdown("#### Metode Pengadaan - Jumlah Paket")
     mph1, mph2, mph3 = st.columns((4,1,5))
@@ -352,3 +354,27 @@ with tab3:
     with mpn3:
         figmpn = px.pie(df_mp_nilai, values='NILAI_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
         st.plotly_chart(figmpn, theme='streamlit', use_container_width=True)
+
+    ##########
+
+    st.markdown("### Jenis Pengadaan")
+
+    st.markdown("#### Jenis Pengadaan - Jumlah Paket")
+    jph1, jph2, jph3 = st.columns((4,1,5))
+    with jph1:
+        st.table(df_jp_hitung)
+    with jph2:
+        st.markdown(":")
+    with jph3:
+        figjph = px.pie(df_jp_hitung, values='JUMLAH_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
+        st.plotly_chart(figjph, theme="streamlit", use_conatiner_width=True)
+
+    st.markdown("#### Jenis Pengadaan - Nilai Paket")
+    jpn1, jpn2, jpn3 = st.columns((4,1,5))
+    with jpn1:
+        st.table(df_jp_nilai)
+    with jpn2:
+        st.markdown(":")
+    with jpn3:
+        figjpn = px.pie(df_jp_nilai, values='NILAI_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
+        st.plotly_chart(figjpn, theme='streamlit', use_container_width=True)
