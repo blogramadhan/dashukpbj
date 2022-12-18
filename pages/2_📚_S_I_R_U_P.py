@@ -182,6 +182,21 @@ with tab1:
     pr2.metric("", "Persentase Capaian RUP")
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
 
+    ### Metode Pengadaan
+    st.markdown("### Metode Pengadaan")
+
+    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(METODEPENGADAAN) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+    df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+
+    st.markdown("#### Metode Pengadaan - Jumlah Paket")
+    mp1, mp2 = st.columns((3,7))
+    with mp1:
+        st.table(df_mp_hitung)
+    with mp2:
+        figmp = plt.figure(figsize=(10,6))
+        sns.barplot(x = df_mp_hitung, y = df_mp_hitung.index)
+        st.pyplot(figmp)
+
 with tab2:
     # Tab Struktur Anggaran Perangkat Daerah
 
