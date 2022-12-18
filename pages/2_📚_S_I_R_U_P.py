@@ -190,10 +190,12 @@ with tab1:
     df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
 
     st.markdown("#### Metode Pengadaan - Jumlah Paket")
-    mph1, mph2 = st.columns((4,6))
+    mph1, mph2, mph3 = st.columns((4,1,5))
     with mph1:
         st.table(df_mp_hitung)
     with mph2:
+        st.markdown("->")
+    with mph3:
         #st.markdown("#### Grafik Jumlah Metode Pengadaan")
         figmph = px.pie(df_mp_hitung, values='JUMLAH_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
         st.plotly_chart(figmph, theme="streamlit", use_conatiner_width=True)
