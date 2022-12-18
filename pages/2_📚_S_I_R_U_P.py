@@ -191,9 +191,8 @@ with tab1:
 
     st.markdown("#### Metode Pengadaan - Jumlah Paket")
     mph1, mph2 = st.columns((5,5))
-    with mph2:
+    with mph1:
         st.table(df_mp_hitung)
-
     with mph2:
         #st.markdown("#### Grafik Jumlah Metode Pengadaan")
         figmph = px.pie(df_mp_hitung, values='JUMLAH_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
