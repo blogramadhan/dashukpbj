@@ -30,7 +30,7 @@ from babel.numbers import format_currency
 # Fungsi-Fungsi yang bisa digunakan
 ## Fungsi Download Dataframe ke CSV
 def unduh_data(unduhdata):
-    return unduhdata.to_csv().encode('utf')
+    return unduhdata.to_csv(index=False).encode('utf')
 
 # Setting CSS
 with open('style.css') as f:
