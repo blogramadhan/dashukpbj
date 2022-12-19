@@ -94,8 +94,6 @@ DatasetSIRUPSW = f"data/ITKP/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP = f"data/ITKP/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 
 ### Query Data RUP paket penyedia
-#df_pp = pd.read_parquet(DatasetSIRUPDP)
-
 df_pp_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'").df()
 df_pp_belum_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
 df_pp_umumkan_umk = con.execute("SELECT * FROM df_pp_umumkan WHERE statususahakecil = 'UsahaKecil'").df()
@@ -113,22 +111,27 @@ df_pp_penunjukan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metod
 df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
 ### Data RUP paket swakelola
-#df_sw = pd.read_parquet(DatasetSIRUPSW)
-
 df_sw_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPSW}' WHERE statusumumkan = 'Terumumkan'").df()
 df_sw_inisiasi = con.execute(f"SELECT * FROM '{DatasetSIRUPSW}' WHERE statusumumkan = 'Terinisiasi'").df()
 
 ### Data struktur anggaran RUP
-#df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
 df_rsap = con.execute(f"SELECT * FROM '{DatasetSIRUPDSARSAP}'").df()
 
 ######### 
+
+#########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
 tab1, tab2, tab3 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP OPD"])
 
 with tab1:
     # Tab pemanfaatan SIRUP
+
+    # Dataset
+    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+    df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+    df_jp_hitung = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, COUNT(jenispengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
+    df_jp_nilai = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
 
     ### Tampilan pemanfaatan SIRUP
     unduh_rupdp = unduh_data(df_pp_umumkan)
@@ -208,11 +211,6 @@ with tab1:
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
 
     ### Metode dan Jenis Pengadaan
-    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
-    df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
-    df_jp_hitung = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, COUNT(jenispengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
-    df_jp_nilai = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
-
     st.markdown("### Metode Pengadaan")
     mph1, mph2 = st.columns((5,5))
     with mph1:
@@ -267,30 +265,59 @@ with tab2:
 with tab3:
     # Tab RUP OPD
 
+    ## Dataset
     sql_rupopd = """
         SELECT DISTINCT(nama_satker) FROM df_rsap;
     """
     opds = con.execute(sql_rupopd).df()
     opd = st.selectbox("Pilih Perangkat Daerah :", opds)
+    
+    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
+    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
+    
+    belanja_pengadaan_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
+    belanja_operasional_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
+    belanja_modal_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
+    belanja_total_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
+
+    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM rup_pdppsql WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+    df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM rup_pdppsql WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+    df_jp_hitung = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, COUNT(jenispengadaan) AS JUMLAH_PAKET FROM rup_pdppsql WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
+    df_jp_nilai = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM rup_pdppsql WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
 
     ### Tampilan RUP Perangkat Daerah
-    st.markdown(f"## **RUP - {opd} - {tahun}**")
+    unduh_rupdp = unduh_data(rup_pdppsql)
+    unduh_rupsw = unduh_data(rup_pdswsql)
+
+    d1, d2, d3 = st.columns((6,2,2))
+    with d1:
+        st.markdown(f"## **RUP - {opd} - {tahun}**")
+    with d2:
+        st.download_button(
+            label = "📥 Download RUP Penyedia",
+            data = unduh_rupdp,
+            file_name = f"ruppenyedia-{opd}.csv",
+            mime = "text/csv"            
+        )
+    with d3:
+         st.download_button(
+            label = "📥 Download RUP Swakelola",
+            data = unduh_rupsw,
+            file_name = f"rupswakelola-{opd}.csv",
+            mime = "text/csv"            
+        )       
 
     ### RUP struktur anggaran
     st.markdown("### Struktur Anggaran")
-    belanja_pengadaan_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
     belanja_pengadaan_pd = belanja_pengadaan_pdsql['belanja_pengadaan'].sum()
     belanja_pengadaan_pd_print = format_currency(belanja_pengadaan_pd, 'Rp. ', locale='id_ID')
 
-    belanja_operasional_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
     belanja_operasional_pd = belanja_operasional_pdsql['belanja_operasi'].sum()
     belanja_operasional_pd_print = format_currency(belanja_operasional_pd, 'Rp. ', locale='id_ID')
 
-    belanja_modal_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
     belanja_modal_pd = belanja_modal_pdsql['belanja_modal'].sum()
     belanja_modal_pd_print = format_currency(belanja_modal_pd, 'Rp. ', locale='id_ID')
 
-    belanja_total_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
     belanja_total_pd = belanja_total_pdsql['total_belanja'].sum()
     belanja_total_pd_print = format_currency(belanja_total_pd, 'Rp. ', locale='id_ID')
 
@@ -302,8 +329,7 @@ with tab3:
 
     ### Posisi input RUP
     st.markdown("### Posisi Input RUP")
-    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
-    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
+
     jumlah_total_rup_pd = rup_pdppsql.shape[0] + rup_pdswsql.shape[0]
     nilai_total_rup_pd = rup_pdppsql['jumlahpagu'].sum() + rup_pdswsql['jumlahpagu'].sum()
     nilai_total_rup_pd_print = format_currency(nilai_total_rup_pd, 'Rp. ', locale='id_ID')
@@ -341,11 +367,6 @@ with tab3:
     pr3.metric("Persentase Capaian RUP", persen_capaian_rup_pd_print)
 
     ### Metode dan Jenis Pengadaan
-    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM rup_pdppsql WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
-    df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM rup_pdppsql WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
-    df_jp_hitung = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, COUNT(jenispengadaan) AS JUMLAH_PAKET FROM rup_pdppsql WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
-    df_jp_nilai = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM rup_pdppsql WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
-
     st.markdown("### Metode Pengadaan")
     mph1, mph2 = st.columns((5,5))
     with mph1:
