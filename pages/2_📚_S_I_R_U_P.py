@@ -40,6 +40,13 @@ hide_st_style = """
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
+# Fungsi Download Dataframe ke CSV
+def convert_rupdp(rupdp):
+    return rupdp.to_csv().encode('utf')
+
+def convert_rupsw(rupsw):
+    return rupsw.to_csv().encode('utf')
+
 # Konfigurasi variabel lokasi UKPBJ
 daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH", "KOTA SINGKAWANG", "KAB. SAMBAS", 
             "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
@@ -122,11 +129,50 @@ df_rsap = con.execute(f"SELECT * FROM '{DatasetSIRUPDSARSAP}'").df()
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
 tab1, tab2, tab3 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP OPD"])
 
+###
+# Download Data Button
+df1_download = convert_trxkatalog(df_kat_loc)
+df2_download = convert_prodkatalog(df_prod_loc)
+
+st.download_button(
+    label = '📥 Download Data Transaksi E-KATALOG',
+    data = df1_download,
+    file_name = 'trxkatalog-' + kodeRUP + '.csv',
+    mime = 'text/csv'
+)
+
+st.download_button(
+    label = '📥 Download Data Produk E-KATALOG',
+    data = df2_download,
+    file_name = 'prodkatalog-' + kodeRUP + '.csv',
+    mime = 'text/csv'
+)
+###
+
 with tab1:
     # Tab pemanfaatan SIRUP
 
     ### Tampilan pemanfaatan SIRUP
-    st.markdown(f"## **RUP - {pilih} - {tahun}**")
+    rupdp_download = convert_rupdp(df_pp_umumkan)
+    rupsw_download = convert_rupsw(df_sw_umumkan)
+
+    d1, d2, d3 = st.columns((6,2,2))
+    with d1:
+        st.markdown(f"## **RUP - {pilih} - {tahun}**")
+    with d2:
+        st.download_button(
+            label = '📥 Download RUP Penyedia',
+            data = rupdp_download,
+            file_name = 'ruppenyedia-' + kodeFolder + '.csv',
+            mime = 'text/csv'            
+        )
+    with d3:
+         st.download_button(
+            label = '📥 Download RUP Swakelola',
+            data = rupsw_download,
+            file_name = 'rupswakelola-' + kodeFolder + '.csv',
+            mime = 'text/csv'            
+        )       
 
     ### RUP struktur anggaran
     st.markdown("### Struktur Anggaran")

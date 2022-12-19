@@ -225,7 +225,7 @@ with tab2:
     opdtrxcount_daring = tmp_daring_loc_ok['nama_satker'].value_counts()
     opdtrxsum_daring = df_daring_loc.groupby(by='nama_satker').sum().sort_values(by='valuasi', ascending=False)['valuasi']  
 
-        # Tampilkan Grafik jika ada Data
+    # Tampilkan Grafik jika ada Data
     if jumlah_trx_daring[0] > 0: 
         # Jumlah Transaksi Toko Daring OPD
         st.markdown('### Jumlah Transaksi Toko Daring OPD')
@@ -249,7 +249,7 @@ with tab2:
     else:
         st.error('BELUM ADA TRANSAKSI DI TOKO DARING ...')       
 
-        # Download Data Button
+    # Download Data Button
     df1_download_daring = convert_trxdaring(df_daring_loc)
 
     st.download_button(
