@@ -198,7 +198,7 @@ with tab1:
         st.markdown("#### Berdasarkan Nilai Paket")
         st.table(df_mp_nilai)
  
-    mpn1, mpn2 = st.columns((4,1,5))
+    mpn1, mpn2 = st.columns((5,5))
     with mpn1:
         figmph = px.pie(df_mp_hitung, values='JUMLAH_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
         st.plotly_chart(figmph, theme="streamlit", use_conatiner_width=True)
