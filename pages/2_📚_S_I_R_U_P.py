@@ -129,26 +129,6 @@ df_rsap = con.execute(f"SELECT * FROM '{DatasetSIRUPDSARSAP}'").df()
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
 tab1, tab2, tab3 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP OPD"])
 
-###
-# Download Data Button
-df1_download = convert_trxkatalog(df_kat_loc)
-df2_download = convert_prodkatalog(df_prod_loc)
-
-st.download_button(
-    label = '📥 Download Data Transaksi E-KATALOG',
-    data = df1_download,
-    file_name = 'trxkatalog-' + kodeRUP + '.csv',
-    mime = 'text/csv'
-)
-
-st.download_button(
-    label = '📥 Download Data Produk E-KATALOG',
-    data = df2_download,
-    file_name = 'prodkatalog-' + kodeRUP + '.csv',
-    mime = 'text/csv'
-)
-###
-
 with tab1:
     # Tab pemanfaatan SIRUP
 
