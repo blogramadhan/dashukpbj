@@ -362,7 +362,7 @@ with tab3:
 
     st.markdown("#### Jenis Pengadaan - Nilai Paket")
     jpn1, jpn2 = st.columns((5,5))
-    with jph1:
+    with jpn1:
         figjph = px.pie(df_jp_hitung, values='JUMLAH_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
         st.plotly_chart(figjph, theme="streamlit", use_conatiner_width=True)
     with jpn2:
