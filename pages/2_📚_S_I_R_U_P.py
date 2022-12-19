@@ -360,7 +360,6 @@ with tab3:
         st.markdown("#### Berdasarkan Nilai Paket")
         st.table(df_jp_nilai)
 
-    st.markdown("#### Jenis Pengadaan - Nilai Paket")
     jpn1, jpn2 = st.columns((5,5))
     with jpn1:
         figjph = px.pie(df_jp_hitung, values='JUMLAH_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
