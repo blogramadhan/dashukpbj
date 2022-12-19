@@ -27,6 +27,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from babel.numbers import format_currency
 
+# Fungsi-Fungsi yang bisa digunakan
+## Fungsi Download Dataframe ke CSV
+def unduh_data(unduhdata):
+    return unduhdata.to_csv().encode('utf')
+
 # Setting CSS
 with open('style.css') as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -39,13 +44,6 @@ hide_st_style = """
     </style>
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
-
-# Fungsi Download Dataframe ke CSV
-def convert_rupdp(rupdp):
-    return rupdp.to_csv().encode('utf')
-
-def convert_rupsw(rupsw):
-    return rupsw.to_csv().encode('utf')
 
 # Konfigurasi variabel lokasi UKPBJ
 daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH", "KOTA SINGKAWANG", "KAB. SAMBAS", 
@@ -133,25 +131,25 @@ with tab1:
     # Tab pemanfaatan SIRUP
 
     ### Tampilan pemanfaatan SIRUP
-    rupdp_download = convert_rupdp(df_pp_umumkan)
-    rupsw_download = convert_rupsw(df_sw_umumkan)
+    unduh_rupdp = unduh_data(df_pp_umumkan)
+    unduh_rupsw = unduh_data(df_sw_umumkan)
 
     d1, d2, d3 = st.columns((6,2,2))
     with d1:
         st.markdown(f"## **RUP - {pilih} - {tahun}**")
     with d2:
         st.download_button(
-            label = '📥 Download RUP Penyedia',
-            data = rupdp_download,
-            file_name = 'ruppenyedia-' + kodeFolder + '.csv',
-            mime = 'text/csv'            
+            label = "📥 Download RUP Penyedia",
+            data = unduh_rupdp,
+            file_name = f"ruppenyedia-{kodeFolder}.csv",
+            mime = "text/csv"            
         )
     with d3:
          st.download_button(
-            label = '📥 Download RUP Swakelola',
-            data = rupsw_download,
-            file_name = 'rupswakelola-' + kodeFolder + '.csv',
-            mime = 'text/csv'            
+            label = "📥 Download RUP Swakelola",
+            data = unduh_rupsw,
+            file_name = f"rupswakelola-{kodeFolder}.csv",
+            mime = "text/csv"            
         )       
 
     ### RUP struktur anggaran
