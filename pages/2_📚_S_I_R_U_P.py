@@ -232,7 +232,7 @@ with tab2:
     st.markdown(f"## **STRUKTUR ANGGARAN - {pilih} - PERANGKAT DAERAH - {tahun}**")
 
     sql_sa = """
-        SELECT nama_satker, SUM(belanja_operasi) AS belanja_operasi, SUM(belanja_modal) AS belanja_modal, SUM(belanja_pengadaan) AS belanja_pengadaan, SUM(total_belanja) AS total_belanja 
+        SELECT nama_satker AS NAMA_SATKER, SUM(belanja_operasi) AS BELANJA_OPERASI, SUM(belanja_modal) AS BELANJA_MODAL, SUM(belanja_pengadaan) AS BELANJA PENGADAAN, SUM(total_belanja) AS TOTAL_BELANJA 
         FROM df_rsap 
         GROUP BY nama_satker
         ORDER BY total_belanja DESC;
