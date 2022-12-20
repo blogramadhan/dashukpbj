@@ -40,9 +40,17 @@ hide_st_style = """
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-st.title("Dashboard UKPBJ")
-st.write("Dashboard ini dibuat untuk menyajikan data ITKP dan transaksi E-Purchasing di Provinsi Kalimantan Barat. \
-        Untuk dapat menggunakan dashboard ini, silahkan memilih UKPBJ yang diinginkan di menu sebelah kiri")
+st.title("Dashboard Pengadaan Barang dan Jasa")
+
+st.markdown("""
+Dashboard ini dibuat sebagai alat bantu untuk mempermudah para pelaku pengadaan di seluruh wilayah Provinsi Kalimantan Barat. Data yang disajikan, antara lain:
+
+* Rencana PBJ
+* Realisasi PBJ
+* Indeks Tata Kelola PBJ
+
+Sumber data dari Dashboard ini berasal dari **API JSON** yang ditarik harian dari [ISB LKPP](https://lkpp.go.id).
+""")
 
 # Buat session pilihan UKPBJ
 #daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH", "KOTA SINGKAWANG", "KAB. SAMBAS", 
