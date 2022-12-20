@@ -19,12 +19,11 @@
 # @ Pontianak, 2022                                                                 #
 #####################################################################################
 
+# Import library
 import duckdb
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import matplotlib.pyplot as plt
-import seaborn as sns
 from babel.numbers import format_currency
 
 # Fungsi-Fungsi yang bisa digunakan

@@ -19,8 +19,20 @@
 # @ Pontianak, 2022                                                                 #
 #####################################################################################
 
+# Import library
 import streamlit as st
 
-st.title("Kontak Saya")
+# Setting CSS
+with open('style.css') as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-#st.write("You have entered", st.session_state["ukpbj"])
+# Hilangkan menu Streamlit di sudut kanan atas
+hide_st_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
+st.title("Realisasi Pengadaan Barang dan Jasa")
