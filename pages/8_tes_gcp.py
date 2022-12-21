@@ -7,7 +7,7 @@ from google.cloud import storage
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
     #st.secrets["gcp_service_account"]
-    st.secrets["private_key_id"]
+    st.secrets["private_key"]
 )
 client = storage.Client(credentials=credentials)
 
