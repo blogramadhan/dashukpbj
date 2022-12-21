@@ -91,9 +91,9 @@ def convert_trxdaring(dftrxdaring):
 
 # Dataset
 if tahun == 2022:
-    DatasetKatalog = f"data/ePurchasing/ePurchasing_gabung/katalogdetail{str(tahun)}.parquet"
-    DatasetProdukKatalog = f"data/ePurchasing/ePurchasing_gabung/prodkatalog{str(tahun)}.parquet"
-    DatasetTokoDaring = f"data/ePurchasing/ePurchasing_gabung/daring{str(tahun)}.parquet"
+    DatasetKatalog = f"data/epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
+    DatasetProdukKatalog = f"data/epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
+    DatasetTokoDaring = f"data/epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
 if tahun == 2023:
     st.error('BELUM ADA TRANSAKSI DI E-PURCHASING DI TAHUN YANG ANDA PILIH ...')
 

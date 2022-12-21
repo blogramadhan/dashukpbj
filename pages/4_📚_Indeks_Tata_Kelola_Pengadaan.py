@@ -49,46 +49,46 @@ pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 tahun = st.sidebar.selectbox("Pilih Tahun :", tahuns)
 
 if pilih == "KAB. BENGKAYANG":
-    kodeFolder = "BKY"
+    kodeFolder = "bky"
 elif pilih == "KAB. KAPUAS HULU":
-    kodeFolder = "KPH"
+    kodeFolder = "kph"
 elif pilih == "KAB. KAYONG UTARA":
-    kodeFolder = "KKU"
+    kodeFolder = "kku"
 elif pilih == "KAB. KETAPANG":
-    kodeFolder = "KTP"
+    kodeFolder = "ktp"
 elif pilih == "KAB. KUBU RAYA":
-    kodeFolder = "KKR"
+    kodeFolder = "kkr"
 elif pilih == "KAB. LANDAK":
-    kodeFolder = "LDK"
+    kodeFolder = "ldk"
 elif pilih == "KAB. MELAWI":
-    kodeFolder = "MLW"
+    kodeFolder = "mlw"
 elif pilih == "KAB. MEMPAWAH":
-    kodeFolder = "MPW"
+    kodeFolder = "mpw"
 elif pilih == "KAB. SAMBAS":
-    kodeFolder = "SBS"
+    kodeFolder = "sbs"
 elif pilih == "KAB. SANGGAU":
-    kodeFolder = "SGU"
+    kodeFolder = "sgu"
 elif pilih == "KAB. SEKADAU":
-    kodeFolder = "SKD"
+    kodeFolder = "skd"
 elif pilih == "KAB. SINTANG":
-    kodeFolder = "STG"
+    kodeFolder = "stg"
 elif pilih == "KOTA PONTIANAK":
-    kodeFolder = "PTK"
+    kodeFolder = "ptk"
 elif pilih == "KOTA SINGKAWANG":
-    kodeFolder = "SKW"
+    kodeFolder = "skw"
 elif pilih == "PROV. KALBAR":
-    kodeFolder = "PROV"
+    kodeFolder = "prov"
 
 # Persiapan Dataset
 ## Dataset ITKP UKPBJ
-DatasetSIRUPDP = f"data/ITKP/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPSW = f"data/ITKP/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP = f"data/ITKP/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-DatasetTENDERDTS = f"data/ITKP/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-DatasetTENDERDTKS = f"data/ITKP/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
-DatasetNTENDERDNTS = f"data/ITKP/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
-DatasetKATALOG = f"data/ePurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
-DatasetDARING = f"data/ePurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
+DatasetSIRUPDP = f"data/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPSW = f"data/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP = f"data/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+DatasetTENDERDTS = f"data/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+DatasetTENDERDTKS = f"data/itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
+DatasetNTENDERDNTS = f"data/itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
+DatasetKATALOG = f"data/epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
+DatasetDARING = f"data/epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
 
 ### Data RUP paket penyedia
 df_pp = pd.read_parquet(DatasetSIRUPDP)
