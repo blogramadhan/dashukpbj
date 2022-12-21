@@ -18,7 +18,7 @@ def read_file(bucket_name, file_path):
     content = bucket.blob(file_path).download_as_string().decode("utf-8")
     return content
 
-bucket_name = "streamlit-bucket"
+bucket_name = "ular_kadut"
 file_path = "myfile.csv"
 
 content = read_file(bucket_name, file_path)
