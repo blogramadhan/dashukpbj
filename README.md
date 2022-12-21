@@ -1,3 +1,9 @@
-# Dahboard UKPBJ
+# Dashboard Pengadaan Barang dan Jasa 
 
-Dashboard ini dibuat untuk menampilkan beberapa data yang didapatkan dari ISB-LKPP. Dashboard ini dibuat dengan Python + Pandas + Streamlit
+Dashboard ini dibuat sebagai alat bantu untuk mempermudah para pelaku pengadaan di seluruh wilayah Provinsi Kalimantan Barat. Data yang disajikan, antara lain:
+
+* Rencana PBJ
+* Realisasi PBJ
+* Indeks Tata Kelola PBJ
+
+Sumber data dari Dashboard ini berasal dari **API JSON** yang ditarik harian dari [ISB LKPP](https://lkpp.go.id).
