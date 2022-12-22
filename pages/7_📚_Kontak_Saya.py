@@ -66,7 +66,8 @@ con = duckdb.connect()
 #DatasetSIRUPDP_Path = "https://storage.googleapis.com/ular_kadut/itkp/prov/sirupdp2023.parquet"
 #DatasetSIRUPDP = read_file(bucket_name, DatasetSIRUPDP_Path)
 DatasetSIRUPDP = "https://storage.googleapis.com/ular_kadut/itkp/prov/sirupdp2023.parquet"
-df_pp_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'").df()
+#df_pp_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'").df()
+df_pp_umumkan = pd.read_parquet(DatasetSIRUPDP)
 df_mp_hitung = con.execute(
     "SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;"
 ).df()
