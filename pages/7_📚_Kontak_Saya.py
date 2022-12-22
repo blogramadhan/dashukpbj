@@ -77,7 +77,7 @@ content = read_file(bucket_name, file_path)
 #content_print = con.execute(f"SELECT * FROM {content}").df()
 #################
 
-st.markdown("## Tes Google Cloud Storage")
+#st.markdown("## Tes Google Cloud Storage")
 # Print results.
 for line in content.strip().split("\n"):
     name, pet = line.split(",")
