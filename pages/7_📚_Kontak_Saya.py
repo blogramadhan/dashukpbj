@@ -55,7 +55,7 @@ client = storage.Client(credentials=credentials)
 def read_file(bucket_name, file_path):
     bucket = client.bucket(bucket_name)
     #return bucket.blob(file_path).download_as_string().decode("utf-8")
-    return bucket.blob(file_path)
+    return bucket.blob(file_path).get()
 
 #################
 # Dataframe GCS #
