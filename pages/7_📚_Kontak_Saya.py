@@ -79,9 +79,9 @@ content_print = con.execute(f"SELECT * FROM {content}").df()
 
 st.markdown("## Tes Google Cloud Storage")
 # Print results.
-#for line in content.strip().split("\n"):
-#    name, pet = line.split(",")
-#    st.write(f"{name} has a :{pet}:")
+for line in content.strip().split("\n"):
+    name, pet = line.split(",")
+    st.write(f"{name} has a :{pet}:")
 
 #st.markdown("## Data SIRUP")
-st.table(content_print)
+#st.table(content_print)
