@@ -54,22 +54,23 @@ client = storage.Client(credentials=credentials)
 @st.experimental_memo(ttl=600)
 def read_file(bucket_name, file_path):
     bucket = client.bucket(bucket_name)
-    return bucket.blob(file_path).download_as_string().decode("utf-8")
- 
+    #return bucket.blob(file_path).download_as_string().decode("utf-8")
+    return bucket.blob(file_path).download_as_file()
+
 #################
 # Dataframe GCS #
 #################
 bucket_name = "ular_kadut"
 
 con = duckdb.connect()
-#DatasetSIRUPDP_Path = "sirupdp2023.parquet"
-#DatasetSIRUPDP = read_file(bucket_name, DatasetSIRUPDP_Path)
-#df_pp_umumkan = con.execute(
-#    f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'"
-#).df()
-#df_mp_hitung = con.execute(
-#    "SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;"
-#).df()
+DatasetSIRUPDP_Path = "sirupdp2023.parquet"
+DatasetSIRUPDP = read_file(bucket_name, DatasetSIRUPDP_Path)
+df_pp_umumkan = con.execute(
+    f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'"
+).df()
+df_mp_hitung = con.execute(
+    "SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;"
+).df()
 
 #################
 file_path = "myfile.csv"
@@ -92,4 +93,4 @@ for line in content.strip().split("\n"):
 #    "SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan"
 #)
 
-#st.table(df_mp_hitung)
+st.table(df_mp_hitung)
