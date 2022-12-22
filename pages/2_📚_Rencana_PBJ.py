@@ -27,6 +27,11 @@ import plotly.express as px
 from babel.numbers import format_currency
 
 # Fungsi-Fungsi yang bisa digunakan
+## Fungsi Baca Dataframe
+@st.experimental_memo(ttl=600)
+def baca_parquet(dataset):
+    return pd.read_parquet(dataset)
+
 ## Fungsi Download Dataframe ke CSV
 def unduh_data(unduhdata):
     return unduhdata.to_csv(index=False).encode('utf')
@@ -88,13 +93,21 @@ elif pilih == "PROV. KALBAR":
 # Persiapan Dataset
 ## Dataset SIRUP
 con = duckdb.connect()
-DatasetSIRUPDP = f"data/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPSW = f"data/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP = f"data/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+#DatasetSIRUPDP = f"data/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+#DatasetSIRUPSW = f"data/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+#DatasetSIRUPDSARSAP = f"data/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+
+DatasetSIRUPDP = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPSW = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+
+df_SIRUPDP = baca_parquet(DatasetSIRUPDP)
+df_SIRUPSW = baca_parquet(DatasetSIRUPSW)
+df_SIRUPDSARSAP = baca_parquet(DatasetSIRUPDSARSAP)
 
 ### Query Data RUP paket penyedia
-df_pp_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'").df()
-df_pp_belum_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
+df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
+df_pp_belum_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
 df_pp_umumkan_umk = con.execute("SELECT * FROM df_pp_umumkan WHERE statususahakecil = 'UsahaKecil'").df()
 df_pp_umumkan_pdn = con.execute("SELECT * FROM df_pp_umumkan WHERE statuspdn = 'PDN'").df()
 
@@ -110,11 +123,11 @@ df_pp_penunjukan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metod
 df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
 ### Data RUP paket swakelola
-df_sw_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPSW}' WHERE statusumumkan = 'Terumumkan'").df()
-df_sw_inisiasi = con.execute(f"SELECT * FROM '{DatasetSIRUPSW}' WHERE statusumumkan = 'Terinisiasi'").df()
+df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terumumkan'").df()
+df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terinisiasi'").df()
 
 ### Data struktur anggaran RUP
-df_rsap = con.execute(f"SELECT * FROM '{DatasetSIRUPDSARSAP}'").df()
+df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 
 ######### 
 
