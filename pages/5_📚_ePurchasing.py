@@ -25,6 +25,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from babel.numbers import format_currency
 
+# Fungsi-Fungsi yang bisa digunakan
+## Fungsi Baca Dataframe
+@st.experimental_memo(ttl=600)
+def baca_parquet(dataset):
+    return pd.read_parquet(dataset)
+
+## Fungsi Download Dataframe ke CSV
+def unduh_data(unduhdata):
+    return unduhdata.to_csv(index=False).encode('utf')
+
 # Setting CSS
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
@@ -91,15 +101,15 @@ def convert_trxdaring(dftrxdaring):
 
 # Dataset
 if tahun == 2022:
-    DatasetKatalog = f"data/epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
-    DatasetProdukKatalog = f"data/epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
-    DatasetTokoDaring = f"data/epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
+    DatasetKatalog = f"https://storage.googleapis.com/ular_kadut/epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
+    DatasetProdukKatalog = f"https://storage.googleapis.com/ular_kadut/epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
+    DatasetTokoDaring = f"https://storage.googleapis.com/ular_kadut/epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
 if tahun == 2023:
     st.error('BELUM ADA TRANSAKSI DI E-PURCHASING DI TAHUN YANG ANDA PILIH ...')
 
 ## Data E-KATALOG
-df_kat = pd.read_parquet(DatasetKatalog)
-df_prod = pd.read_parquet(DatasetProdukKatalog)
+df_kat = baca_parquet(DatasetKatalog)
+df_prod = baca_parquet(DatasetProdukKatalog)
 
 df_kat_loc = df_kat[df_kat['kd_klpd'] == kodeRUP]
 df_kat_loc_lokal = df_kat_loc[df_kat_loc['jenis_katalog'] == "Lokal"]
@@ -108,7 +118,7 @@ df_kat_loc_nasional = df_kat_loc[df_kat_loc['jenis_katalog'] == "Nasional"]
 df_prod_loc = df_prod[df_prod['kd_klpd'] == kodeRUP]
 
 ## Data Toko Daring
-df_daring = pd.read_parquet(DatasetTokoDaring)
+df_daring = baca_parquet(DatasetTokoDaring)
 df_daring_loc = df_daring[df_daring['kd_klpd'] == kodeRUP]
 
 # Buat Tab e-Katalog dan Toko Daring

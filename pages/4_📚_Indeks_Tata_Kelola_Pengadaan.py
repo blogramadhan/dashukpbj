@@ -25,6 +25,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from babel.numbers import format_currency
 
+# Fungsi-Fungsi yang bisa digunakan
+## Fungsi Baca Dataframe
+@st.experimental_memo(ttl=600)
+def baca_parquet(dataset):
+    return pd.read_parquet(dataset)
+
+## Fungsi Download Dataframe ke CSV
+def unduh_data(unduhdata):
+    return unduhdata.to_csv(index=False).encode('utf')
+
 # Setting CSS
 with open('style.css') as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -81,17 +91,17 @@ elif pilih == "PROV. KALBAR":
 
 # Persiapan Dataset
 ## Dataset ITKP UKPBJ
-DatasetSIRUPDP = f"data/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPSW = f"data/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP = f"data/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-DatasetTENDERDTS = f"data/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-DatasetTENDERDTKS = f"data/itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
-DatasetNTENDERDNTS = f"data/itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
-DatasetKATALOG = f"data/epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
-DatasetDARING = f"data/epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
+DatasetSIRUPDP = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPSW = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+DatasetTENDERDTS = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+DatasetTENDERDTKS = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
+DatasetNTENDERDNTS = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
+DatasetKATALOG = f"https://storage.googleapis.com/ular_kadut/epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
+DatasetDARING = f"https://storage.googleapis.com/ular_kadut/epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
 
 ### Data RUP paket penyedia
-df_pp = pd.read_parquet(DatasetSIRUPDP)
+df_pp = baca_parquet(DatasetSIRUPDP)
 df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]
 df_pp_belum_umumkan = df_pp[df_pp['statusumumkan'].isin(['Draf', 'Draf Lengkap', 'Final Draft'])] 
 df_pp_umumkan_umk = df_pp_umumkan[df_pp_umumkan['statususahakecil'] == 'UsahaKecil']
@@ -109,25 +119,25 @@ df_pp_penunjukan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(
 df_pp_epurchasing = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['e-Purchasing'])]
 
 ### Data RUP paket swakelola
-df_sw = pd.read_parquet(DatasetSIRUPSW)
+df_sw = baca_parquet(DatasetSIRUPSW)
 df_sw_umumkan = df_sw[df_sw['statusumumkan'] == 'Terumumkan']
 df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
 
 ### Data struktur anggaran RUP
-df_rsap = pd.read_parquet(DatasetSIRUPDSARSAP)
+df_rsap = baca_parquet(DatasetSIRUPDSARSAP)
 
 ### Data Tender
-df_dts = pd.read_parquet(DatasetTENDERDTS)
-df_dtks = pd.read_parquet(DatasetTENDERDTKS)
+df_dts = baca_parquet(DatasetTENDERDTS)
+df_dtks = baca_parquet(DatasetTENDERDTKS)
 
 ### Data Non Tender
-df_dnts = pd.read_parquet(DatasetNTENDERDNTS)
+df_dnts = baca_parquet(DatasetNTENDERDNTS)
 
 ### Data Katalog
-df_katalog = pd.read_parquet(DatasetKATALOG)
+df_katalog = baca_parquet(DatasetKATALOG)
 
 ### Data Daring
-df_daring = pd.read_parquet(DatasetDARING)
+df_daring = baca_parquet(DatasetDARING)
 
 ######### 
 
