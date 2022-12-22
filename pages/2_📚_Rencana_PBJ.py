@@ -25,16 +25,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from babel.numbers import format_currency
-
-# Fungsi-Fungsi yang bisa digunakan
-## Fungsi Baca Dataframe
-@st.experimental_memo(ttl=600)
-def baca_parquet(dataset):
-    return pd.read_parquet(dataset)
-
-## Fungsi Download Dataframe ke CSV
-def unduh_data(unduhdata):
-    return unduhdata.to_csv(index=False).encode('utf')
+from fungsi import *
 
 # Setting CSS
 with open('style.css') as f:
@@ -93,9 +84,6 @@ elif pilih == "PROV. KALBAR":
 # Persiapan Dataset
 ## Dataset SIRUP
 con = duckdb.connect()
-#DatasetSIRUPDP = f"data/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-#DatasetSIRUPSW = f"data/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-#DatasetSIRUPDSARSAP = f"data/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 
 DatasetSIRUPDP = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
 DatasetSIRUPSW = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
