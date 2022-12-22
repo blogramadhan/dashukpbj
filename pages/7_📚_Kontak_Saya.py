@@ -54,8 +54,8 @@ client = storage.Client(credentials=credentials)
 @st.experimental_memo(ttl=600)
 def read_file(bucket_name, file_path):
     bucket = client.bucket(bucket_name)
-    #return bucket.blob(file_path).download_as_string().decode("utf-8")
-    return bucket.blob(file_path).get()
+    return bucket.blob(file_path).download_as_string().decode("utf-8")
+    #return bucket.blob(file_path).get()
 
 #################
 # Dataframe GCS #
@@ -63,7 +63,7 @@ def read_file(bucket_name, file_path):
 bucket_name = "ular_kadut"
 
 con = duckdb.connect()
-DatasetSIRUPDP_Path = "itkp/prov/sirupdp2023.parquet"
+DatasetSIRUPDP_Path = "gs://ular_kadut/sirupdp2023.parquet"
 DatasetSIRUPDP = read_file(bucket_name, DatasetSIRUPDP_Path)
 df_pp_umumkan = con.execute(
     f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'"
