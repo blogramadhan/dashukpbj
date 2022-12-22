@@ -127,8 +127,8 @@ with tab1:
     # Tab pemanfaatan SIRUP
 
     # Dataset
-    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
-    df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;").df()
+    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
+    df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
     df_jp_hitung = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, COUNT(jenispengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
     df_jp_nilai = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
 
