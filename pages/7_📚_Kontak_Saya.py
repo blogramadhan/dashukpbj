@@ -54,8 +54,7 @@ client = storage.Client(credentials=credentials)
 @st.experimental_memo(ttl=600)
 def read_file(bucket_name, file_path):
     bucket = client.bucket(bucket_name)
-    #return bucket.blob(file_path).download_as_string().decode("utf-8")
-    return bucket.blob(file_path).download_as_bytes()
+    return bucket.blob(file_path).download_as_string().decode("utf-8")
 
 #################
 # Dataframe GCS #
@@ -63,26 +62,22 @@ def read_file(bucket_name, file_path):
 bucket_name = "ular_kadut"
 
 con = duckdb.connect()
-#DatasetSIRUPDP_Path = "https://storage.googleapis.com/ular_kadut/itkp/prov/sirupdp2023.parquet"
-#DatasetSIRUPDP = read_file(bucket_name, DatasetSIRUPDP_Path)
 DatasetSIRUPDP = "https://storage.googleapis.com/ular_kadut/itkp/prov/sirupdp2023.parquet"
 #df_pp_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'").df()
 df_pp_umumkan = pd.read_parquet(DatasetSIRUPDP)
-df_mp_hitung = con.execute(
-    "SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan;"
-).df()
+df_mp_hitung = con.execute("SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
 
 #################
-file_path = "myfile.csv"
-content = read_file(bucket_name, file_path)
+#file_path = "myfile.csv"
+#content = read_file(bucket_name, file_path)
 #content_print = con.execute(f"SELECT * FROM {content}").df()
 #################
 
 #st.markdown("## Tes Google Cloud Storage")
 # Print results.
-for line in content.strip().split("\n"):
-    name, pet = line.split(",")
-    st.write(f"{name} has a :{pet}:")
+#for line in content.strip().split("\n"):
+#    name, pet = line.split(",")
+#    st.write(f"{name} has a :{pet}:")
 
 #st.markdown("## Data SIRUP")
 #st.table(content_print)
