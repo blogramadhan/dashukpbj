@@ -85,3 +85,11 @@ for line in content.strip().split("\n"):
 
 #st.markdown("## Data SIRUP")
 #st.table(content_print)
+
+urldata = "https://storage.cloud.google.com/ular_kadut/itkp/prov/sirupdp2023.parquet"
+df_pp_umumkan = con.execute(f"SELECT * FROM '{urldata}' WHERE statusumumkan = 'Terumumkan'").df()
+df_mp_hitung = con.execute(
+    "SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan"
+)
+
+st.table(df_pp_umumkan)
