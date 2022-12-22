@@ -52,19 +52,22 @@ client = storage.Client(credentials=credentials)
 # Retrieve file contents.
 # Uses st.experimental_memo to only rerun when the query changes or after 10 min.
 @st.experimental_memo(ttl=600)
-def read_file(bucket_name, file_path):
-    bucket = client.bucket(bucket_name)
-    return bucket.blob(file_path).download_as_string().decode("utf-8")
+def baca_parquet(dataset):
+    return pd.read_parquet(dataset)
+
+#def read_file(bucket_name, file_path):
+#    bucket = client.bucket(bucket_name)
+#    return bucket.blob(file_path).download_as_string().decode("utf-8")
 
 #################
 # Dataframe GCS #
 #################
-bucket_name = "ular_kadut"
+#bucket_name = "ular_kadut"
 
 con = duckdb.connect()
 DatasetSIRUPDP = "https://storage.googleapis.com/ular_kadut/itkp/prov/sirupdp2023.parquet"
 #df_pp_umumkan = con.execute(f"SELECT * FROM '{DatasetSIRUPDP}' WHERE statusumumkan = 'Terumumkan'").df()
-df_pp_umumkan = pd.read_parquet(DatasetSIRUPDP)
+df_pp_umumkan = baca_parquet(DatasetSIRUPDP)
 df_mp_hitung = con.execute("SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
 
 #################
