@@ -54,7 +54,7 @@ client = storage.Client(credentials=credentials)
 # Retrieve file contents.
 # Uses st.experimental_memo to only rerun when the query changes or after 10 min.
 @st.experimental_memo(ttl=600)
-def download_to_local_file(bucket_name, file_path, destination):
+def unduh_df_parquet(bucket_name, file_path, destination):
     bucket = client.bucket(bucket_name)
     return bucket.blob(file_path).download_to_filename(destination)
 
@@ -64,10 +64,10 @@ file_sirupdp_temp = "sirupdp2023_temp.parquet"
 file_sirupdsw = "data/sirupdsw2023.parquet"
 file_sirupdsw_temp = "sirupdsw2023_temp.parquet"
 
-download_to_local_file(
+unduh_df_parquet(
     bucket, file_sirupdp, file_sirupdp_temp
 )
-download_to_local_file(
+unduh_df_parquet(
     bucket, file_sirupdsw, file_sirupdsw_temp
 )
 

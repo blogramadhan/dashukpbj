@@ -24,9 +24,15 @@ import duckdb
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+# Import library currency
 from babel.numbers import format_currency
+# Import library AgGrid
 from st_aggrid import AgGrid, JsCode
 from st_aggrid.grid_options_builder import GridOptionsBuilder
+# Import library Google Cloud Storage
+from google.oauth2 import service_account
+from google.cloud import storage
+# Import fungsi pribadi
 from fungsi import *
 
 # Setting CSS
@@ -84,16 +90,46 @@ elif pilih == "PROV. KALBAR":
     kodeFolder = "prov"
 
 # Persiapan Dataset
+## Google Cloud Storage
+# Create API client.
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = storage.Client(credentials=credentials)
+
+# Retrieve file contents.
+# Uses st.experimental_memo to only rerun when the query changes or after 10 min.
+@st.experimental_memo(ttl=600)
+def unduh_df_parquet(bucket_name, file_path, destination):
+    bucket = client.bucket(bucket_name)
+    return bucket.blob(file_path).download_to_filename(destination)
+##
+
 ## Dataset SIRUP
-con = duckdb.connect()
+con = duckdb.connect(database=':memory:')
 
-DatasetSIRUPDP = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPSW = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+bucket = "dashukpbj"
 
-df_SIRUPDP = baca_parquet(DatasetSIRUPDP)
-df_SIRUPSW = baca_parquet(DatasetSIRUPSW)
-df_SIRUPDSARSAP = baca_parquet(DatasetSIRUPDSARSAP)
+DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPDP_Temp = f"sirupdp{str(tahun)}_temp.parquet"
+DatasetSIRUPSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPSW_Temp = f"sirupdsw{str(tahun)}_temp.parquet"
+DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{str(tahun)}_temp.parquet"
+
+unduh_df_parquet(
+    bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp
+)
+unduh_df_parquet(
+    bucket, DatasetSIRUPSW, DatasetSIRUPSW_Temp
+)
+unduh_df_parquet(
+    bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp
+)
+
+df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
+df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
 ### Query Data RUP paket penyedia
 df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
