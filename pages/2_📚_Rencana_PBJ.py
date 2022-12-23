@@ -119,17 +119,18 @@ df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Te
 ### Data struktur anggaran RUP
 df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 
-sql_namaopd = """
-    SELECT DISTINCT(nama_satker) FROM df_SIRUPDSARSAP;
-"""
-namaopd = con.execute(sql_namaopd).df()
+namaopd = df_rsap['namasatker'].unique()
+#sql_namaopd = """
+#    SELECT DISTINCT(nama_satker) FROM df_SIRUPDSARSAP;
+#"""
+#namaopd = con.execute(sql_namaopd).df()
 
 ######### 
 
 #########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP PERANGKAT DAERAH", "RUP PAKET PENYEDIA", "RUP PAKET SWAKELOLA"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["RUP DAERAH |", "STRUKTUR ANGGARAN |", "RUP PERANGKAT DAERAH |", "RUP PAKET PENYEDIA |", "RUP PAKET SWAKELOLA |"])
 
 with tab1:
     # Tab pemanfaatan SIRUP
