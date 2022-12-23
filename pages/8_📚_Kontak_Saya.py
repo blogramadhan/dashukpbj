@@ -59,11 +59,20 @@ def download_to_local_file(bucket_name, file_path, destination):
     return bucket.blob(file_path).download_to_filename(destination)
 
 bucket = "dashukpbj"
-file_path = "sirupdp2023.parquet"
+file_sirupdp = "sirupdp2023.parquet"
+file_sirupdp_temp = "sirupdp2023_temp.parquet"
+file_sirupdsw = "sirupdsw2023.parquet"
+file_sirupdsw_temp = "sirupdsw2023_temp.parquet"
 
-sirupdp = download_to_local_file(
-  bucket, file_path, "sirupdp2023_temp.parquet")
+download_to_local_file(
+    bucket, file_sirupdp, file_sirupdp_temp
+)
+download_to_local_file(
+    bucket, file_sirupdsw, file_sirupdsw_temp
+)
 
 con = duckdb.connect(database=':memory:')
-rup = con.execute(f"SELECT * FROM '{sirupdp}' LIMIT 5").df()
-st.dataframe(rup)
+rupdp = con.execute(f"SELECT * FROM read_parquet('{file_sirupdp_temp}') LIMIT 5").df()
+rupdsw = con.execute(f"SELECT * FROM read_parquet('{file_sirupdsw_temp}') LIMIT 2").df()
+st.dataframe(rupdp)
+st.dataframe(rupdsw)
