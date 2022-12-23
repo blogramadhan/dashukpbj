@@ -125,7 +125,7 @@ df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 #########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP OPD", "RUP OPD - Penyedia", "RIP OPD - Swakelola"])
+tab1, tab2, tab3, tab4 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP OPD", "RUP OPD - Penyedia"])
 
 with tab1:
     # Tab pemanfaatan SIRUP
@@ -415,10 +415,3 @@ with tab4:
     """
     opds4 = con.execute(sql_rupopd_4).df()
     opd4 = st.selectbox("Pilih Perangkat Daerah :", opds4)
-
-    #st.markdown("## RUP OPD - Melalui Penyedia")
-
-with tab5:
-    # Tab RUP OPD - Swakelola
-
-    st.markdown("## RUP OPD - Swakelola")
