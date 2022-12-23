@@ -409,6 +409,13 @@ with tab3:
 with tab4:
     # Tab RUP OPD - Melalui Penyedia
 
+    ## Dataset
+    sql_rupopd = """
+        SELECT DISTINCT(nama_satker) FROM df_rsap;
+    """
+    opds = con.execute(sql_rupopd).df()
+    opd = st.selectbox("Pilih Perangkat Daerah :", opds)
+    
     st.markdown("## RUP OPD - Melalui Penyedia")
 
 with tab5:
