@@ -43,8 +43,6 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 st.title("Dashboard Pengadaan Barang dan Jasa")
 
 st.markdown("""
-# Dashboard Pengadaan Barang dan Jasa
-
 *Dashboard* ini dibuat sebagai alat bantu untuk mempermudah para pelaku pengadaan di seluruh wilayah Provinsi Kalimantan Barat. Data yang disajikan, antara lain:
 
 * **Rencana PBJ**
