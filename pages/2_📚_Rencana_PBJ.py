@@ -125,7 +125,7 @@ df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 #########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
-tab1, tab2, tab3 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP OPD"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP OPD", "RUP OPD - Penyedia", "RIP OPD - Swakelola"])
 
 with tab1:
     # Tab pemanfaatan SIRUP
@@ -405,3 +405,13 @@ with tab3:
     with jpn2:
         figjpn = px.pie(df_jp_nilai, values='NILAI_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
         st.plotly_chart(figjpn, theme='streamlit', use_container_width=True)
+
+with tab4:
+    # Tab RUP OPD - Melalui Penyedia
+
+    st.markdown("## RUP OPD - Melalui Penyedia")
+
+with tab5:
+    # Tab RUP OPD - Swakelola
+
+    st.markdown("## RUP OPD - Swakelola")

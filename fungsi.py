@@ -10,3 +10,4 @@ def baca_parquet(dataset):
 ## Fungsi Download Dataframe ke CSV
 def unduh_data(unduhdata):
     return unduhdata.to_csv(index=False).encode('utf')
+
