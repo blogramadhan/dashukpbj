@@ -263,7 +263,6 @@ with tab2:
         ORDER BY total_belanja DESC;
     """
     posisi_sa = con.execute(sql_sa).df()
-    #st.table(posisi_sa)
     AgGrid(posisi_sa)
 
 with tab3:
@@ -375,10 +374,10 @@ with tab3:
     mph1, mph2 = st.columns((5,5))
     with mph1:
         st.markdown("#### Berdasarkan Jumlah Paket")
-        st.table(df_mp_hitung)
+        AgGrid(df_mp_hitung)
     with mph2:
         st.markdown("#### Berdasarkan Nilai Paket")
-        st.table(df_mp_nilai)
+        AgGrid(df_mp_nilai)
 
     mpn1, mpn2 = st.columns((5,5))
     with mpn1:
@@ -394,10 +393,10 @@ with tab3:
     jph1, jph2 = st.columns((5,5))
     with jph1:
         st.markdown("#### Berdasarkan Jumlah Paket")
-        st.table(df_jp_hitung)
+        AgGrid(df_jp_hitung)
     with jph2:
         st.markdown("#### Berdasarkan Nilai Paket")
-        st.table(df_jp_nilai)
+        AgGrid(df_jp_nilai)
 
     jpn1, jpn2 = st.columns((5,5))
     with jpn1:
