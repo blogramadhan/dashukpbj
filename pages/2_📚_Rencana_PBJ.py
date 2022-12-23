@@ -26,6 +26,9 @@ import pandas as pd
 import plotly.express as px
 from babel.numbers import format_currency
 from fungsi import *
+# Tes library agrid
+from st_aggrid import AgGrid, JsCode
+from st_aggrid.grid_options_builder import GridOptionsBuilder
 
 # Setting CSS
 with open('style.css') as f:
@@ -260,7 +263,8 @@ with tab2:
         ORDER BY total_belanja DESC;
     """
     posisi_sa = con.execute(sql_sa).df()
-    st.table(posisi_sa)
+    #st.table(posisi_sa)
+    AgGrid(posisi_sa)
 
 with tab3:
     # Tab RUP OPD
