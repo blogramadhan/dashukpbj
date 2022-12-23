@@ -24,7 +24,15 @@ import duckdb
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+# Import library currency
 from babel.numbers import format_currency
+# Import library AgGrid
+from st_aggrid import AgGrid, JsCode
+from st_aggrid.grid_options_builder import GridOptionsBuilder
+# Import library Google Cloud Storage
+from google.oauth2 import service_account
+from google.cloud import storage
+# Import fungsi pribadi
 from fungsi import *
 
 # Setting CSS
@@ -82,20 +90,78 @@ elif pilih == "PROV. KALBAR":
     kodeFolder = "prov"
 
 # Persiapan Dataset
-## Dataset ITKP UKPBJ
-DatasetSIRUPDP = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPSW = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-DatasetTENDERDTS = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-DatasetTENDERDTKS = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
-DatasetNTENDERDNTS = f"https://storage.googleapis.com/ular_kadut/itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
-DatasetKATALOG = f"https://storage.googleapis.com/ular_kadut/epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
-DatasetDARING = f"https://storage.googleapis.com/ular_kadut/epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
+## Google Cloud Storage
+## Create API client.
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = storage.Client(credentials=credentials)
 
-### Data RUP paket penyedia
-df_pp = baca_parquet(DatasetSIRUPDP)
+# Ambil file dari Google Cloud Storage.
+# Uses st.experimental_memo to only rerun when the query changes or after 10 min.
+@st.experimental_memo(ttl=600)
+def unduh_df_parquet(bucket_name, file_path, destination):
+    bucket = client.bucket(bucket_name)
+    return bucket.blob(file_path).download_to_filename(destination)
+##
+
+## Dataset ITKP UKPBJ
+con = duckdb.connect(database=':memory:')
+
+bucket = "dashukpbj"
+
+### File path dan unduh file parquet untuk disimpan di memory
+DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPDP_Temp = f"sirupdp{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+
+DatasetSIRUPSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPSW_Temp = f"sirupdsw{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetSIRUPSW, DatasetSIRUPSW_Temp)
+
+DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+
+DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+DatasetTENDERDTS_Temp = f"dtender_dts{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
+
+DatasetTENDERDTKS = f"itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
+DatasetTENDERDTKS_Temp = f"dtender_dtks{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetTENDERDTKS, DatasetTENDERDTKS_Temp)
+
+DatasetNTENDERDNTS = f"itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
+DatasetNTENDERDNTS_Temp = f"dntenter_dnts{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetNTENDERDNTS, DatasetNTENDERDNTS_Temp)
+
+DatasetKATALOG = f"epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
+DatasetKATALOG_Temp = f"trxkatalog{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
+
+DatasetDARING = f"epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
+DatasetDARING_Temp = f"daring{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetDARING, DatasetDARING_Temp)
+
+### Query dataframe parquet penting
+#### Data Paket Penyedia dan Swakelola
+df_pp = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+df_sw = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
+#### Data Struktur Anggaran
+df_rsap = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP}')").df()
+#### Data Tender
+df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS}')").df()
+df_dtks = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTKS}')").df()
+#### Data Non Tender
+df_dnts = con.execute(f"SELECT * FROM read_parquet('{DatasetNTENDERDNTS}')").df()
+#### Data Katalog
+df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG}')").df()
+#### Data Daring
+df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetDARING}')").df()
+
+### Query Data RUP paket penyedia
 df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]
-df_pp_belum_umumkan = df_pp[df_pp['statusumumkan'].isin(['Draf', 'Draf Lengkap', 'Final Draft'])] 
+df_pp_belum_umumkan = df_pp[df_pp['statusumumkan'].isin(['Draf', 'Draf Lengkap', 'Final Draft'])]
 df_pp_umumkan_umk = df_pp_umumkan[df_pp_umumkan['statususahakecil'] == 'UsahaKecil']
 df_pp_umumkan_pdn = df_pp_umumkan[df_pp_umumkan['statuspdn'] == 'PDN']
 
@@ -110,26 +176,9 @@ df_pp_penunjukan_langsung = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(
 
 df_pp_epurchasing = df_pp_umumkan[df_pp_umumkan['metodepengadaan'].isin(['e-Purchasing'])]
 
-### Data RUP paket swakelola
-df_sw = baca_parquet(DatasetSIRUPSW)
+### Query Data RUP paket swakelola
 df_sw_umumkan = df_sw[df_sw['statusumumkan'] == 'Terumumkan']
 df_sw_inisiasi = df_sw[df_sw['statusumumkan'] == 'Terinisiasi']
-
-### Data struktur anggaran RUP
-df_rsap = baca_parquet(DatasetSIRUPDSARSAP)
-
-### Data Tender
-df_dts = baca_parquet(DatasetTENDERDTS)
-df_dtks = baca_parquet(DatasetTENDERDTKS)
-
-### Data Non Tender
-df_dnts = baca_parquet(DatasetNTENDERDNTS)
-
-### Data Katalog
-df_katalog = baca_parquet(DatasetKATALOG)
-
-### Data Daring
-df_daring = baca_parquet(DatasetDARING)
 
 ######### 
 
@@ -143,7 +192,7 @@ with tab1:
     st.markdown(f"## **PEMANFAATAN SIRUP - {tahun}**")
 
     ### RUP struktur anggaran
-    st.markdown(f"### Struktur Anggaran")
+    st.markdown("### Struktur Anggaran")
     belanja_pengadaan = df_rsap['belanja_pengadaan'].sum()
     belanja_pengadaan_print = format_currency(belanja_pengadaan, 'Rp. ', locale='id_ID')
     belanja_operasional = df_rsap['belanja_operasi'].sum()
@@ -157,7 +206,7 @@ with tab1:
     sa3.metric("Belanja Modal", belanja_modal_print)
 
     ### Posisi input RUP
-    st.markdown(f"### Posisi Input RUP")
+    st.markdown("### Posisi Input RUP")
     jumlah_total_rup = df_pp_umumkan.shape[0] + df_sw_umumkan.shape[0]
     nilai_total_rup = df_pp_umumkan['jumlahpagu'].sum() + df_sw_umumkan['jumlahpagu'].sum()
     nilai_total_rup_print = format_currency(nilai_total_rup, 'Rp. ', locale='id_ID')
@@ -179,7 +228,7 @@ with tab1:
     jumlah_rup_sw_umumkan = df_sw_umumkan.shape[0]
     nilai_rup_sw_umumkan = df_sw_umumkan['jumlahpagu'].sum()
     nilai_rup_sw_umumkan_print = format_currency(nilai_rup_sw_umumkan, 'Rp. ', locale='id_ID')
-    
+
     pirsw1, pirsw2, pirsw3 = st.columns(3)
     pirsw1.metric("", "Paket Swakelola")
     pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
@@ -199,9 +248,9 @@ with tab2:
 
     ### Tampilan Pemanfaatan e-Tendering
     st.markdown(f"## **PEMANFAATAN E-TENDERING - {tahun}**")
- 
+
     ### Pengumuman e-Tendering
-    st.markdown(f"### Pengumuman e-Tendering")
+    st.markdown("### Pengumuman e-Tendering")
 
     jumlah_total_etendering = df_pp_etendering.shape[0]
     nilai_total_etendering = df_pp_etendering['jumlahpagu'].sum()
@@ -240,7 +289,7 @@ with tab2:
     ets3.metric("Nilai e-Tendering (Seleksi)", nilai_etendering_seleksi_print) 
 
     ### Realisasi e-Tendering
-    st.markdown(f"### Realisasi e-Tendering")
+    st.markdown("### Realisasi e-Tendering")
 
     jumlah_total_realisasi_etendering = df_dts.shape[0]
     nilai_total_realisasi_etendering = df_dts['pagu'].sum()
@@ -252,7 +301,7 @@ with tab2:
     ret3.metric("Nilai Total Realisasi E-Tendering", nilai_total_realisasi_etendering_print)           
 
     ### Persentase e-Tendering
-    st.markdown(f"### Persentase e-Tendering")
+    st.markdown("### Persentase e-Tendering")
 
     persen_capaian_etendering = (nilai_total_realisasi_etendering / nilai_total_etendering)
     persen_capaian_etendering_print = "{:.2%}".format(persen_capaian_etendering)
@@ -269,7 +318,7 @@ with tab3:
     st.markdown(f"## **PEMANFAATAN NON E-TENDERING - {tahun}**")
 
     ### Pengumuman non e-Tendering
-    st.markdown(f"### Pengumuman non e-Tendering")
+    st.markdown("### Pengumuman non e-Tendering")
 
     jumlah_total_non_etendering = df_pp_non_etendering.shape[0]
     nilai_total_non_etendering = df_pp_non_etendering['jumlahpagu'].sum()
