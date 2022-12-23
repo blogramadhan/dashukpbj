@@ -410,8 +410,5 @@ with tab4:
     # Tab RUP OPD - Melalui Penyedia
 
     ## Dataset
-    sql_rupopd_4 = """
-        SELECT DISTINCT(nama_satker) FROM df_rsap;
-    """
-    opds4 = con.execute(sql_rupopd_4).df()
-    opd4 = st.selectbox("Pilih Perangkat Daerah :", opds4)
+    namaopds = df_rsap['nama_satker'].unique()
+    namaopd = st.selectbox("Pilih Perangkat Daerah :", namaopds)
