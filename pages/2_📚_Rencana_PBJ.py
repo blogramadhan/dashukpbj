@@ -130,7 +130,7 @@ namaopd = df_rsap['nama_satker'].unique()
 #########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["RUP DAERAH |", "STRUKTUR ANGGARAN |", "RUP PERANGKAT DAERAH |", "RUP PAKET PENYEDIA |", "RUP PAKET SWAKELOLA |"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["| RUP DAERAH |", "| STRUKTUR ANGGARAN |", "| RUP PERANGKAT DAERAH |", "| RUP PAKET PENYEDIA |", "| RUP PAKET SWAKELOLA |"])
 
 with tab1:
     # Tab pemanfaatan SIRUP
