@@ -59,9 +59,9 @@ def download_to_local_file(bucket_name, file_path, destination):
     return bucket.blob(file_path).download_to_filename(destination)
 
 bucket = "dashukpbj"
-file_sirupdp = "sirupdp2023.parquet"
+file_sirupdp = "data/sirupdp2023.parquet"
 file_sirupdp_temp = "sirupdp2023_temp.parquet"
-file_sirupdsw = "sirupdsw2023.parquet"
+file_sirupdsw = "data/sirupdsw2023.parquet"
 file_sirupdsw_temp = "sirupdsw2023_temp.parquet"
 
 download_to_local_file(
