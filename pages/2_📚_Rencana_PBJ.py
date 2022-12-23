@@ -118,14 +118,8 @@ df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Te
 
 ### Data struktur anggaran RUP
 df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
-
+#### Buat variabel nama satker unik
 namaopd = df_rsap['nama_satker'].unique()
-#sql_namaopd = """
-#    SELECT DISTINCT(nama_satker) FROM df_SIRUPDSARSAP;
-#"""
-#namaopd = con.execute(sql_namaopd).df()
-
-######### 
 
 #########
 
@@ -273,6 +267,7 @@ with tab2:
 with tab3:
     # Tab RUP PERANGKAT DAERAH
 
+    ### Tampilan pilihan menu nama opd
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab3')
     
     rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
