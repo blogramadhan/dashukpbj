@@ -74,5 +74,7 @@ download_to_local_file(
 con = duckdb.connect(database=':memory:')
 rupdp = con.execute(f"SELECT namasatker, namapaket, jumlahpagu FROM read_parquet('{file_sirupdp_temp}') LIMIT 5").df()
 rupdsw = con.execute(f"SELECT namasatker, namapaket, jumlahpagu FROM read_parquet('{file_sirupdsw_temp}') LIMIT 2").df()
+st.markdown("## SIRUP Data Penyedia")
 st.dataframe(rupdp)
+st.markdown("## SIRUP Data Swakelola")
 st.dataframe(rupdsw)
