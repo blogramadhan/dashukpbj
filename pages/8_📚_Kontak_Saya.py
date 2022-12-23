@@ -61,9 +61,9 @@ def download_to_local_file(bucket_name, file_path, destination):
 bucket = "dashukpbj"
 file_path = "sirupdp2023.parquet"
 
-download_to_local_file(
+sirupdp = download_to_local_file(
   bucket, file_path, "sirupdp2023_temp.parquet")
 
 con = duckdb.connect(database=':memory:')
-rup = con.execute("SELECT * FROM read_parquet('sirupdp2023_temp.parquet') LIMIT 5").df()
+rup = con.execute(f"SELECT * FROM '{sirupdp}' LIMIT 5").df()
 st.dataframe(rup)
