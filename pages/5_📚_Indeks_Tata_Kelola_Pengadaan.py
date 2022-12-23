@@ -148,16 +148,16 @@ unduh_df_parquet(bucket, DatasetDARING, DatasetDARING_Temp)
 df_pp = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
 df_sw = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
 #### Data Struktur Anggaran
-df_rsap = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP}')").df()
+df_rsap = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 #### Data Tender
-df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS}')").df()
-df_dtks = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTKS}')").df()
+df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
+df_dtks = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTKS_Temp}')").df()
 #### Data Non Tender
-df_dnts = con.execute(f"SELECT * FROM read_parquet('{DatasetNTENDERDNTS}')").df()
+df_dnts = con.execute(f"SELECT * FROM read_parquet('{DatasetNTENDERDNTS_Temp}')").df()
 #### Data Katalog
-df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG}')").df()
+df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}')").df()
 #### Data Daring
-df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetDARING}')").df()
+df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetDARING_Temp}')").df()
 
 ### Query Data RUP paket penyedia
 df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]
