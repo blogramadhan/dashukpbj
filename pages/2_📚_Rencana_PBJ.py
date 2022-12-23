@@ -410,12 +410,12 @@ with tab4:
     # Tab RUP OPD - Melalui Penyedia
 
     ## Dataset
-    sql_rupopd = """
+    sql_rupopd_4 = """
         SELECT DISTINCT(nama_satker) FROM df_rsap;
     """
-    opds = con.execute(sql_rupopd).df()
-    opd = st.selectbox("Pilih Perangkat Daerah :", opds)
-    
+    opds4 = con.execute(sql_rupopd_4).df()
+    opd4 = st.selectbox("Pilih Perangkat Daerah :", opds4)
+
     st.markdown("## RUP OPD - Melalui Penyedia")
 
 with tab5:
