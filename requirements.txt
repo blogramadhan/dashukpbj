@@ -7,4 +7,3 @@ seaborn
 matplotlib
 plotly.express
 google-cloud-storage
-aggrid
