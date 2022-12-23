@@ -272,7 +272,7 @@ with tab2:
 with tab3:
     # Tab RUP PERANGKAT DAERAH
 
-    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
+    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab3')
     
     rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
     rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
@@ -408,9 +408,9 @@ with tab3:
 with tab4:
     # RUP PAKET PENYEDIA
 
-    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
+    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab4')
 
 with tab5:
     # RUP PAKET SWAKELOLA
 
-    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
+    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab5')
