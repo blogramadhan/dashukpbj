@@ -21,6 +21,8 @@
 
 # Import library
 import streamlit as st
+import duckdb
+import pandas as pd
 
 from google.oauth2 import service_account
 from google.cloud import storage
@@ -52,16 +54,16 @@ client = storage.Client(credentials=credentials)
 # Retrieve file contents.
 # Uses st.experimental_memo to only rerun when the query changes or after 10 min.
 @st.experimental_memo(ttl=600)
-def read_file(bucket_name, file_path):
+def download_to_local_file(bucket_name, file_path, destination):
     bucket = client.bucket(bucket_name)
-    return bucket.blob(file_path).download_as_string().decode("utf-8")
+    return bucket.blob(file_path).download_to_filename(destination)
 
-bucket_name = "dashukpbj"
-file_path = "myfile.csv"
+bucket = "dashukpbj"
+file_path = "sirupdp2023.parquet"
 
-content = read_file(bucket_name, file_path)
+download_to_local_file(
+  bucket, file_path, "sirupdp2023_temp.parquet")
 
-# Print results.
-for line in content.strip().split("\n"):
-    name, pet = line.split(",")
-    st.write(f"{name} has a :{pet}:")
+con = duckdb.connect(database=':memory:')
+rup = con.execute("SELECT * FROM read_parquet('sirupdp2023_temp.parquet') LIMIT 5").df()
+st.dataframe(rup)
