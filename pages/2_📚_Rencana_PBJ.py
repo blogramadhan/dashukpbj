@@ -414,8 +414,7 @@ with tab4:
         SELECT DISTINCT(nama_satker) FROM df_rsap;
     """
     opds4 = con.execute(sql_rupopd_4).df()
-    AgGrid(opds4)
-    #opd4 = st.selectbox("Pilih Perangkat Daerah :", opds4)
+    opd4 = st.selectbox("Pilih Perangkat Daerah :", opds4)
 
     #st.markdown("## RUP OPD - Melalui Penyedia")
 
