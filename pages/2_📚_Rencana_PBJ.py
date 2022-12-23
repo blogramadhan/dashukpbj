@@ -119,7 +119,7 @@ df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Te
 ### Data struktur anggaran RUP
 df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 
-namaopd = df_rsap['namasatker'].unique()
+namaopd = df_rsap['nama_satker'].unique()
 #sql_namaopd = """
 #    SELECT DISTINCT(nama_satker) FROM df_SIRUPDSARSAP;
 #"""
