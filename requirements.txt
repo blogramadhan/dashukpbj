@@ -7,4 +7,4 @@ seaborn
 matplotlib
 plotly.express
 google-cloud-storage
-st_aggrid
+AgGrid
