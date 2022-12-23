@@ -25,10 +25,9 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from babel.numbers import format_currency
-from fungsi import *
-# Library aggrid
 from st_aggrid import AgGrid, JsCode
 from st_aggrid.grid_options_builder import GridOptionsBuilder
+from fungsi import *
 
 # Setting CSS
 with open('style.css') as f:
