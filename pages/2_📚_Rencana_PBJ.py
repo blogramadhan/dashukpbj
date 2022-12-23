@@ -119,6 +119,11 @@ df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Te
 ### Data struktur anggaran RUP
 df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 
+sql_namaopd = """
+    SELECT DISTINCT(nama_satker) FROM df_SIRUPDSARSAP;
+"""
+namaopd = con.execute(sql_namaopd).df()
+
 ######### 
 
 #########
@@ -268,11 +273,11 @@ with tab3:
     # Tab RUP PERANGKAT DAERAH
 
     ## Dataset
-    sql_rupopd = """
-        SELECT DISTINCT(nama_satker) FROM df_rsap;
-    """
-    opds = con.execute(sql_rupopd).df()
-    opd = st.selectbox("Pilih Perangkat Daerah :", opds)
+    #sql_rupopd = """
+    #    SELECT DISTINCT(nama_satker) FROM df_rsap;
+    #"""
+    #opds = con.execute(sql_rupopd).df()
+    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
     
     rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
     rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
