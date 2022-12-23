@@ -129,7 +129,7 @@ namaopd = con.execute(sql_namaopd).df()
 #########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
-tab1, tab2, tab3 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP PERANGKAT DAERAH"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP PERANGKAT DAERAH", "RUP PAKET PENYEDIA", "RUP PAKET SWAKELOLA"])
 
 with tab1:
     # Tab pemanfaatan SIRUP
@@ -272,11 +272,6 @@ with tab2:
 with tab3:
     # Tab RUP PERANGKAT DAERAH
 
-    ## Dataset
-    #sql_rupopd = """
-    #    SELECT DISTINCT(nama_satker) FROM df_rsap;
-    #"""
-    #opds = con.execute(sql_rupopd).df()
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
     
     rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
@@ -409,3 +404,13 @@ with tab3:
     with jpn2:
         figjpn = px.pie(df_jp_nilai, values='NILAI_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
         st.plotly_chart(figjpn, theme='streamlit', use_container_width=True)
+
+with tab4:
+    # RUP PAKET PENYEDIA
+
+    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
+
+with tab5:
+    # RUP PAKET SWAKELOLA
+
+    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
