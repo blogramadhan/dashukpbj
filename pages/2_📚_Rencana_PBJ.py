@@ -26,7 +26,7 @@ import pandas as pd
 import plotly.express as px
 from babel.numbers import format_currency
 from fungsi import *
-# Tes library agrid
+# Library aggrid
 from st_aggrid import AgGrid, JsCode
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 
@@ -125,7 +125,7 @@ df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 #########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
-tab1, tab2, tab3, tab4 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP OPD", "PAKET PENYEDIA - OPD"])
+tab1, tab2, tab3 = st.tabs(["RUP DAERAH", "STRUKTUR ANGGARAN", "RUP PERANGKAT DAERAH"])
 
 with tab1:
     # Tab pemanfaatan SIRUP
@@ -266,7 +266,7 @@ with tab2:
     AgGrid(posisi_sa)
 
 with tab3:
-    # Tab RUP OPD
+    # Tab RUP PERANGKAT DAERAH
 
     ## Dataset
     sql_rupopd = """
@@ -405,10 +405,3 @@ with tab3:
     with jpn2:
         figjpn = px.pie(df_jp_nilai, values='NILAI_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
         st.plotly_chart(figjpn, theme='streamlit', use_container_width=True)
-
-with tab4:
-    # Tab RUP OPD - Melalui Penyedia
-
-    ## Dataset
-    namaopds = df_rsap['nama_satker'].unique()
-    namaopd = st.selectbox("Pilih Perangkat Daerah :", namaopds)
