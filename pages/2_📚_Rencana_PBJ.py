@@ -218,10 +218,10 @@ with tab1:
     mph1, mph2 = st.columns((5,5))
     with mph1:
         st.markdown("#### Berdasarkan Jumlah Paket")
-        AgGrid(df_mp_hitung)
+        AgGrid(df_mp_hitung, width='100%')
     with mph2:
         st.markdown("#### Berdasarkan Nilai Paket")
-        AgGrid(df_mp_nilai)
+        AgGrid(df_mp_nilai, width='100%')
  
     mpn1, mpn2 = st.columns((5,5))
     with mpn1:
@@ -237,10 +237,10 @@ with tab1:
     jph1, jph2 = st.columns((5,5))
     with jph1:
         st.markdown("#### Berdasarkan Jumlah Paket")
-        AgGrid(df_jp_hitung)
+        AgGrid(df_jp_hitung, width='100%')
     with jph2:
         st.markdown("#### Berdasarkan Nilai Paket")
-        AgGrid(df_jp_nilai)
+        AgGrid(df_jp_nilai, width='100%')
 
     jpn1, jpn2 = st.columns((5,5))
     with jpn1:
