@@ -91,13 +91,13 @@ elif pilih == "PROV. KALBAR":
 
 # Persiapan Dataset
 ## Google Cloud Storage
-# Create API client.
+## Create API client.
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"]
 )
 client = storage.Client(credentials=credentials)
 
-# Retrieve file contents.
+# Ambil file dari Google Cloud Storage.
 # Uses st.experimental_memo to only rerun when the query changes or after 10 min.
 @st.experimental_memo(ttl=600)
 def unduh_df_parquet(bucket_name, file_path, destination):
@@ -110,6 +110,7 @@ con = duckdb.connect(database=':memory:')
 
 bucket = "dashukpbj"
 
+### File path
 DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
 DatasetSIRUPDP_Temp = f"sirupdp{str(tahun)}_temp.parquet"
 DatasetSIRUPSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
@@ -117,6 +118,7 @@ DatasetSIRUPSW_Temp = f"sirupdsw{str(tahun)}_temp.parquet"
 DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{str(tahun)}_temp.parquet"
 
+### Unduh file parquet dan simpan di memory
 unduh_df_parquet(
     bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp
 )
@@ -127,9 +129,12 @@ unduh_df_parquet(
     bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp
 )
 
+### Query dataframe parquet penting 
 df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
 df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
 df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+
+##########
 
 ### Query Data RUP paket penyedia
 df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
