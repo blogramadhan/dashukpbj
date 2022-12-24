@@ -18,15 +18,24 @@
 #-----------------------------------------------------------------------------------#
 # @ Pontianak, 2022                                                                 #
 #####################################################################################
-
+# Library yang akan dihapus
+import matplotlib.pyplot as plt
+import seaborn as sns
 # import library
+# Import library
 import duckdb
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 import plotly.express as px
+# Import library currency
 from babel.numbers import format_currency
+# Import library AgGrid
+from st_aggrid import AgGrid, JsCode
+from st_aggrid.grid_options_builder import GridOptionsBuilder
+# Import library Google Cloud Storage
+from google.oauth2 import service_account
+from google.cloud import storage
+# Import fungsi pribadi
 from fungsi import *
 
 # Setting CSS
@@ -83,42 +92,65 @@ elif pilih == "KOTA SINGKAWANG":
 elif pilih == "PROV. KALBAR":
     kodeRUP = "D197"    
 
-# Fungsi-fungsi buatan
-def convert_trxkatalog(dftrx):
-    return dftrx.to_csv().encode('utf')
+# Persiapan Dataset
+## Google Cloud Storage
+## Create API client.
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = storage.Client(credentials=credentials)
 
-def convert_prodkatalog(dfprod):
-    return dfprod.to_csv().encode('utf')
+# Ambil file dari Google Cloud Storage.
+# Uses st.experimental_memo to only rerun when the query changes or after 10 min.
+@st.experimental_memo(ttl=600)
+def unduh_df_parquet(bucket_name, file_path, destination):
+    bucket = client.bucket(bucket_name)
+    return bucket.blob(file_path).download_to_filename(destination)
+##
 
-def convert_trxdaring(dftrxdaring):
-    return dftrxdaring.to_csv().encode('utf')
+## Dataset ePurchasing
+con = duckdb.connect(database=':memory:')
 
-# Dataset
-if tahun == 2022:
-    DatasetKatalog = f"https://storage.googleapis.com/ular_kadut/epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
-    DatasetProdukKatalog = f"https://storage.googleapis.com/ular_kadut/epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
-    DatasetTokoDaring = f"https://storage.googleapis.com/ular_kadut/epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
-if tahun == 2023:
-    st.error('BELUM ADA TRANSAKSI DI E-PURCHASING DI TAHUN YANG ANDA PILIH ...')
+bucket = "dashukpbj"
 
-## Data E-KATALOG
-df_kat = baca_parquet(DatasetKatalog)
-df_prod = baca_parquet(DatasetProdukKatalog)
+### File path dan unduh file parquet dan simpan di memory
+DatasetKATALOG = f"epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
+DatasetKATALOG_Temp = f"katalogdetail{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
 
+DatasetPRODUKKATALOG = f"epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
+DatasetPRODUKKATALOG_Temp = f"prodkatalog{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetPRODUKKATALOG, DatasetPRODUKKATALOG_Temp)
+
+DatasetTOKODARING = f"epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
+DatasetTOKODARING_Temp = f"daring{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
+
+### Query dataframe parquet penting
+#### Query dataframe Katalog
+df_kat = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}')").df()
+df_prod = con.execute(f"SELECT * FROM read_parquet('{DatasetPRODUKKATALOG_Temp}')").df()
+#### Quey dataframe Toko Daring
+df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}')").df()
+
+##########
+
+### Query Data Katalog
 df_kat_loc = df_kat[df_kat['kd_klpd'] == kodeRUP]
 df_kat_loc_lokal = df_kat_loc[df_kat_loc['jenis_katalog'] == "Lokal"]
 df_kat_loc_sektoral = df_kat_loc[df_kat_loc['jenis_katalog'] == "Sektoral"]
 df_kat_loc_nasional = df_kat_loc[df_kat_loc['jenis_katalog'] == "Nasional"]
 df_prod_loc = df_prod[df_prod['kd_klpd'] == kodeRUP]
 
-## Data Toko Daring
-df_daring = baca_parquet(DatasetTokoDaring)
+### Query Data Toko Daring
 df_daring_loc = df_daring[df_daring['kd_klpd'] == kodeRUP]
 
 # Buat Tab e-Katalog dan Toko Daring
 tab1, tab2 = st.tabs(["E-KATALOG", "TOKO DARING"])
 
-## Tab e-Katalog
+##########
+
+## Buat Tab ePurchasing
 with tab1:
 
     ## Mulai Tampilkan Data E-KATALOG
@@ -190,8 +222,8 @@ with tab1:
         st.error('BELUM ADA TRANSAKSI DI KATALOG LOKAL ...')
 
     # Download Data Button
-    df1_download = convert_trxkatalog(df_kat_loc)
-    df2_download = convert_prodkatalog(df_prod_loc)
+    df1_download = unduh_data(df_kat_loc)
+    df2_download = unduh_data(df_prod_loc)
 
     st.download_button(
         label = '📥 Download Data Transaksi E-KATALOG',

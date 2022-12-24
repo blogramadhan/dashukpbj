@@ -110,24 +110,18 @@ con = duckdb.connect(database=':memory:')
 
 bucket = "dashukpbj"
 
-### File path
+### File path dan unduh file parquet dan simpan di memory
 DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
 DatasetSIRUPDP_Temp = f"sirupdp{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+
 DatasetSIRUPSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
 DatasetSIRUPSW_Temp = f"sirupdsw{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetSIRUPSW, DatasetSIRUPSW_Temp)
+
 DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{str(tahun)}_temp.parquet"
-
-### Unduh file parquet dan simpan di memory
-unduh_df_parquet(
-    bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp
-)
-unduh_df_parquet(
-    bucket, DatasetSIRUPSW, DatasetSIRUPSW_Temp
-)
-unduh_df_parquet(
-    bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp
-)
+unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
 ### Query dataframe parquet penting 
 df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
