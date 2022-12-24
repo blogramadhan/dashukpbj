@@ -286,7 +286,7 @@ with tab2:
         st.error('BELUM ADA TRANSAKSI DI TOKO DARING ...')       
 
     # Download Data Button
-    df1_download_daring = convert_trxdaring(df_daring_loc)
+    df1_download_daring = unduh_data(df_daring_loc)
 
     st.download_button(
         label = '📥 Download Data Transaksi TOKO DARING',
