@@ -27,7 +27,7 @@ import plotly.express as px
 # Import library currency
 from babel.numbers import format_currency
 # Import library AgGrid
-from st_aggrid import AgGrid, JsCode
+from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 # Import library Google Cloud Storage
 from google.oauth2 import service_account
