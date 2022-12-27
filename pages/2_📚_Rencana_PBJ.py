@@ -463,7 +463,7 @@ with tab4:
     gd = GridOptionsBuilder.from_dataframe(rup_pdppsql_tampil)
     gd.configure_pagination()
     gd.configure_side_bar()
-    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", aggFunc="count", editable=True)
 
     gridOptions = gd.build()
 
