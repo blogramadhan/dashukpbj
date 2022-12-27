@@ -325,7 +325,7 @@ with tab3:
 
     d1, d2, d3 = st.columns((6,2,2))
     with d1:
-        st.markdown(f"## **{opd}**")
+        st.markdown(f"### **{opd}**")
     with d2:
         st.download_button(
             label = "📥 Download RUP Penyedia",
@@ -452,7 +452,7 @@ with tab4:
 
     d1, d2= st.columns((8,2))
     with d1:
-        st.markdown(f"## **{opd}**")
+        st.markdown(f"### **{opd}**")
     with d2:
         st.download_button(
             label = "📥 Download Paket RUP Penyedia",
