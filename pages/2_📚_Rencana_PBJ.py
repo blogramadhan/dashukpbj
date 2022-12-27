@@ -437,11 +437,39 @@ with tab3:
         st.plotly_chart(figjpn, theme='streamlit', use_container_width=True)
 
 with tab4:
-    # RUP PAKET PENYEDIA
+    # RUP PAKET PENYEDIA TIAP OPD TABULASI DATA
 
+    ### Tampilan pilihan menu nama OPD
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab4')
 
-with tab5:
-    # RUP PAKET SWAKELOLA
+    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
+    rup_pdppsql_tampil = con.execute(f"SELECT namapaket, metodepengadaan, jenispengadaan, jumlahpagu FROM rup_pdppsql").df()
 
+    ### Tampilan RUP Pearangkat Daerah
+    unduh_rupdp = unduh_data(rup_pdppsql)
+
+    d1, d2= st.columns((8,2))
+    with d1:
+        st.markdown(f"## **PAKET RUP - {opd} - {tahun}**")
+    with d2:
+        st.download_button(
+            label = "📥 Download Paket RUP Penyedia",
+            data = unduh_rupdp,
+            file_name = f"ruppenyedia-{opd}.csv",
+            mime = "text/csv"             
+        )
+    
+    ### Tabulasi data dan pagination AgGrid
+    gd = GridOptionsBuilder.from_dataframe(rup_pdppsql_tampil)
+    gd.configure_pagination()
+    gridOptions = gd.build()
+
+    AgGrid(rup_pdppsql_tampil, gridOptions=gridOptions)
+
+with tab5:
+    # RUP PAKET SWAKELOLA TIAP OPD TABULASI DATA
+
+    ### Tampilan pilihan menu nama OPD
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab5')
+
+    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
