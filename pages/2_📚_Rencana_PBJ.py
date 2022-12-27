@@ -301,7 +301,7 @@ with tab2:
 
 with tab3:
     # Tab RUP PERANGKAT DAERAH
-    st.markdown(f"## **RUP PERANGKAT DAERAH**")
+    st.markdown(f"## **RUP PERANGKAT DAERAH TAHUN {tahun}**")
 
     ### Tampilan pilihan menu nama opd
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab3')
@@ -325,7 +325,7 @@ with tab3:
 
     d1, d2, d3 = st.columns((6,2,2))
     with d1:
-        st.markdown(f"## **{opd} - {tahun}**")
+        st.markdown(f"## **{opd}**")
     with d2:
         st.download_button(
             label = "📥 Download RUP Penyedia",
@@ -439,7 +439,7 @@ with tab3:
 
 with tab4:
     # RUP PAKET PENYEDIA TIAP OPD TABULASI DATA
-    st.markdown(f"## **RUP PAKET PENYEDIA**")
+    st.markdown(f"## **RUP PAKET PENYEDIA TAHUN {tahun}**")
 
     ### Tampilan pilihan menu nama OPD
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab4')
@@ -452,7 +452,7 @@ with tab4:
 
     d1, d2= st.columns((8,2))
     with d1:
-        st.markdown(f"## **{opd} - {tahun}**")
+        st.markdown(f"## **{opd}**")
     with d2:
         st.download_button(
             label = "📥 Download Paket RUP Penyedia",
