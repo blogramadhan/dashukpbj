@@ -443,7 +443,7 @@ with tab4:
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab4')
 
     rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
-    rup_pdppsql_tampil = con.execute(f"SELECT namapaket, metodepengadaan, jenispengadaan, jumlahpagu FROM rup_pdppsql").df()
+    rup_pdppsql_tampil = con.execute(f"SELECT namapaket AS NAMA_PAKET, metodepengadaan AS METODE_PENGADAAN, jenispengadaan AS JENIS_PENGADAAN, statuspdn AS STATUS_PDN, statususahakecil AS STATUS_USAHA_KECIL, jumlahpagu AS JUMLAH_PAGU FROM rup_pdppsql").df()
 
     ### Tampilan RUP Pearangkat Daerah
     unduh_rupdp = unduh_data(rup_pdppsql)
@@ -462,9 +462,12 @@ with tab4:
     ### Tabulasi data dan pagination AgGrid
     gd = GridOptionsBuilder.from_dataframe(rup_pdppsql_tampil)
     gd.configure_pagination()
+    gd.configure_side_bar()
+    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+
     gridOptions = gd.build()
 
-    AgGrid(rup_pdppsql_tampil, gridOptions=gridOptions)
+    AgGrid(rup_pdppsql_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
 
 with tab5:
     # RUP PAKET SWAKELOLA TIAP OPD TABULASI DATA
