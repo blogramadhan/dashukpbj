@@ -463,12 +463,11 @@ with tab4:
     gd = GridOptionsBuilder.from_dataframe(rup_pdppsql_tampil)
     gd.configure_pagination()
     gd.configure_side_bar()
-    #gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
 
     gridOptions = gd.build()
 
-    #AgGrid(rup_pdppsql_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
-    AgGrid(rup_pdppsql_tampil, gridOptions=gridOptions)
+    AgGrid(rup_pdppsql_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
 
 with tab5:
     # RUP PAKET SWAKELOLA TIAP OPD TABULASI DATA
