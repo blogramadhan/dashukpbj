@@ -124,9 +124,9 @@ DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
 unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
 ### Query dataframe parquet penting 
-df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{f"sirupdp{kodeFolder}{str(tahun)}_temp.parquet"}')").df()
-df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{f"sirupdsw{kodeFolder}{str(tahun)}_temp.parquet"}')").df()
-df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"}')").df()
+df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
+df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
 ##########
 
