@@ -445,17 +445,17 @@ with tab4:
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab4')
 
     rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
-    rup_pdppsql_tampil = con.execute(f"SELECT namapaket AS NAMA_PAKET, metodepengadaan AS METODE_PENGADAAN, jenispengadaan AS JENIS_PENGADAAN, statuspdn AS STATUS_PDN, statususahakecil AS STATUS_USAHA_KECIL, jumlahpagu AS JUMLAH_PAGU FROM rup_pdppsql").df()
+    rup_pdppsql_tampil = con.execute(f"SELECT idrup AS KODE_RUP, namapaket AS NAMA_PAKET, metodepengadaan AS METODE_PENGADAAN, jenispengadaan AS JENIS_PENGADAAN, statuspdn AS STATUS_PDN, statususahakecil AS STATUS_USAHA_KECIL, jumlahpagu AS JUMLAH_PAGU FROM rup_pdppsql").df()
 
-    ### Tampilan RUP Pearangkat Daerah
+    ### Tampilan RUP Perangkat Daerah (Data Penyedia)
     unduh_rupdp = unduh_data(rup_pdppsql)
 
-    d1, d2= st.columns((8,2))
-    with d1:
+    ddp1, ddp2 = st.columns((8,2))
+    with ddp1:
         st.markdown(f"### **{opd}**")
-    with d2:
+    with ddp2:
         st.download_button(
-            label = "📥 Download Paket RUP Penyedia",
+            label = "📥 Download RUP Paket Penyedia",
             data = unduh_rupdp,
             file_name = f"ruppenyedia-{opd}.csv",
             mime = "text/csv"             
@@ -473,8 +473,34 @@ with tab4:
 
 with tab5:
     # RUP PAKET SWAKELOLA TIAP OPD TABULASI DATA
+    st.markdown(f"## **RUP PAKET SWAKELOLA TAHUN {tahun}**")
 
     ### Tampilan pilihan menu nama OPD
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab5')
 
     rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
+    rup_pdswsql_tampil = con.execute(f"SELECT idrup AS KODE_RUP, namapaket AS NAMA_PAKET, tipe_swakelola AS TIPE_SWAKELOLA, jumlahpagu AS NILAI_PAGU FROM rup_pdswsql ").df()
+
+    ### Tampilan RUP Perangkat Daerah (Data Swakelola)
+    unduh_rupsw = unduh_data(rup_pdswsql)
+
+    dsw1, dsw2 = st.columns((8,2))
+    with dsw1:
+        st.markdown(f"### **{opd}**")
+    with dsw2:
+        st.download_button(
+            label = "📥 Download RUP Paket Swakelola",
+            data = unduh_rupsw,
+            file_name = f"rupswakelola-{opd}.csv",
+            mime = "text/csv"       
+        )
+
+    ### Tabulasi data dan pagination AgGrid
+    gd = GridOptionsBuilder.from_dataframe(rup_pdswsql_tampil)
+    gd.configure_pagination()
+    gd.configure_side_bar()
+    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+
+    gridOptions = gd.build()
+
+    AgGrid(rup_pdswsql_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
