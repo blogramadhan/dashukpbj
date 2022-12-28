@@ -115,9 +115,9 @@ DatasetTENDERDTP = f"itkp/{kodeFolder}/dtender_dtp{str((tahun))}.parquet"
 DatasetTENDERDTP_Temp = f"dtender_dtp{kodeFolder}{str(tahun)}_temp.parquet"
 unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
 
-DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-DatasetTENDERDTS_Temp = f"dtender_dts{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
+#DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+#DatasetTENDERDTS_Temp = f"dtender_dts{kodeFolder}{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
 
 DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
