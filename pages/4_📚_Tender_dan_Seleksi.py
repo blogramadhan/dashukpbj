@@ -199,11 +199,11 @@ with tab2:
         )
 
     ### Tabulasi data dan pagination AgGrid
-    gd = GridOptionsBuilder.from_dataframe(dts_tabel_gab)
+    gd = GridOptionsBuilder.from_dataframe(dts_tabel_gab_tampil)
     gd.configure_pagination()
     gd.configure_side_bar()
     gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
 
     gridOptions = gd.build()
 
-    AgGrid(dts_tabel_gab, gridOptions=gridOptions, enable_enterprise_modules=True)
+    AgGrid(dts_tabel_gab_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
