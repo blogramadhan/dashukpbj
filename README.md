@@ -11,7 +11,9 @@
 * **Tender dan Seleksi**
   * Tender/Seleksi diumumkan
   * Tender/Seleksi Selesai
-* ePurchasing
+* **ePurchasing**
+  * Katalog Lokal
+  * Toko Daring
 * Indeks Tata Kelola PBJ
 
 *Made with love* dengan menggunakan bahasa programming [Python](https://www.python.org/) dengan beberapa *library* utama seperti:
