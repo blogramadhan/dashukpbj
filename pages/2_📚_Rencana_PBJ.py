@@ -479,7 +479,7 @@ with tab5:
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab5')
 
     rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
-    rup_pdswsql_tampil = con.execute(f"SELECT idrup AS KODE_RUP, namapaket AS NAMA_PAKET, tipe_swakelola AS TIPE_SWAKELOLA, statuspdn AS STATUS_PDN, statususahakecil AS STATUS_USAHA_KECIL, jumlahpagu AS NILAI_PAGU FROM rup_pdswsql ").df()
+    rup_pdswsql_tampil = con.execute(f"SELECT idrup AS KODE_RUP, namapaket AS NAMA_PAKET, tipe_swakelola AS TIPE_SWAKELOLA, lokasi AS LOKASI, ppk AS PPK, volume AS VOLUME, jumlahpagu AS NILAI_PAGU FROM rup_pdswsql ").df()
 
     ### Tampilan RUP Perangkat Daerah (Data Swakelola)
     unduh_rupsw = unduh_data(rup_pdswsql)
