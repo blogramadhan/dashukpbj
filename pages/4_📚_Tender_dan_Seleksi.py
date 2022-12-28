@@ -182,6 +182,7 @@ with tab2:
     dtp_tabel = con.execute(f"SELECT * FROM df_dtp WHERE nama_satker = '{opd}'").df()
     dts_tabel = con.execute(f"SELECT * FROM df_dts WHERE nama_satker = '{opd}'").df()
     dts_tabel_gab = con.execute(f"SELECT * FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket").df()
+    dts_tabel_gab_tampil = con.execute(f"SELECT dts.kd_rup_paket AS KODE_RUP, dtp.nama_paket AS NAMA_PAKET, dtp.mtd_pemilihan AS METODE_PEMILIHAN, dtp.kualifikasi_paket AS KUALIFIKASI_PAKET FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket").df()
 
     ### Tampilan Data Tender Selesai Perangkat Daerah
     unduh_dts_gab = unduh_data(dts_tabel_gab)
