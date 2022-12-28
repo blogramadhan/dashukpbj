@@ -53,7 +53,7 @@ daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH"
             "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
             "KAB. KAYONG UTARA", "KAB. KETAPANG"]
 
-tahuns = [2022, 2023]
+tahuns = [2022]
 
 pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 tahun = st.sidebar.selectbox("Pilih Tahun :", tahuns)
@@ -115,9 +115,9 @@ DatasetTENDERDTP = f"itkp/{kodeFolder}/dtender_dtp{str((tahun))}.parquet"
 DatasetTENDERDTP_Temp = f"dtender_dtp{kodeFolder}{str(tahun)}_temp.parquet"
 unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
 
-#DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-#DatasetTENDERDTS_Temp = f"dtender_dts{kodeFolder}{str(tahun)}_temp.parquet"
-#unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
+DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+DatasetTENDERDTS_Temp = f"dtender_dts{kodeFolder}{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
 
 DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
@@ -125,7 +125,7 @@ unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
 ### Query dataframe parquet penting
 df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
-#df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df() 
+df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df() 
 df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
 ### Query Data Tender dan Non Tender
@@ -143,6 +143,7 @@ with tab1:
 
     ### Tampilan pilihan menu nama opd
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab1')
+
     dtp_tabel = con.execute(f"SELECT * FROM df_dtp WHERE nama_satker = '{opd}'").df()
     dtp_tabel_tampil = con.execute(f"SELECT kd_rup_paket AS KODE_RUP, nama_paket AS NAMA_PAKET, mtd_pemilihan AS METODE_PEMILIHAN, pagu AS PAGU, tgl_buat_paket AS TGL_BUAT, tgl_pengumuman_tender AS TGL_RENC_TENDER, nama_status_tender AS STATUS_PAKET FROM dtp_tabel").df()
 
@@ -177,3 +178,31 @@ with tab2:
 
     ### Tampilan pilihan menu nama opd
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab2')
+
+    dtp_tabel = con.execute(f"SELECT * FROM df_dtp WHERE nama_satker = '{opd}'").df()
+    dts_tabel = con.execute(f"SELECT * FROM df_dts WHERE nama_satker = '{opd}'").df()
+    dts_tabel_gab = con.execute(f"SELECT * FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket").df()
+
+    ### Tampilan Data Tender Selesai Perangkat Daerah
+    unduh_dts_gab = unduh_data(dts_tabel_gab)
+
+    dts1, dts2 = st.columns((8,2))
+    with dts1:
+        st.markdown(f"### **{opd}**")
+    with dts2:
+        st.download_button(
+            label = "📥 Download Data Tender Diumumkan",
+            data = unduh_dts_gab,
+            file_name = f"datatenderselesai-{opd}.csv",
+            mime = "text/csv"                
+        )
+
+    ### Tabulasi data dan pagination AgGrid
+    gd = GridOptionsBuilder.from_dataframe(dts_tabel_gab)
+    gd.configure_pagination()
+    gd.configure_side_bar()
+    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+
+    gridOptions = gd.build()
+
+    AgGrid(dts_tabel_gab, gridOptions=gridOptions, enable_enterprise_modules=True)
