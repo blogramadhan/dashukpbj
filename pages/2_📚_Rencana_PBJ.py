@@ -91,7 +91,7 @@ elif pilih == "PROV. KALBAR":
 
 # Persiapan Dataset
 ## Google Cloud Storage
-## Create API client.
+## Create API Client.
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"]
 )
