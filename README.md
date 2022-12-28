@@ -8,7 +8,10 @@
   * *RUP Perangkat Daerah*
   * *RUP Paket Penyedia*
   * *RUP Paket Swakelola*
-* Realisasi PBJ
+* **Tender dan Seleksi**
+  * Tender/Seleksi diumumkan
+  * Tender/Seleksi Selesai
+* ePurchasing
 * Indeks Tata Kelola PBJ
 
 *Made with love* dengan menggunakan bahasa programming [Python](https://www.python.org/) dengan beberapa *library* utama seperti:
@@ -18,4 +21,4 @@
 
 Sumber data dari *Dashboard* ini berasal dari **API JSON** yang ditarik harian dari [ISB LKPP](https://lkpp.go.id). Data tersebut kemudian disimpan di [Google Cloud Storage](https://google.com) untuk kemudian diolah lebih lanjut dengan [Python](https://python.org).
 
-@2022 - **UlarKadut** 
+@2022 - **UlarKadut**  

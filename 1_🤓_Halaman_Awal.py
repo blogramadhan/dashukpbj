@@ -51,7 +51,10 @@ st.markdown("""
   * *RUP Perangkat Daerah*
   * *RUP Paket Penyedia*
   * *RUP Paket Swakelola*
-* Realisasi PBJ
+* **Tender dan Seleksi**
+  * Tender/Seleksi diumumkan
+  * Tender/Seleksi Selesai
+* ePurchasing
 * Indeks Tata Kelola PBJ
 
 *Made with love* dengan menggunakan bahasa programming [Python](https://www.python.org/) dengan beberapa *library* utama seperti:

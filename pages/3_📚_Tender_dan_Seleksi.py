@@ -125,7 +125,7 @@ unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
 ### Query dataframe parquet penting
 df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
-df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df() 
+df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
 df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
 ### Query Data Tender dan Non Tender
@@ -145,7 +145,9 @@ with tab1:
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab1')
 
     dtp_tabel = con.execute(f"SELECT * FROM df_dtp WHERE nama_satker = '{opd}'").df()
-    dtp_tabel_tampil = con.execute(f"SELECT kd_rup_paket AS KODE_RUP, nama_paket AS NAMA_PAKET, mtd_pemilihan AS METODE_PEMILIHAN, pagu AS PAGU, tgl_buat_paket AS TGL_BUAT, tgl_pengumuman_tender AS TGL_RENC_TENDER, nama_status_tender AS STATUS_PAKET FROM dtp_tabel").df()
+    dtp_tabel_tampil = con.execute(
+        "SELECT kd_rup_paket AS KODE_RUP, nama_paket AS NAMA_PAKET, mtd_pemilihan AS METODE_PEMILIHAN, pagu AS PAGU, tgl_buat_paket AS TGL_BUAT, tgl_pengumuman_tender AS TGL_RENC_TENDER, nama_status_tender AS STATUS_PAKET FROM dtp_tabel"
+    ).df()
 
     ### Tampilan Data Tender Diumumkan Perangkat Daerah
     unduh_dtp = unduh_data(dtp_tabel)
@@ -174,15 +176,19 @@ with tab1:
 
 with tab2:
     # Tab TENDER/SELEKSI DIUMUMKAN
-    st.markdown(f"## **TENDER/SELEKSI DIUMUMKAN TAHUN {tahun}**")
+    st.markdown(f"## **TENDER/SELEKSI SELESAI TAHUN {tahun}**")
 
     ### Tampilan pilihan menu nama opd
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab2')
 
     dtp_tabel = con.execute(f"SELECT * FROM df_dtp WHERE nama_satker = '{opd}'").df()
     dts_tabel = con.execute(f"SELECT * FROM df_dts WHERE nama_satker = '{opd}'").df()
-    dts_tabel_gab = con.execute(f"SELECT * FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket").df()
-    dts_tabel_gab_tampil = con.execute(f"SELECT dts.kd_rup_paket AS KODE_RUP, dtp.nama_paket AS NAMA_PAKET, dtp.mtd_pemilihan AS METODE_PEMILIHAN, dtp.kualifikasi_paket AS KUALIFIKASI_PAKET, dts.nilai_kontrak AS NILAI_KONTRAK, dts.tgl_pengumuman_tender AS TGL_UMUMKAN, dts.tgl_penetapan_pemenang AS TGL_MENANG, dts.nama_penyedia AS NAMA_PEMENANG FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket").df()
+    dts_tabel_gab = con.execute(
+        "SELECT * FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket"
+    ).df()
+    dts_tabel_gab_tampil = con.execute(
+        "SELECT dts.kd_rup_paket AS KODE_RUP, dtp.nama_paket AS NAMA_PAKET, dtp.mtd_pemilihan AS METODE_PEMILIHAN, dtp.kualifikasi_paket AS KUALIFIKASI_PAKET, dts.nilai_kontrak AS NILAI_KONTRAK, dts.tgl_pengumuman_tender AS TGL_UMUMKAN, dts.tgl_penetapan_pemenang AS TGL_MENANG, dts.nama_penyedia AS NAMA_PEMENANG FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket"
+    ).df()
 
     ### Tampilan Data Tender Selesai Perangkat Daerah
     unduh_dts_gab = unduh_data(dts_tabel_gab)
