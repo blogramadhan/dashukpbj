@@ -160,6 +160,16 @@ with tab1:
             mime = "text/csv"                
         )
 
+    ### Tabulasi data dan pagination AgGrid
+    gd = GridOptionsBuilder.from_dataframe(dtp_tabel_tampil)
+    gd.configure_pagination()
+    gd.configure_side_bar()
+    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+
+    gridOptions = gd.build()
+
+    AgGrid(dtp_tabel_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
+
 
 with tab2:
     # Tab TENDER/SELEKSI DIUMUMKAN
