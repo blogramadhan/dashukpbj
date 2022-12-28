@@ -143,6 +143,23 @@ with tab1:
 
     ### Tampilan pilihan menu nama opd
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab1')
+    dtp_tabel = con.execute(f"SELECT * FROM DatasetTENDERDTP_Temp WHERE nama_satker = '{opd}'").df()
+    dtp_tabel_tampil = con.execute(f"SELECT kd_rup_paket AS KODE_RUP, nama_paket AS NAMA_PAKET, mtd_pemilihan AS METODE_PEMILIHAN, pagu AS PAGU, tgl_buat_paket AS TGL_BUAT, tgl_pengumuman_tender AS TGL_RENC_TENDER, nama_status_tender AS STATUS_PAKET FROM dtp_tabel").df()
+
+    ### Tampilan Data Tender Diumumkan Perangkat Daerah
+    unduh_dtp = unduh_data(dtp_tabel)
+
+    dtp1, dtp2 = st.columns((8,2))
+    with dtp1:
+        st.markdown(f"### **{opd}**")
+    with dtp2:
+        st.download_button(
+            label = "📥 Download Data Tender Diumumkan",
+            data = unduh_dtp,
+            file_name = f"datatenderumumkan-{opd}.csv",
+            mime = "text/csv"                
+        )
+
 
 with tab2:
     # Tab TENDER/SELEKSI DIUMUMKAN
