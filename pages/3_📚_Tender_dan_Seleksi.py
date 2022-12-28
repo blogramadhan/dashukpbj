@@ -135,7 +135,7 @@ df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 namaopd = df_rsap['nama_satker'].unique()
 
 ##########
-tab1, tab2 = st.tabs(["| TENDER/SELEKSI DIUMUMKAN |", "| TENDER/SELEKSI BERJALAN |"])
+tab1, tab2 = st.tabs(["| TENDER/SELEKSI DIUMUMKAN |", "| TENDER/SELEKSI SELESAI |"])
 
 with tab1:
     # Tab TENDER/SELEKSI DIUMUMKAN
