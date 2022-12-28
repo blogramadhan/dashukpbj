@@ -124,8 +124,6 @@ DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
 unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
 ### Query dataframe parquet penting
-df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
-df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df() 
 df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
 ### Query Data Tender dan Non Tender
@@ -139,6 +137,8 @@ tab1, tab2 = st.tabs(["| TENDER/SELEKSI DIUMUMKAN |", "| TENDER/SELEKSI BERJALAN
 
 with tab1:
     # Tab TENDER/SELEKSI DIUMUMKAN
+    df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
+
     st.markdown(f"## **TENDER/SELEKSI DIUMUMKAN TAHUN {tahun}**")
 
     ### Tampilan pilihan menu nama opd
@@ -146,6 +146,8 @@ with tab1:
 
 with tab2:
     # Tab TENDER/SELEKSI DIUMUMKAN
+    df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df() 
+
     st.markdown(f"## **TENDER/SELEKSI DIUMUMKAN TAHUN {tahun}**")
 
     ### Tampilan pilihan menu nama opd
