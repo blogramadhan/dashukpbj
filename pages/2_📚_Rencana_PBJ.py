@@ -479,6 +479,7 @@ with tab4:
     gd.configure_pagination()
     gd.configure_side_bar()
     gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+    gd.configure_column("JUMLAH_PAGU", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.JUMLAH_PAGU.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
 
     gridOptions = gd.build()
 
@@ -513,6 +514,7 @@ with tab5:
     gd.configure_pagination()
     gd.configure_side_bar()
     gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+    gd.configure_column("NILAI_PAGU", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAGU.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
 
     gridOptions = gd.build()
 
