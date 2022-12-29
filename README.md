@@ -3,11 +3,11 @@
 *Dashboard* ini dibuat sebagai alat bantu untuk mempermudah para pelaku pengadaan di seluruh wilayah Provinsi Kalimantan Barat. Data yang disajikan, antara lain:
 
 * **Rencana PBJ**
-  * *RUP Daerah*
-  * *Struktur Anggaran*
-  * *RUP Perangkat Daerah*
-  * *RUP Paket Penyedia*
-  * *RUP Paket Swakelola*
+  * RUP Daerah
+  * Struktur Anggaran
+  * RUP Perangkat Daerah
+  * RUP Paket Penyedia
+  * RUP Paket Swakelola
 * **Tender dan Seleksi**
   * Tender/Seleksi diumumkan
   * Tender/Seleksi Selesai
