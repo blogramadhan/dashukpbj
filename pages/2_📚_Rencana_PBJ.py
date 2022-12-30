@@ -153,8 +153,10 @@ df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Te
 
 ### Data struktur anggaran RUP
 df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
-#### Buat variabel nama satker unik
-namaopd = df_rsap['nama_satker'].unique()
+
+### Buat variabel nama satker unik
+#namaopd = df_rsap['nama_satker'].unique()
+namaopd = df_SIRUPDP['namasatker'].unique()
 
 #########
 
