@@ -134,8 +134,8 @@ df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP
 df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 
 ### Buat variabel nama satker unik
-#namaopd = df_rsap['nama_satker'].unique()
-namaopd = df_dtp['namasatker'].unique()
+namaopd = df_rsap['nama_satker'].unique()
+#namaopd = df_dtp['namasatker'].unique()
 
 ##########
 tab1, tab2 = st.tabs(["| TENDER/SELEKSI DIUMUMKAN |", "| TENDER/SELEKSI SELESAI |"])
