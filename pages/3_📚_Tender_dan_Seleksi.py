@@ -113,11 +113,11 @@ bucket = "dashukpbj"
 ### File path dan unduh file parquet untuk disimpan di memory
 DatasetTENDERDTP = f"itkp/{kodeFolder}/dtender_dtp{str((tahun))}.parquet"
 DatasetTENDERDTP_Temp = f"dtender_dtp{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
+#unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
 
 DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
 DatasetTENDERDTS_Temp = f"dtender_dts{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
+#unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
 
 DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
 DatasetSIRUPDP_Temp = f"sirupdp{kodeFolder}{str(tahun)}_temp.parquet"
@@ -128,8 +128,8 @@ DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
 unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
 ### Query dataframe parquet penting
-df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
-df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
+#df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
+#df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
 df_SIRUPDP = con.execute(f"SELECT namasatker FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
 df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
@@ -146,6 +146,11 @@ namaopd = df_SIRUPDP['namasatker'].unique()
 tab1, tab2 = st.tabs(["| TENDER/SELEKSI DIUMUMKAN |", "| TENDER/SELEKSI SELESAI |"])
 
 with tab1:
+
+    # Unduh data parquet Tender Berjalan
+    unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
+    df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
+
     # Tab TENDER/SELEKSI DIUMUMKAN
     st.markdown(f"## **TENDER/SELEKSI DIUMUMKAN TAHUN {tahun}**")
 
@@ -184,6 +189,11 @@ with tab1:
 
 
 with tab2:
+
+    # Unduh data parquet Tender Selesai
+    unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
+    df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
+
     # Tab TENDER/SELEKSI DIUMUMKAN
     st.markdown(f"## **TENDER/SELEKSI SELESAI TAHUN {tahun}**")
 
