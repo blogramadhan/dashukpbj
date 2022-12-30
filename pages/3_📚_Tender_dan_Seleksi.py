@@ -191,45 +191,48 @@ with tab1:
 with tab2:
 
     # Unduh data parquet Tender Selesai
-    unduh_dts = unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
-    df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
+    if unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp):
+        df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
 
-    # Tab TENDER/SELEKSI DIUMUMKAN
-    st.markdown(f"## **TENDER/SELEKSI SELESAI TAHUN {tahun}**")
+        # Tab TENDER/SELEKSI DIUMUMKAN
+        st.markdown(f"## **TENDER/SELEKSI SELESAI TAHUN {tahun}**")
 
-    ### Tampilan pilihan menu nama opd
-    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab2')
+        ### Tampilan pilihan menu nama opd
+        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab2')
 
-    dtp_tabel = con.execute(f"SELECT * FROM df_dtp WHERE nama_satker = '{opd}'").df()
-    dts_tabel = con.execute(f"SELECT * FROM df_dts WHERE nama_satker = '{opd}'").df()
-    dts_tabel_gab = con.execute(
-        "SELECT * FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket"
-    ).df()
-    dts_tabel_gab_tampil = con.execute(
-        "SELECT dts.kd_rup_paket AS KODE_RUP, dtp.nama_paket AS NAMA_PAKET, dtp.mtd_pemilihan AS METODE_PEMILIHAN, dtp.kualifikasi_paket AS KUALIFIKASI_PAKET, dts.nilai_kontrak AS NILAI_KONTRAK, dts.tgl_pengumuman_tender AS TGL_UMUMKAN, dts.tgl_penetapan_pemenang AS TGL_MENANG, dts.nama_penyedia AS NAMA_PEMENANG FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket"
-    ).df()
+        dtp_tabel = con.execute(f"SELECT * FROM df_dtp WHERE nama_satker = '{opd}'").df()
+        dts_tabel = con.execute(f"SELECT * FROM df_dts WHERE nama_satker = '{opd}'").df()
+        dts_tabel_gab = con.execute(
+            "SELECT * FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket"
+        ).df()
+        dts_tabel_gab_tampil = con.execute(
+            "SELECT dts.kd_rup_paket AS KODE_RUP, dtp.nama_paket AS NAMA_PAKET, dtp.mtd_pemilihan AS METODE_PEMILIHAN, dtp.kualifikasi_paket AS KUALIFIKASI_PAKET, dts.nilai_kontrak AS NILAI_KONTRAK, dts.tgl_pengumuman_tender AS TGL_UMUMKAN, dts.tgl_penetapan_pemenang AS TGL_MENANG, dts.nama_penyedia AS NAMA_PEMENANG FROM dtp_tabel AS dtp JOIN dts_tabel AS dts ON dtp.kd_rup_paket = dts.kd_rup_paket"
+        ).df()
 
-    ### Tampilan Data Tender Selesai Perangkat Daerah
-    unduh_dts_gab = unduh_data(dts_tabel_gab)
+        ### Tampilan Data Tender Selesai Perangkat Daerah
+        unduh_dts_gab = unduh_data(dts_tabel_gab)
 
-    dts1, dts2 = st.columns((8,2))
-    with dts1:
-        st.markdown(f"### **{opd}**")
-    with dts2:
-        st.download_button(
-            label = "📥 Download Data Tender Diumumkan",
-            data = unduh_dts_gab,
-            file_name = f"datatenderselesai-{opd}.csv",
-            mime = "text/csv"                
-        )
+        dts1, dts2 = st.columns((8,2))
+        with dts1:
+            st.markdown(f"### **{opd}**")
+        with dts2:
+            st.download_button(
+                label = "📥 Download Data Tender Diumumkan",
+                data = unduh_dts_gab,
+                file_name = f"datatenderselesai-{opd}.csv",
+                mime = "text/csv"                
+            )
 
-    ### Tabulasi data dan pagination AgGrid
-    gd = GridOptionsBuilder.from_dataframe(dts_tabel_gab_tampil)
-    gd.configure_pagination()
-    gd.configure_side_bar()
-    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-    gd.configure_column("NILAI_KONTRAK", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_KONTRAK.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+        ### Tabulasi data dan pagination AgGrid
+        gd = GridOptionsBuilder.from_dataframe(dts_tabel_gab_tampil)
+        gd.configure_pagination()
+        gd.configure_side_bar()
+        gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+        gd.configure_column("NILAI_KONTRAK", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_KONTRAK.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
 
-    gridOptions = gd.build()
+        gridOptions = gd.build()
 
-    AgGrid(dts_tabel_gab_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
+        AgGrid(dts_tabel_gab_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
+    
+    else:
+        st.error("Data Tender Selesai Belum Ada ...")
