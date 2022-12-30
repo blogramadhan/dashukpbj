@@ -191,7 +191,7 @@ with tab1:
 with tab2:
 
     # Unduh data parquet Tender Selesai
-    if unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp):
+    if unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp) == True:
         df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
 
         # Tab TENDER/SELEKSI DIUMUMKAN
