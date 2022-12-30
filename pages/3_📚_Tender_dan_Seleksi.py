@@ -119,6 +119,10 @@ DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
 DatasetTENDERDTS_Temp = f"dtender_dts{kodeFolder}{str(tahun)}_temp.parquet"
 unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
 
+DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPDP_Temp = f"sirupdp{kodeFolder}{str(tahun)}_temp.parquet"
+unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+
 DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
 unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
@@ -126,6 +130,7 @@ unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 ### Query dataframe parquet penting
 df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
 df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
+df_SIRUPDP = con.execute(f"SELECT namasatker FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
 df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
 ### Query Data Tender dan Non Tender
@@ -134,8 +139,8 @@ df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP
 df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 
 ### Buat variabel nama satker unik
-namaopd = df_rsap['nama_satker'].unique()
-#namaopd = df_dtp['namasatker'].unique()
+#namaopd = df_rsap['nama_satker'].unique()
+namaopd = df_SIRUPDP['namasatker'].unique()
 
 ##########
 tab1, tab2 = st.tabs(["| TENDER/SELEKSI DIUMUMKAN |", "| TENDER/SELEKSI SELESAI |"])
