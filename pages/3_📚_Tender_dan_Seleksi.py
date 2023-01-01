@@ -147,49 +147,55 @@ tab1, tab2 = st.tabs(["| TENDER/SELEKSI DIUMUMKAN |", "| TENDER/SELEKSI SELESAI 
 
 with tab1:
 
-    # Unduh data parquet Tender Berjalan
-    unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
-    df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
+    ### Gunakan Try dan Except untuk pilihan logika
+    try:
+        # Unduh data parquet Tender Berjalan
+        unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
+        df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
 
-    # Tab TENDER/SELEKSI DIUMUMKAN
-    st.markdown(f"## **TENDER/SELEKSI DIUMUMKAN TAHUN {tahun}**")
+        # Tab TENDER/SELEKSI DIUMUMKAN
+        st.markdown(f"## **TENDER/SELEKSI DIUMUMKAN TAHUN {tahun}**")
 
-    ### Tampilan pilihan menu nama opd
-    opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab1')
+        ### Tampilan pilihan menu nama opd
+        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab1')
 
-    dtp_tabel = con.execute(f"SELECT * FROM df_dtp WHERE nama_satker = '{opd}'").df()
-    dtp_tabel_tampil = con.execute(
-        "SELECT kd_rup_paket AS KODE_RUP, nama_paket AS NAMA_PAKET, mtd_pemilihan AS METODE_PEMILIHAN, pagu AS PAGU, tgl_buat_paket AS TGL_BUAT, tgl_pengumuman_tender AS TGL_RENC_TENDER, nama_status_tender AS STATUS_PAKET FROM dtp_tabel"
-    ).df()
+        dtp_tabel = con.execute(f"SELECT * FROM df_dtp WHERE nama_satker = '{opd}'").df()
+        dtp_tabel_tampil = con.execute(
+            "SELECT kd_rup_paket AS KODE_RUP, nama_paket AS NAMA_PAKET, mtd_pemilihan AS METODE_PEMILIHAN, pagu AS PAGU, tgl_buat_paket AS TGL_BUAT, tgl_pengumuman_tender AS TGL_RENC_TENDER, nama_status_tender AS STATUS_PAKET FROM dtp_tabel"
+        ).df()
 
-    ### Tampilan Data Tender Diumumkan Perangkat Daerah
-    unduh_dtp = unduh_data(dtp_tabel)
+        ### Tampilan Data Tender Diumumkan Perangkat Daerah
+        unduh_dtp = unduh_data(dtp_tabel)
 
-    dtp1, dtp2 = st.columns((8,2))
-    with dtp1:
-        st.markdown(f"### **{opd}**")
-    with dtp2:
-        st.download_button(
-            label = "📥 Download Data Tender Diumumkan",
-            data = unduh_dtp,
-            file_name = f"datatenderumumkan-{opd}.csv",
-            mime = "text/csv"                
-        )
+        dtp1, dtp2 = st.columns((8,2))
 
-    ### Tabulasi data dan pagination AgGrid
-    gd = GridOptionsBuilder.from_dataframe(dtp_tabel_tampil)
-    gd.configure_pagination()
-    gd.configure_side_bar()
-    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-    gd.configure_column("PAGU", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.PAGU.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+        with dtp1:
+            st.markdown(f"### **{opd}**")
+        with dtp2:
+            st.download_button(
+                label = "📥 Download Data Tender Diumumkan",
+                data = unduh_dtp,
+                file_name = f"datatenderumumkan-{opd}.csv",
+                mime = "text/csv"                
+            )
 
-    gridOptions = gd.build()
+        ### Tabulasi data dan pagination AgGrid
+        gd = GridOptionsBuilder.from_dataframe(dtp_tabel_tampil)
+        gd.configure_pagination()
+        gd.configure_side_bar()
+        gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+        gd.configure_column("PAGU", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.PAGU.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
-    AgGrid(dtp_tabel_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
+        gridOptions = gd.build()
 
+        AgGrid(dtp_tabel_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
+
+    except Exception:
+        st.error("Data tender/seleksi berjalan belum ada, tabel tidak ditampilkan ...")
 
 with tab2:
 
+    ### Gunakan Try dan Except untuk pilihan logika
     try:
         # Unduh data parquet Tender Selesai
         unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
@@ -236,4 +242,4 @@ with tab2:
         AgGrid(dts_tabel_gab_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
 
     except Exception:
-        st.error("Data tidak lengkap ...")
+        st.error("Data tender/seleksi selesai belum ada, tabel tidak ditampilkan ...")
