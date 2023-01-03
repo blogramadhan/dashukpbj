@@ -296,7 +296,7 @@ with tab2:
             with tdc2:
                 #st.markdown(f"### GRAFIK JUMLAH")
                 
-                fig_daring_count = px.bar(daring_tabel_count, y='JUMLAH_TRANSAKSI', x='nama_satker', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
+                fig_daring_count = px.bar(daring_tabel_count, y='JUMLAH_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
                 fig_daring_count.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
                 st.plotly_chart(fig_daring_count, theme="streamlit", use_container_width=True)
 
