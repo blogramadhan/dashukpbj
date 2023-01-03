@@ -246,7 +246,7 @@ with tab2:
     try:
         # Unduh data parquet Toko Daring
         unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
-        df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+        df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
 
         # Tab Toko Daring
         st.markdown(f"## **TRANSAKSI TOKO DARING - {pilih}**")
