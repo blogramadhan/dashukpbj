@@ -187,7 +187,6 @@ with tab1:
         gd.configure_column("PAGU", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.PAGU.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
         gridOptions = gd.build()
-
         AgGrid(dtp_tabel_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
 
     except Exception:
@@ -238,7 +237,6 @@ with tab2:
         gd.configure_column("NILAI_KONTRAK", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_KONTRAK.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
 
         gridOptions = gd.build()
-
         AgGrid(dts_tabel_gab_tampil, gridOptions=gridOptions, enable_enterprise_modules=True)
 
     except Exception:

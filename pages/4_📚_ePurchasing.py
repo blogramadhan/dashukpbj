@@ -266,8 +266,14 @@ with tab2:
             GROUP BY nama_satker
             ORDER BY JUMLAH_TRANSAKSI DESC
         """
+        daring_tabel_sum_sql = """
+            SELECT nama_satker AS NAMA_SATKER, SUM(valuasi) AS NILAI_TRANSAKSI
+            FROM df_daring
+            GROUP BY nama_satker
+            ORDER BY NILAI_TRANSAKSI DESC
+        """
         daring_tabel_count = con.execute(daring_tabel_count_sql).df()
-        #daring_tabel_sum = con.execute(f"SELECT nama_satker AS NAMA_SATKER, SUM(valuasi) AS NILAI_TRANSAKSI FROM df_daring ORDER BY NILAI_TRANSAKSI").df()
+        daring_tabel_sum = con.execute(daring_tabel_sum_sql).df()
 
         #tmp_daring_loc = df_daring[['nama_satker', 'order_id']]
         #pv_daring_loc = tmp_daring_loc.pivot_table(
@@ -279,10 +285,12 @@ with tab2:
 
         # Tampilkan Grafik jika ada Data
         if jumlah_trx_daring[0] > 0: 
+
             # Jumlah Transaksi Toko Daring OPD
-            st.markdown('### Jumlah Transaksi Toko Daring OPD')
+            st.markdown("### Jumlah Transaksi Toko Daring OPD")
             
             tdc1, tdc2 = st.columns((4,6))
+            
             with tdc1:
                 
                 gd = GridOptionsBuilder.from_dataframe(daring_tabel_count)
@@ -294,15 +302,32 @@ with tab2:
                 AgGrid(daring_tabel_count, gridOptions=gridOptions, enable_enterprise_modules=True)
                 
             with tdc2:
-                #st.markdown(f"### GRAFIK JUMLAH")
                 
                 fig_daring_count = px.bar(daring_tabel_count, y='JUMLAH_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
                 fig_daring_count.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
                 st.plotly_chart(fig_daring_count, theme="streamlit", use_container_width=True)
 
-                #figtdc = plt.figure(figsize=(10,6))
-                #sns.barplot(x = opdtrxcount_daring, y = opdtrxcount_daring.index)
-                #st.pyplot(figtdc)
+            # Nilai Transaksi Toko Daring OPD
+            st.markdown("### Nilai Transaksi Toko Daring OPD")
+
+            tds1, tds2 = st.columns((4,6))
+
+            with tds1:
+
+                gd = GridOptionsBuilder.from_dataframe(daring_tabel_sum)
+                gd.configure_pagination()
+                gd.configure_side_bar()
+                gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+                gd.configure_column("NILAI_TRANSAKSI", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_TRANSAKSI.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+
+                gridOptions = gd.build()
+                AgGrid(daring_tabel_sum, gridOptions=gridOptions, enable_enterprise_modules=True)
+
+            with tds2:
+
+                fig_daring_sum = px.bar(daring_tabel_sum, y='NILAI_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
+                fig_daring_sum.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+                st.plotly_chart(fig_daring_sum, theme="streamlit", use_container_width=True)
 
             # Nilai Transaksi Katalog Lokal OPD 
             #st.markdown('### Nilai Transaksi Toko Daring OPD')
