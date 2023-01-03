@@ -386,12 +386,12 @@ with tab3:
         namaopd = con.execute(f"SELECT DISTINCT(nama_satker) FROM df_katalog_lokal WHERE nama_satker IS NOT NULL")
 
         # Tab Detail Katalog OPD
-        st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**").df()
-
+        st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**")
+        
         # Tampilan pilihan menu nama opd
-        #opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
+        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
 
-        #st.markdown(f"### **{opd}**")
+        st.markdown(f"### **{opd}**")
 
     except:
         st.error("Data Katalog belum ada, tabel tidak ditampilkan ...")
