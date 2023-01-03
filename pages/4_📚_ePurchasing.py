@@ -285,15 +285,15 @@ with tab2:
             with tdc1:
                 #st.markdown(f"### TABEL JUMLAH TRANSAKSI")
                 
-                #gd = GridOptionsBuilder.from_dataframe(daring_tabel_count)
-                #gd.configure_pagination()
-                #gd.configure_side_bar()
-                #gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+                gd = GridOptionsBuilder.from_dataframe(daring_tabel_count)
+                gd.configure_pagination()
+                gd.configure_side_bar()
+                gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
 
-                #gridOptions = gd.build()
-                #AgGrid(daring_tabel_count, gridOptions=gridOptions, enable_enterprise_modules=True)
+                gridOptions = gd.build()
+                AgGrid(daring_tabel_count, gridOptions=gridOptions, enable_enterprise_modules=True)
                 
-                st.dataframe(daring_tabel_count)
+                #st.dataframe(daring_tabel_count)
             with tdc2:
                 st.markdown(f"### GRAFIK JUMLAH")
                 
