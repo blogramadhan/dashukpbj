@@ -260,7 +260,7 @@ with tab2:
         td1.metric("Jumlah Transaksi Toko Daring", jumlah_trx_daring[0])
         td2.metric("Nilai Transaksi Toko Daring", nilai_trx_daring_print)
 
-        daring_tabel_count = con.execute(f"SELECT nama_satker AS NAMA_SATKER, COUNT(order_id) AS JUMLAH_TRANSAKSI FROM df_daring ORDER BY JUMLAH_TRANSAKSI").df()
+        daring_tabel_count = con.execute(f"SELECT nama_satker AS NAMA_SATKER, COUNT(order_id) AS JUMLAH_TRANSAKSI FROM df_daring").df()
         #daring_tabel_sum = con.execute(f"SELECT nama_satker AS NAMA_SATKER, SUM(valuasi) AS NILAI_TRANSAKSI FROM df_daring ORDER BY NILAI_TRANSAKSI").df()
 
         #tmp_daring_loc = df_daring[['nama_satker', 'order_id']]
@@ -277,7 +277,7 @@ with tab2:
             st.markdown('### Jumlah Transaksi Toko Daring OPD')
             tdc1, tdc2 = st.columns((4,6))
             with tdc1:
-                st.markdown(f"### TABEL JUMLAH TRANSAKSI")
+                #st.markdown(f"### TABEL JUMLAH TRANSAKSI")
                 
                 gd = GridOptionsBuilder.from_dataframe(daring_tabel_count)
                 gd.configure_pagination()
