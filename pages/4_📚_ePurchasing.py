@@ -275,14 +275,6 @@ with tab2:
         daring_tabel_count = con.execute(daring_tabel_count_sql).df()
         daring_tabel_sum = con.execute(daring_tabel_sum_sql).df()
 
-        #tmp_daring_loc = df_daring[['nama_satker', 'order_id']]
-        #pv_daring_loc = tmp_daring_loc.pivot_table(
-        #    index = ['nama_satker', 'order_id']
-        #)
-        #tmp_daring_loc_ok = pv_daring_loc.reset_index()
-        #opdtrxcount_daring = tmp_daring_loc_ok['nama_satker'].value_counts()
-        #opdtrxsum_daring = df_daring.groupby(by='nama_satker').sum().sort_values(by='valuasi', ascending=False)['valuasi']  
-
         # Tampilkan Grafik jika ada Data
         if jumlah_trx_daring[0] > 0: 
 
@@ -329,27 +321,18 @@ with tab2:
                 fig_daring_sum.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
                 st.plotly_chart(fig_daring_sum, theme="streamlit", use_container_width=True)
 
-            # Nilai Transaksi Katalog Lokal OPD 
-            #st.markdown('### Nilai Transaksi Toko Daring OPD')
-            #tds1, tds2 = st.columns((4,6))
-            #with tds1:
-            #    st.dataframe(opdtrxsum_daring)
-            #with tds2:
-            #    figtds = plt.figure(figsize=(10,6))
-            #    sns.barplot(x = opdtrxsum_daring, y = opdtrxsum_daring.index)
-            #    st.pyplot(figtds)
         else:
             st.error(f"BELUM ADA TRANSAKSI DI TOKO DARING ...")       
 
         # Download Data Button
-        #df1_download_daring = unduh_data(df_daring)
+        download_daring = unduh_data(df_daring)
 
-        #st.download_button(
-        #    label = '📥 Download Data Transaksi TOKO DARING',
-        #    data = df1_download_daring,
-        #    file_name = 'trxdaring-' + kodeRUP + '.csv',
-        #    mime = 'text/csv'
-        #)
+        st.download_button(
+            label = '📥 Download Data Transaksi TOKO DARING',
+            data = download_daring,
+            file_name = 'trxdaring-' + kodeRUP + '.csv',
+            mime = 'text/csv'
+        )
 
     except:
         st.error("Data Toko Daring belum ada ...")
