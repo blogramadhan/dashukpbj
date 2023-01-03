@@ -383,13 +383,15 @@ with tab3:
         # Unduh data parquet Detail Katalog
         unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
         df_katalog_lokal = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}' AND jenis_katalog = 'Lokal'").df()
-        namaopd = df_katalog_lokal['nama_satker'].unique()
+        namaopd = con.execute(f"SELECT DISTINCT(nama_satker) FROM df_katalog_lokal WHERE nama_satker IS NOT NULL")
 
         # Tab Detail Katalog OPD
         st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**").df()
 
         # Tampilan pilihan menu nama opd
-        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab3')
+        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
+
+        st.markdown(f"### **{opd}**")
 
     except Exception:
         st.error("Data Katalog belum ada, tabel tidak ditampilkan ...")
