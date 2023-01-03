@@ -260,8 +260,8 @@ with tab2:
         td1.metric("Jumlah Transaksi Toko Daring", jumlah_trx_daring[0])
         td2.metric("Nilai Transaksi Toko Daring", nilai_trx_daring_print)
 
-        daring_tabel_count = con.execute(f"SELECT nama_satker AS NAMA_SATKER, COUNT(order_id) AS JUMLAH_TRANSAKSI FROM df_daring ORDER BY JUMLAH_TRANSAKSI").df()
-        daring_tabel_sum = con.execute(f"SELECT nama_satker AS NAMA_SATKER, SUM(valuasi) AS NILAI_TRANSAKSI FROM df_daring ORDER BY NILAI_TRANSAKSI").df()
+        #daring_tabel_count = con.execute(f"SELECT nama_satker AS NAMA_SATKER, COUNT(order_id) AS JUMLAH_TRANSAKSI FROM df_daring ORDER BY JUMLAH_TRANSAKSI").df()
+        #daring_tabel_sum = con.execute(f"SELECT nama_satker AS NAMA_SATKER, SUM(valuasi) AS NILAI_TRANSAKSI FROM df_daring ORDER BY NILAI_TRANSAKSI").df()
 
         #tmp_daring_loc = df_daring[['nama_satker', 'order_id']]
         #pv_daring_loc = tmp_daring_loc.pivot_table(
@@ -305,19 +305,19 @@ with tab2:
             #    sns.barplot(x = opdtrxsum_daring, y = opdtrxsum_daring.index)
             #    st.pyplot(figtds)
         else:
-            st.error('BELUM ADA TRANSAKSI DI TOKO DARING ...')       
+            st.error(f"BELUM ADA TRANSAKSI DI TOKO DARING ...")       
 
         # Download Data Button
-        df1_download_daring = unduh_data(df_daring)
+        #df1_download_daring = unduh_data(df_daring)
 
-        st.download_button(
-            label = '📥 Download Data Transaksi TOKO DARING',
-            data = df1_download_daring,
-            file_name = 'trxdaring-' + kodeRUP + '.csv',
-            mime = 'text/csv'
-        )
+        #st.download_button(
+        #    label = '📥 Download Data Transaksi TOKO DARING',
+        #    data = df1_download_daring,
+        #    file_name = 'trxdaring-' + kodeRUP + '.csv',
+        #    mime = 'text/csv'
+        #)
 
-    except Exception:
+    except:
         st.error("Data Toko Daring belum ada ...")
 
 with tab3:
