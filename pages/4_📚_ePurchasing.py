@@ -277,13 +277,15 @@ with tab2:
             st.markdown('### Jumlah Transaksi Toko Daring OPD')
             tdc1, tdc2 = st.columns((4,6))
             with tdc1:
-                gd = GridOptionsBuilder.from_dataframe(daring_tabel_count)
-                gd.configure_pagination()
-                gd.configure_side_bar()
-                gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+                st.markdown(f"### TABEL JUMLAH TRANSAKSI")
+                
+                #gd = GridOptionsBuilder.from_dataframe(daring_tabel_count)
+                #gd.configure_pagination()
+                #gd.configure_side_bar()
+                #gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
 
-                gridOptions = gd.build()
-                AgGrid(daring_tabel_count, gridOptions=gridOptions, enable_enterprise_modules=True)
+                #gridOptions = gd.build()
+                #AgGrid(daring_tabel_count, gridOptions=gridOptions, enable_enterprise_modules=True)
                 
                 #st.dataframe(opdtrxcount_daring)
             with tdc2:
