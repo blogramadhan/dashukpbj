@@ -294,14 +294,14 @@ with tab2:
                 #st.pyplot(figtdc)
 
             # Nilai Transaksi Katalog Lokal OPD 
-            st.markdown('### Nilai Transaksi Toko Daring OPD')
-            tds1, tds2 = st.columns((4,6))
-            with tds1:
-                st.dataframe(opdtrxsum_daring)
-            with tds2:
-                figtds = plt.figure(figsize=(10,6))
-                sns.barplot(x = opdtrxsum_daring, y = opdtrxsum_daring.index)
-                st.pyplot(figtds)
+            #st.markdown('### Nilai Transaksi Toko Daring OPD')
+            #tds1, tds2 = st.columns((4,6))
+            #with tds1:
+            #    st.dataframe(opdtrxsum_daring)
+            #with tds2:
+            #    figtds = plt.figure(figsize=(10,6))
+            #    sns.barplot(x = opdtrxsum_daring, y = opdtrxsum_daring.index)
+            #    st.pyplot(figtds)
         else:
             st.error('BELUM ADA TRANSAKSI DI TOKO DARING ...')       
 
