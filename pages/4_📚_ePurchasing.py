@@ -271,7 +271,7 @@ with tab2:
         #opdtrxcount_daring = tmp_daring_loc_ok['nama_satker'].value_counts()
         #opdtrxsum_daring = df_daring.groupby(by='nama_satker').sum().sort_values(by='valuasi', ascending=False)['valuasi']  
 
-       # Tampilkan Grafik jika ada Data
+        # Tampilkan Grafik jika ada Data
         if jumlah_trx_daring[0] > 0: 
             # Jumlah Transaksi Toko Daring OPD
             st.markdown('### Jumlah Transaksi Toko Daring OPD')
