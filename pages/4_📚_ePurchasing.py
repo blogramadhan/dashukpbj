@@ -56,7 +56,7 @@ daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH"
             "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
             "KAB. KAYONG UTARA", "KAB. KETAPANG"]
 
-tahuns =    [2023, 2022]
+tahuns =    [2022, 2023]
 
 pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 tahun = st.sidebar.selectbox("Pilih Tahun :", tahuns)
@@ -249,7 +249,7 @@ with tab2:
         df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
 
         # Tab Toko Daring
-        st.markdown(f"## **TRANSAKSI TOKOD DARING - {pilih}")
+        st.markdown(f"## **TRANSAKSI TOKOD DARING - {pilih}**")
 
         # Query Toko Daring
         jumlah_trx_daring = df_daring['order_id'].value_counts().shape
