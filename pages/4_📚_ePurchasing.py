@@ -281,9 +281,9 @@ with tab2:
         if jumlah_trx_daring[0] > 0: 
             # Jumlah Transaksi Toko Daring OPD
             st.markdown('### Jumlah Transaksi Toko Daring OPD')
+            
             tdc1, tdc2 = st.columns((4,6))
             with tdc1:
-                #st.markdown(f"### TABEL JUMLAH TRANSAKSI")
                 
                 gd = GridOptionsBuilder.from_dataframe(daring_tabel_count)
                 gd.configure_pagination()
@@ -293,10 +293,13 @@ with tab2:
                 gridOptions = gd.build()
                 AgGrid(daring_tabel_count, gridOptions=gridOptions, enable_enterprise_modules=True)
                 
-                #st.dataframe(daring_tabel_count)
             with tdc2:
-                st.markdown(f"### GRAFIK JUMLAH")
+                #st.markdown(f"### GRAFIK JUMLAH")
                 
+                fig_daring_count = px.bar(daring_tabel_count, y='JUMLAH_TRANSAKSI', x='nama_satker', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
+                fig_daring_count.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+                fig_daring_count.show()
+
                 #figtdc = plt.figure(figsize=(10,6))
                 #sns.barplot(x = opdtrxcount_daring, y = opdtrxcount_daring.index)
                 #st.pyplot(figtdc)
