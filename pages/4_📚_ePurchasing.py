@@ -18,10 +18,7 @@
 #-----------------------------------------------------------------------------------#
 # @ Pontianak, 2022                                                                 #
 #####################################################################################
-# Library yang akan dihapus
-import matplotlib.pyplot as plt
-import seaborn as sns
-# import library
+
 # Import library
 import duckdb
 import streamlit as st
@@ -30,13 +27,16 @@ import plotly.express as px
 # Import library currency
 from babel.numbers import format_currency
 # Import library AgGrid
-from st_aggrid import AgGrid, JsCode
+from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 # Import library Google Cloud Storage
 from google.oauth2 import service_account
 from google.cloud import storage
 # Import fungsi pribadi
 from fungsi import *
+# Nati dihapus
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Setting CSS
 with open('style.css') as f:
@@ -56,7 +56,7 @@ daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH"
             "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
             "KAB. KAYONG UTARA", "KAB. KETAPANG"]
 
-tahuns =    [2022, 2023]
+tahuns =    [2023, 2022]
 
 pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 tahun = st.sidebar.selectbox("Pilih Tahun :", tahuns)
@@ -116,15 +116,15 @@ bucket = "dashukpbj"
 ### File path dan unduh file parquet dan simpan di memory
 DatasetKATALOG = f"epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
 DatasetKATALOG_Temp = f"katalogdetail{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
+#unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
 
 DatasetPRODUKKATALOG = f"epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
 DatasetPRODUKKATALOG_Temp = f"prodkatalog{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetPRODUKKATALOG, DatasetPRODUKKATALOG_Temp)
+#unduh_df_parquet(bucket, DatasetPRODUKKATALOG, DatasetPRODUKKATALOG_Temp)
 
 DatasetTOKODARING = f"epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
 DatasetTOKODARING_Temp = f"daring{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
+#unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
 
 ### Query dataframe parquet penting
 #### Query dataframe Katalog
@@ -143,10 +143,10 @@ df_kat_loc_nasional = df_kat_loc[df_kat_loc['jenis_katalog'] == "Nasional"]
 df_prod_loc = df_prod[df_prod['kd_klpd'] == kodeRUP]
 
 ### Query Data Toko Daring
-df_daring_loc = df_daring[df_daring['kd_klpd'] == kodeRUP]
+#df_daring_loc = df_daring[df_daring['kd_klpd'] == kodeRUP]
 
 # Buat Tab e-Katalog dan Toko Daring
-tab1, tab2 = st.tabs(["E-KATALOG", "TOKO DARING"])
+tab1, tab2, tab3, tab4 = st.tabs(["| E-KATALOG |", "| TOKO DARING |", "| DETAIL E-KATALOG |", "| DETAIL TOKO DARING |"])
 
 ##########
 
@@ -242,55 +242,75 @@ with tab1:
 ## Tab Toko Daring
 with tab2:
 
-    ## Mulai Tampilkan Data Toko Daring
-    st.subheader("TRANSAKSI TOKO DARING - " + pilih)
+    ### Gunakan Try dan Except untuk pilihan logika
+    try:
+        # Unduh data parquet Toko Daring
+        unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
+        df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
 
-    jumlah_trx_daring = df_daring_loc['order_id'].value_counts().shape
-    nilai_trx_daring = df_daring_loc['valuasi'].sum()
-    nilai_trx_daring_print = format_currency(nilai_trx_daring, 'Rp. ', locale='id_ID')
+        # Tab Toko Daring
+        st.markdown(f"## **TRANSAKSI TOKOD DARING - {pilih}")
 
-    td1, td2 = st.columns(2)
-    td1.metric("Jumlah Transaksi Toko Daring", jumlah_trx_daring[0])
-    td2.metric("Nilai Transaksi Toko Daring", nilai_trx_daring_print)
+        # Query Toko Daring
+        jumlah_trx_daring = df_daring['order_id'].value_counts().shape
+        nilai_trx_daring = df_daring['valuasi'].sum()
+        nilai_trx_daring_print = format_currency(nilai_trx_daring, 'Rp. ', locale='id_ID')
 
-    tmp_daring_loc = df_daring_loc[['nama_satker', 'order_id']]
-    pv_daring_loc = tmp_daring_loc.pivot_table(
-        index = ['nama_satker', 'order_id']
-    )
-    tmp_daring_loc_ok = pv_daring_loc.reset_index()
-    opdtrxcount_daring = tmp_daring_loc_ok['nama_satker'].value_counts()
-    opdtrxsum_daring = df_daring_loc.groupby(by='nama_satker').sum().sort_values(by='valuasi', ascending=False)['valuasi']  
+        td1, td2 = st.columns(2)
+        td1.metric("Jumlah Transaksi Toko Daring", jumlah_trx_daring[0])
+        td2.metric("Nilai Transaksi Toko Daring", nilai_trx_daring_print)
 
-    # Tampilkan Grafik jika ada Data
-    if jumlah_trx_daring[0] > 0: 
-        # Jumlah Transaksi Toko Daring OPD
-        st.markdown('### Jumlah Transaksi Toko Daring OPD')
-        tdc1, tdc2 = st.columns((4,6))
-        with tdc1:
-            st.dataframe(opdtrxcount_daring)
-        with tdc2:
-            figtdc = plt.figure(figsize=(10,6))
-            sns.barplot(x = opdtrxcount_daring, y = opdtrxcount_daring.index)
-            st.pyplot(figtdc)
+        tmp_daring_loc = df_daring[['nama_satker', 'order_id']]
+        pv_daring_loc = tmp_daring_loc.pivot_table(
+            index = ['nama_satker', 'order_id']
+        )
+        tmp_daring_loc_ok = pv_daring_loc.reset_index()
+        opdtrxcount_daring = tmp_daring_loc_ok['nama_satker'].value_counts()
+        opdtrxsum_daring = df_daring.groupby(by='nama_satker').sum().sort_values(by='valuasi', ascending=False)['valuasi']  
 
-        # Nilai Transaksi Katalog Lokal OPD 
-        st.markdown('### Nilai Transaksi Toko Daring OPD')
-        tds1, tds2 = st.columns((4,6))
-        with tds1:
-            st.dataframe(opdtrxsum_daring)
-        with tds2:
-            figtds = plt.figure(figsize=(10,6))
-            sns.barplot(x = opdtrxsum_daring, y = opdtrxsum_daring.index)
-            st.pyplot(figtds)
-    else:
-        st.error('BELUM ADA TRANSAKSI DI TOKO DARING ...')       
+       # Tampilkan Grafik jika ada Data
+        if jumlah_trx_daring[0] > 0: 
+            # Jumlah Transaksi Toko Daring OPD
+            st.markdown('### Jumlah Transaksi Toko Daring OPD')
+            tdc1, tdc2 = st.columns((4,6))
+            with tdc1:
+                st.dataframe(opdtrxcount_daring)
+            with tdc2:
+                figtdc = plt.figure(figsize=(10,6))
+                sns.barplot(x = opdtrxcount_daring, y = opdtrxcount_daring.index)
+                st.pyplot(figtdc)
 
-    # Download Data Button
-    df1_download_daring = unduh_data(df_daring_loc)
+            # Nilai Transaksi Katalog Lokal OPD 
+            st.markdown('### Nilai Transaksi Toko Daring OPD')
+            tds1, tds2 = st.columns((4,6))
+            with tds1:
+                st.dataframe(opdtrxsum_daring)
+            with tds2:
+                figtds = plt.figure(figsize=(10,6))
+                sns.barplot(x = opdtrxsum_daring, y = opdtrxsum_daring.index)
+                st.pyplot(figtds)
+        else:
+            st.error('BELUM ADA TRANSAKSI DI TOKO DARING ...')       
 
-    st.download_button(
-        label = '📥 Download Data Transaksi TOKO DARING',
-        data = df1_download_daring,
-        file_name = 'trxdaring-' + kodeRUP + '.csv',
-        mime = 'text/csv'
-    )
+        # Download Data Button
+        df1_download_daring = unduh_data(df_daring)
+
+        st.download_button(
+            label = '📥 Download Data Transaksi TOKO DARING',
+            data = df1_download_daring,
+            file_name = 'trxdaring-' + kodeRUP + '.csv',
+            mime = 'text/csv'
+        )
+
+    except Exception:
+        st.error("Data Toko Daring belum ada ...")
+
+with tab3:
+
+    # Tab Toko Daring
+    st.markdown(f"## **DETAIL E-KATALOG - {pilih}")
+
+with tab4:
+
+    # Tab Toko Daring
+    st.markdown(f"## **DETAIL TOKO DARING - {pilih}")
