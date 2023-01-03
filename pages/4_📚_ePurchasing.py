@@ -389,11 +389,11 @@ with tab3:
         st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**").df()
 
         # Tampilan pilihan menu nama opd
-        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
+        #opd = st.selectbox("Pilih Perangkat Daerah :", namaopd)
 
-        st.markdown(f"### **{opd}**")
+        #st.markdown(f"### **{opd}**")
 
-    except Exception:
+    except:
         st.error("Data Katalog belum ada, tabel tidak ditampilkan ...")
 
 with tab4:
