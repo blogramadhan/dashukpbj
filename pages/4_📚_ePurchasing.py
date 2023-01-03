@@ -305,7 +305,10 @@ with tab2:
         daring_tabel_sum_sql = """
             SELECT nama_satker AS NAMA_SATKER, SUM(valuasi) AS NILAI_TRANSAKSI
             FROM df_daring
-            GROUP BY nama_satker
+            GROUP BY nam                fig_daring_sum = px.bar(daring_tabel_sum, y='NILAI_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
+                fig_daring_sum.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+                st.plotly_chart(fig_daring_sum, theme="streamlit", use_container_width=True)
+satker
             ORDER BY NILAI_TRANSAKSI DESC
         """
         daring_tabel_count = con.execute(daring_tabel_count_sql).df()
@@ -375,8 +378,21 @@ with tab2:
 
 with tab3:
 
-    # Tab Toko Daring
-    st.markdown(f"## **DETAIL E-KATALOG - {pilih}")
+    ### Gunakan Try dan Except untuk pilihan logika
+    try:
+        # Unduh data parquet Detail Katalog
+        unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
+        df_katalog_lokal = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}' AND jenis_katalog = 'Lokal'").df()
+        namaopd = df_katalog_lokal['nama_satker'].unique()
+
+        # Tab Detail Katalog OPD
+        st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**").df()
+
+        # Tampilan pilihan menu nama opd
+        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab3')
+
+    except Exception:
+        st.error("Data Katalog belum ada, tabel tidak ditampilkan ...")
 
 with tab4:
 
