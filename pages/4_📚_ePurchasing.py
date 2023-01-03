@@ -298,7 +298,7 @@ with tab2:
                 
                 fig_daring_count = px.bar(daring_tabel_count, y='JUMLAH_TRANSAKSI', x='nama_satker', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
                 fig_daring_count.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
-                fig_daring_count.show()
+                st.plotly_chart(fig_daring_count, theme="streamlit", use_container_width=True)
 
                 #figtdc = plt.figure(figsize=(10,6))
                 #sns.barplot(x = opdtrxcount_daring, y = opdtrxcount_daring.index)
