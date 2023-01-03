@@ -249,7 +249,7 @@ with tab2:
         df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
 
         # Tab Toko Daring
-        st.markdown(f"## **TRANSAKSI TOKOD DARING - {pilih}**")
+        st.markdown(f"## **TRANSAKSI TOKO DARING - {pilih}**")
 
         # Query Toko Daring
         jumlah_trx_daring = df_daring['order_id'].value_counts().shape
@@ -274,7 +274,15 @@ with tab2:
             st.markdown('### Jumlah Transaksi Toko Daring OPD')
             tdc1, tdc2 = st.columns((4,6))
             with tdc1:
-                st.dataframe(opdtrxcount_daring)
+                gd = GridOptionsBuilder.from_dataframe(opdtrxcount_daring)
+                gd.configure_pagination()
+                gd.configure_side_bar()
+                gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+
+                gridOptions = gd.build()
+                AgGrid(opdtrxcount_daring, gridOptions=gridOptions, enable_enterprise_modules=True)
+                
+                #st.dataframe(opdtrxcount_daring)
             with tdc2:
                 figtdc = plt.figure(figsize=(10,6))
                 sns.barplot(x = opdtrxcount_daring, y = opdtrxcount_daring.index)
