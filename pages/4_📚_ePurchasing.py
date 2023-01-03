@@ -399,4 +399,4 @@ with tab3:
 with tab4:
 
     # Tab Toko Daring
-    st.markdown(f"## **DETAIL TOKO DARING - {pilih}")
+    st.markdown(f"## **DETAIL TOKO DARING - {pilih}**")
