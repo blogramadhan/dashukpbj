@@ -305,10 +305,7 @@ with tab2:
         daring_tabel_sum_sql = """
             SELECT nama_satker AS NAMA_SATKER, SUM(valuasi) AS NILAI_TRANSAKSI
             FROM df_daring
-            GROUP BY nam                fig_daring_sum = px.bar(daring_tabel_sum, y='NILAI_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
-                fig_daring_sum.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
-                st.plotly_chart(fig_daring_sum, theme="streamlit", use_container_width=True)
-satker
+            GROUP BY NAMA_SATKER
             ORDER BY NILAI_TRANSAKSI DESC
         """
         daring_tabel_count = con.execute(daring_tabel_count_sql).df()
