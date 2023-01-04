@@ -247,7 +247,7 @@ with tab1:
 
             with ks2:
 
-                fig_katalog_sum = px.bar(katalog_tabel_sum, y='NILAI_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
+                fig_katalog_sum = px.bar(katalog_tabel_sum, y='NILAI_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Nilai Transaksi Toko Daring")
                 fig_katalog_sum.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
                 st.plotly_chart(fig_katalog_sum, theme="streamlit", use_container_width=True)
 
@@ -353,7 +353,7 @@ with tab2:
 
             with tds2:
 
-                fig_daring_sum = px.bar(daring_tabel_sum, y='NILAI_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
+                fig_daring_sum = px.bar(daring_tabel_sum, y='NILAI_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Nilai Transaksi Toko Daring")
                 fig_daring_sum.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
                 st.plotly_chart(fig_daring_sum, theme="streamlit", use_container_width=True)
 
@@ -379,8 +379,8 @@ with tab3:
     try:
         # Unduh data parquet Detail Katalog
         unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
-        df_katalog_lokal = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}' AND jenis_katalog = 'Lokal'").df()
-        namaopd = con.execute(f"SELECT DISTINCT(nama_satker) FROM df_katalog_lokal WHERE nama_satker IS NOT NULL").df()
+        katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+        namaopd = con.execute(f"SELECT DISTINCT(nama_satker) FROM katalog WHERE nama_satker IS NOT NULL").df()
 
         # Tab Detail Katalog OPD
         st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**")
@@ -389,6 +389,18 @@ with tab3:
         opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab3')
 
         st.markdown(f"### **{opd}**")
+
+        gd = GridOptionsBuilder.from_dataframe(katalog)
+        gd.configure_pagination()
+        gd.configure_side_bar()
+        gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+        gd.configure_column("total", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.total.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+        gd.configure_column("harga_satuan", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.harga_satuan.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+        gd.configure_column("ongkos_kirim", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.ongkos_kirim.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+        gd.configure_column("total_harga", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.total_harga.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+
+        gridOptions = gd.build()
+        AgGrid(katalog, gridOptions=gridOptions, enable_enterprise_modules=True)
 
     except:
         st.error("Data Katalog belum ada, tabel tidak ditampilkan ...")
