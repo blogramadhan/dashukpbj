@@ -193,14 +193,14 @@ with tab1:
             FROM df_katalog_lokal
             WHERE NAMA_SATKER IS NOT NULL
             GROUP BY NAMA_SATKER
-            ORDER BY JUMLAH_TRANSAKSI DESC
+            ORDER BY JUMLAH_TRANSAKSI DESC LIMIT 10
         """
         katalog_tabel_sum_sql = """
             SELECT nama_satker AS NAMA_SATKER, SUM(total_harga) AS NILAI_TRANSAKSI
             FROM df_katalog_lokal
             WHERE NAMA_SATKER IS NOT NULL
             GROUP BY NAMA_SATKER
-            ORDER BY NILAI_TRANSAKSI DESC
+            ORDER BY NILAI_TRANSAKSI DESC LIMIT 10
         """
         katalog_tabel_count = con.execute(katalog_tabel_count_sql).df()
         katalog_tabel_sum = con.execute(katalog_tabel_sum_sql).df()
@@ -300,13 +300,13 @@ with tab2:
             SELECT nama_satker AS NAMA_SATKER, COUNT(DISTINCT(order_id)) AS JUMLAH_TRANSAKSI
             FROM df_daring
             GROUP BY nama_satker
-            ORDER BY JUMLAH_TRANSAKSI DESC
+            ORDER BY JUMLAH_TRANSAKSI DESC LIMIT 10
         """
         daring_tabel_sum_sql = """
             SELECT nama_satker AS NAMA_SATKER, SUM(valuasi) AS NILAI_TRANSAKSI
             FROM df_daring
             GROUP BY NAMA_SATKER
-            ORDER BY NILAI_TRANSAKSI DESC
+            ORDER BY NILAI_TRANSAKSI DESC LIMIT 10
         """
         daring_tabel_count = con.execute(daring_tabel_count_sql).df()
         daring_tabel_sum = con.execute(daring_tabel_sum_sql).df()
