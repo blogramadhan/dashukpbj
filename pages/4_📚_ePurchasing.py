@@ -407,5 +407,29 @@ with tab3:
 
 with tab4:
 
-    # Tab Toko Daring
-    st.markdown(f"## **DETAIL TOKO DARING - {pilih}**")
+    ### Gunakan Try dan Except untuk pilihan logika
+    try:
+        # Unduh data parquet Detail Toko Daring
+        unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
+        daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+        namaopd = con.execute(f"SELECT DISTINCT(nama_satker) FROM katalog WHERE nama_satker IS NOT NULL").df() 
+
+        # Tab Detail Katalog OPD
+        st.markdown(f"## **DETAIL TOKO DARING TAHUN {tahun}**")
+        
+        # Tampilan pilihan menu nama opd
+        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab4')
+
+        st.markdown(f"### **{opd}**")
+
+        gd = GridOptionsBuilder.from_dataframe(daring)
+        gd.configure_pagination()
+        gd.configure_side_bar()
+        gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+        gd.configure_column("valuasi", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.valuasi.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+        
+        gridOptions = gd.build()
+        AgGrid(daring, gridOptions=gridOptions, enable_enterprise_modules=True)
+
+    except:
+        st.error("Data Toko Daring belum ada, tabel tidak ditampilkan ...")
