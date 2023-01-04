@@ -380,15 +380,9 @@ with tab3:
         # Unduh data parquet Detail Katalog
         unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
         katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
-        namaopd = con.execute(f"SELECT DISTINCT(nama_satker) FROM katalog WHERE nama_satker IS NOT NULL").df()
 
         # Tab Detail Katalog OPD
         st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**")
-        
-        # Tampilan pilihan menu nama opd
-        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab3')
-
-        st.markdown(f"### **{opd}**")
 
         gd = GridOptionsBuilder.from_dataframe(katalog)
         gd.configure_pagination()
@@ -412,16 +406,10 @@ with tab4:
         # Unduh data parquet Detail Toko Daring
         unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
         daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
-        namaopd = con.execute(f"SELECT DISTINCT(nama_satker) FROM katalog WHERE nama_satker IS NOT NULL").df() 
 
         # Tab Detail Katalog OPD
         st.markdown(f"## **DETAIL TOKO DARING TAHUN {tahun}**")
         
-        # Tampilan pilihan menu nama opd
-        opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab4')
-
-        st.markdown(f"### **{opd}**")
-
         gd = GridOptionsBuilder.from_dataframe(daring)
         gd.configure_pagination()
         gd.configure_side_bar()
