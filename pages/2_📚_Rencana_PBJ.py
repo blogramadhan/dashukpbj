@@ -259,10 +259,10 @@ with tab1:
         st.markdown("#### Berdasarkan Nilai Paket")
 
         gd = GridOptionsBuilder.from_dataframe(df_mp_nilai)
-        gd.configure_pagination
+        gd.configure_pagination()
         gd.configure_side_bar()
         gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-        gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+        gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
         gridOptions = gd.build()
         AgGrid(df_mp_nilai)
@@ -286,10 +286,10 @@ with tab1:
         st.markdown("#### Berdasarkan Nilai Paket")
 
         gd = GridOptionsBuilder.from_dataframe(df_jp_nilai)
-        gd.configure_pagination
+        gd.configure_pagination()
         gd.configure_side_bar()
         gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-        gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+        gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
         gridOptions = gd.build()
         AgGrid(df_jp_nilai)
