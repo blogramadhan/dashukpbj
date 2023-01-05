@@ -265,7 +265,7 @@ with tab1:
         gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
         gridOptions = gd.build()
-        AgGrid(df_mp_nilai)
+        AgGrid(df_mp_nilai, gridOptions=gridOptions, enable_enterprise_modules=True)
  
     mpn1, mpn2 = st.columns((5,5))
     with mpn1:
@@ -292,7 +292,7 @@ with tab1:
         gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
         gridOptions = gd.build()
-        AgGrid(df_jp_nilai)
+        AgGrid(df_jp_nilai, gridOptions=gridOptions, enable_enterprise_modules=True)
 
     jpn1, jpn2 = st.columns((5,5))
     with jpn1:
