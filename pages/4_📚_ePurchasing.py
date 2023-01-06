@@ -138,13 +138,32 @@ with tab1:
         df_produk_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetPRODUKKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
 
         # Tab E-Katalog
-        st.markdown(f"## **TRANSAKSI E-KATALOG - {pilih}**")
+        # Header dan Download Data Button
+        download_katalog = unduh_data(df_katalog)
+        download_produk_katalog = unduh_data(df_produk_katalog)
+
+        d1, d2, d3 = st.columns((6,2,2))
+        with d1:
+            st.markdown(f"## **TRANSAKSI E-KATALOG - {pilih}**")
+        with d2:
+            st.download_button(
+                label = '📥 Download Data Transaksi E-KATALOG',
+                data = download_katalog,
+                file_name = 'trxkatalog-' + kodeRUP + '.csv',
+                mime = 'text/csv'
+            )
+        with d3:
+            st.download_button(
+                label = '📥 Download Data Produk E-KATALOG',
+                data = download_produk_katalog,
+                file_name = 'prodkatalog-' + kodeRUP + '.csv',
+                mime = 'text/csv'
+            )
 
         # Query E-KATALOG
         df_katalog_lokal = con.execute(f"SELECT * FROM df_katalog WHERE jenis_katalog = 'Lokal'").df()
         df_katalog_sektoral = con.execute(f"SELECT * FROM df_katalog WHERE jenis_katalog = 'Sektoral'").df()
         df_katalog_nasional = con.execute(f"SELECT * FROM df_katalog WHERE jenis_katalog = 'Nasional'").df()
-
 
         jumlah_produk = df_produk_katalog['nama_produk'].count()
         jumlah_penyedia = df_produk_katalog['nama_penyedia'].value_counts().shape
@@ -176,17 +195,6 @@ with tab1:
         dkn1.metric("Jumlah Produk E-Katalog Nasional", "Tidak Ada Data")
         dkn2.metric("Jumlah Transaksi E-Katalog Nasional", jumlah_trx_nasional[0])
         dkn3.metric("Nilai Transaksi E-Ketalog Nasional", nilai_trx_nasional_print)
-
-        # Buat grafik Data E-Katalog   
-        #opdtrxcount = df_kat_loc_lokal.nama_satker.value_counts().sort_values(ascending=False)
-        #tmp_kat_loc_lokal = df_kat_loc_lokal[['nama_satker', 'no_paket']]
-        #pv_kat_loc_lokal = tmp_kat_loc_lokal.pivot_table(
-        #    index = ['nama_satker', 'no_paket'],
-        #    #values = ['no_paket']
-        #)
-        #tmp_kat_loc_lokal_ok = pv_kat_loc_lokal.reset_index()
-        #opdtrxcount = tmp_kat_loc_lokal_ok['nama_satker'].value_counts()
-        #opdtrxsum = df_kat_loc_lokal.groupby(by='nama_satker').sum().sort_values(by='total_harga', ascending=False)['total_harga']    
 
         katalog_tabel_count_sql = """
             SELECT nama_satker AS NAMA_SATKER, COUNT(DISTINCT(no_paket)) AS JUMLAH_TRANSAKSI
@@ -253,24 +261,6 @@ with tab1:
 
         else:
             st.error('BELUM ADA TRANSAKSI DI KATALOG LOKAL ...')
-
-        # Download Data Button
-        download_katalog = unduh_data(df_katalog)
-        download_produk_katalog = unduh_data(df_produk_katalog)
-
-        st.download_button(
-            label = '📥 Download Data Transaksi E-KATALOG',
-            data = download_katalog,
-            file_name = 'trxkatalog-' + kodeRUP + '.csv',
-            mime = 'text/csv'
-        )
-
-        st.download_button(
-            label = '📥 Download Data Produk E-KATALOG',
-            data = download_produk_katalog,
-            file_name = 'prodkatalog-' + kodeRUP + '.csv',
-            mime = 'text/csv'
-        )
 
     except:
         st.error("Data Ketalog Lokal belum ada ...")
