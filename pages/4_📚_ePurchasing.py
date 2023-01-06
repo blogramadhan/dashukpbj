@@ -56,7 +56,7 @@ daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH"
             "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
             "KAB. KAYONG UTARA", "KAB. KETAPANG"]
 
-tahuns =    [2022, 2023]
+tahuns =    [2023, 2022]
 
 pilih = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
 tahun = st.sidebar.selectbox("Pilih Tahun :", tahuns)
