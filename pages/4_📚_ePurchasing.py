@@ -34,9 +34,6 @@ from google.oauth2 import service_account
 from google.cloud import storage
 # Import fungsi pribadi
 from fungsi import *
-# Nati dihapus
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Setting CSS
 with open('style.css') as f:

@@ -2,9 +2,6 @@ duckdb
 pandas
 streamlit
 babel
-openpyxl
-seaborn
-matplotlib
 plotly.express
 google-cloud-storage
 streamlit-aggrid
