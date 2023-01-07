@@ -161,9 +161,15 @@ with tab1:
             )
 
         # Query E-KATALOG
-        df_katalog_lokal = con.execute(f"SELECT * FROM df_katalog WHERE jenis_katalog = 'Lokal'").df()
-        df_katalog_sektoral = con.execute(f"SELECT * FROM df_katalog WHERE jenis_katalog = 'Sektoral'").df()
-        df_katalog_nasional = con.execute(f"SELECT * FROM df_katalog WHERE jenis_katalog = 'Nasional'").df()
+        df_katalog_lokal = con.execute(
+            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Lokal'"
+        ).df()
+        df_katalog_sektoral = con.execute(
+            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Sektoral'"
+        ).df()
+        df_katalog_nasional = con.execute(
+            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Nasional'"
+        ).df()
 
         jumlah_produk = df_produk_katalog['nama_produk'].count()
         jumlah_penyedia = df_produk_katalog['nama_penyedia'].value_counts().shape
@@ -241,7 +247,7 @@ with tab1:
             st.markdown('### Nilai Transaksi Katalog Lokal OPD')
 
             ks1, ks2 = st.columns((4,6))
-            
+
             with ks1:
 
                 gd = GridOptionsBuilder.from_dataframe(katalog_tabel_sum)
@@ -262,7 +268,7 @@ with tab1:
         else:
             st.error('BELUM ADA TRANSAKSI DI KATALOG LOKAL ...')
 
-    except:
+    except Exception:
         st.error("Data Ketalog Lokal belum ada ...")
 
 ## Tab Toko Daring
@@ -306,11 +312,11 @@ with tab2:
 
             # Jumlah Transaksi Toko Daring OPD
             st.markdown("### Jumlah Transaksi Toko Daring OPD")
-            
+
             tdc1, tdc2 = st.columns((4,6))
-            
+
             with tdc1:
-                
+
                 gd = GridOptionsBuilder.from_dataframe(daring_tabel_count)
                 gd.configure_pagination()
                 gd.configure_side_bar()
@@ -318,9 +324,9 @@ with tab2:
 
                 gridOptions = gd.build()
                 AgGrid(daring_tabel_count, gridOptions=gridOptions, enable_enterprise_modules=True)
-                
+
             with tdc2:
-                
+
                 fig_daring_count = px.bar(daring_tabel_count, y='JUMLAH_TRANSAKSI', x='NAMA_SATKER', text_auto='.2s', title="Jumlah Transaksi Toko Daring")
                 fig_daring_count.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
                 st.plotly_chart(fig_daring_count, theme="streamlit", use_container_width=True)
@@ -348,7 +354,7 @@ with tab2:
                 st.plotly_chart(fig_daring_sum, theme="streamlit", use_container_width=True)
 
         else:
-            st.error(f"BELUM ADA TRANSAKSI DI TOKO DARING ...")       
+            st.error("BELUM ADA TRANSAKSI DI TOKO DARING ...")       
 
         # Download Data Button
         download_daring = unduh_data(df_daring)
@@ -360,7 +366,7 @@ with tab2:
             mime = 'text/csv'
         )
 
-    except:
+    except Exception:
         st.error("Data Toko Daring belum ada ...")
 
 with tab3:
@@ -369,24 +375,26 @@ with tab3:
     try:
         # Unduh data parquet Detail Katalog
         unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
-        katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+        katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()        
+        katalog_tabel_sql = """
+            SELECT nama_satker AS NAMA_SATKER, no_paket AS NOMOR_PAKET, nama_paket AS NAMA_PAKET, kd_rup AS KODE_RUP, nama_sumber_dana AS SUMBER_DANA, total_harga AS TOTAL_HARGA, paket_status_str AS STATUS_PAKET, nama_komoditas AS NAMA_KOMODITAS, jenis_katalog AS JENIS_KATALOG
+            FROM katalog
+        """
+        katalog_tabel = con.execute(katalog_tabel_sql)
 
         # Tab Detail Katalog OPD
         st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**")
 
-        gd = GridOptionsBuilder.from_dataframe(katalog)
+        gd = GridOptionsBuilder.from_dataframe(katalog_tabel)
         gd.configure_pagination()
         gd.configure_side_bar()
         gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-        gd.configure_column("total", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.total.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
-        gd.configure_column("harga_satuan", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.harga_satuan.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
-        gd.configure_column("ongkos_kirim", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.ongkos_kirim.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
         gd.configure_column("total_harga", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.total_harga.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
         gridOptions = gd.build()
-        AgGrid(katalog, gridOptions=gridOptions, enable_enterprise_modules=True)
+        AgGrid(katalog_tabel, gridOptions=gridOptions, enable_enterprise_modules=True)
 
-    except:
+    except Exception:
         st.error("Data Katalog belum ada, tabel tidak ditampilkan ...")
 
 with tab4:
@@ -399,15 +407,15 @@ with tab4:
 
         # Tab Detail Katalog OPD
         st.markdown(f"## **DETAIL TOKO DARING TAHUN {tahun}**")
-        
+
         gd = GridOptionsBuilder.from_dataframe(daring)
         gd.configure_pagination()
         gd.configure_side_bar()
         gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
         gd.configure_column("valuasi", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.valuasi.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
-        
+
         gridOptions = gd.build()
         AgGrid(daring, gridOptions=gridOptions, enable_enterprise_modules=True)
 
-    except:
+    except Exception:
         st.error("Data Toko Daring belum ada, tabel tidak ditampilkan ...")
