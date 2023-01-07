@@ -375,24 +375,24 @@ with tab3:
     try:
         # Unduh data parquet Detail Katalog
         unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
-        katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()        
-        katalog_tabel_sql = """
+        katalog_tab3 = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()        
+        katalog_tabel_sql_tab3 = """
             SELECT nama_satker AS NAMA_SATKER, no_paket AS NOMOR_PAKET, nama_paket AS NAMA_PAKET, kd_rup AS KODE_RUP, nama_sumber_dana AS SUMBER_DANA, total_harga AS TOTAL_HARGA, paket_status_str AS STATUS_PAKET, nama_komoditas AS NAMA_KOMODITAS, jenis_katalog AS JENIS_KATALOG
             FROM katalog
         """
-        katalog_tabel = con.execute(katalog_tabel_sql).df()
+        katalog_tabel_tab3 = con.execute(katalog_tabel_sql_tab3).df()
 
         # Tab Detail Katalog OPD
-        st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**")
+        st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUNS {tahun}**")
 
-        gd = GridOptionsBuilder.from_dataframe(katalog_tabel)
+        gd = GridOptionsBuilder.from_dataframe(katalog_tabel_tab3)
         gd.configure_pagination()
         gd.configure_side_bar()
         gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
         gd.configure_column("TOTAL_HARGA", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.TOTAL_HARGA.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
         gridOptions = gd.build()
-        AgGrid(katalog_tabel, gridOptions=gridOptions, enable_enterprise_modules=True)
+        AgGrid(katalog_tabel_tab3, gridOptions=gridOptions, enable_enterprise_modules=True)
 
     except Exception:
         st.error("Data Katalog belum ada, tabel tidak ditampilkan ...")
