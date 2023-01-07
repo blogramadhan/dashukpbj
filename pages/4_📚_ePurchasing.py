@@ -383,7 +383,7 @@ with tab3:
         katalog_tabel_tab3 = con.execute(katalog_tabel_sql_tab3).df()
 
         # Tab Detail Katalog OPD
-        st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUNS {tahun}**")
+        st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**")
 
         gd = GridOptionsBuilder.from_dataframe(katalog_tabel_tab3)
         gd.configure_pagination()
