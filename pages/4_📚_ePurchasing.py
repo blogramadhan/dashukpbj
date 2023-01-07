@@ -389,7 +389,7 @@ with tab3:
         gd.configure_pagination()
         gd.configure_side_bar()
         gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-        gd.configure_column("total_harga", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.total_harga.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+        gd.configure_column("TOTAL_HARGA", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.TOTAL_HARGA.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
         gridOptions = gd.build()
         AgGrid(katalog_tabel, gridOptions=gridOptions, enable_enterprise_modules=True)
