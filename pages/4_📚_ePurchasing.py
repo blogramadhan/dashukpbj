@@ -366,7 +366,7 @@ with tab3:
         katalog_tab3 = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()        
         katalog_tabel_sql_tab3 = """
             SELECT nama_satker AS NAMA_SATKER, no_paket AS NOMOR_PAKET, nama_paket AS NAMA_PAKET, kd_rup AS KODE_RUP, nama_sumber_dana AS SUMBER_DANA, total_harga AS TOTAL_HARGA, paket_status_str AS STATUS_PAKET, nama_komoditas AS NAMA_KOMODITAS, jenis_katalog AS JENIS_KATALOG
-            FROM katalog
+            FROM katalog_tab3
         """
         katalog_tabel_tab3 = con.execute(katalog_tabel_sql_tab3).df()
 
