@@ -380,7 +380,7 @@ with tab3:
             SELECT nama_satker AS NAMA_SATKER, no_paket AS NOMOR_PAKET, nama_paket AS NAMA_PAKET, kd_rup AS KODE_RUP, nama_sumber_dana AS SUMBER_DANA, total_harga AS TOTAL_HARGA, paket_status_str AS STATUS_PAKET, nama_komoditas AS NAMA_KOMODITAS, jenis_katalog AS JENIS_KATALOG
             FROM katalog
         """
-        katalog_tabel = con.execute(katalog_tabel_sql)
+        katalog_tabel = con.execute(katalog_tabel_sql).df()
 
         # Tab Detail Katalog OPD
         st.markdown(f"## **DETAIL E-KATALOG LOKAL TAHUN {tahun}**")
