@@ -68,15 +68,3 @@ Sumber data dari *Dashboard* ini berasal dari **API JSON** yang ditarik harian d
 
 @2022 - **UlarKadut** 
 """)
-
-# Buat session pilihan UKPBJ
-#daerah =    ["PROV. KALBAR", "KOTA PONTIANAK", "KAB. KUBU RAYA", "KAB. MEMPAWAH", "KOTA SINGKAWANG", "KAB. SAMBAS", 
-#            "KAB. BENGKAYANG", "KAB. LANDAK", "KAB. SANGGAU", "KAB. SEKADAU", "KAB. SINTANG", "KAB. MELAWI", "KAB. KAPUAS HULU", 
-#            "KAB. KAYONG UTARA", "KAB. KETAPANG"]
-
-#if "ukpbj" not in st.session_state:
-#    st.session_state["ukpbj"] = ""
-
-#ukpbj = st.sidebar.selectbox("Pilih UKPBJ yang diinginkan :", daerah)
-
-#st.session_state["ukpbj"] = ukpbj
