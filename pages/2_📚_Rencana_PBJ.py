@@ -19,7 +19,7 @@
 # @ Pontianak, 2022                                                                 #
 #####################################################################################
 
-# Import library +
+# Import library
 import duckdb
 import streamlit as st
 import pandas as pd
