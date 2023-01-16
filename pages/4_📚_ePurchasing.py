@@ -123,9 +123,20 @@ with tab1:
         unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
         unduh_df_parquet(bucket, DatasetPRODUKKATALOG, DatasetPRODUKKATALOG_Temp)
         df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
-        df_katalog_clean = con.execute(f"SELECT * FROM df_katalog WHERE nama_satker IS NOT NULL")
+        df_katalog_clean = con.execute(f"SELEct * FROM df_katalog WHERE nama_satker IS NOT NULL").df()
         df_produk_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetPRODUKKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
-        df_produk_katalog_clean = con.execute(f"SELECT * FROM df_produk_katalog WHERE nama_satker IS NOT NULL")
+        df_produk_katalog_clean = con.execute(f"SELECT * FROM df_produk_katalog WHERE nama_satker IS NOT NULL").df()
+
+        # Query E-KATALOG
+        df_katalog_lokal = con.execute(
+            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Lokal'"
+        ).df()
+        df_katalog_sektoral = con.execute(
+            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Sektoral'"
+        ).df()
+        df_katalog_nasional = con.execute(
+            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Nasional'"
+        ).df()
 
         # Tab E-Katalog
         # Header dan Download Data Button
@@ -149,17 +160,6 @@ with tab1:
                 file_name = 'prodkatalog-' + kodeRUP + '.csv',
                 mime = 'text/csv'
             )
-
-        # Query E-KATALOG
-        df_katalog_lokal = con.execute(
-            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Lokal'"
-        ).df()
-        df_katalog_sektoral = con.execute(
-            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Sektoral'"
-        ).df()
-        df_katalog_nasional = con.execute(
-            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Nasional'"
-        ).df()
 
         jumlah_produk = df_produk_katalog['nama_produk'].count()
         jumlah_penyedia = df_produk_katalog['nama_penyedia'].value_counts().shape
