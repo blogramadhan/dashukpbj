@@ -195,14 +195,14 @@ with tab1:
             FROM df_katalog_lokal
             WHERE NAMA_SATKER IS NOT NULL
             GROUP BY NAMA_SATKER
-            ORDER BY JUMLAH_TRANSAKSI DESC LIMIT 10
+            ORDER BY JUMLAH_TRANSAKSI DESC
         """
         katalog_tabel_sum_sql = """
             SELECT nama_satker AS NAMA_SATKER, SUM(total_harga) AS NILAI_TRANSAKSI
             FROM df_katalog_lokal
             WHERE NAMA_SATKER IS NOT NULL
             GROUP BY NAMA_SATKER
-            ORDER BY NILAI_TRANSAKSI DESC LIMIT 10
+            ORDER BY NILAI_TRANSAKSI DESC
         """
         katalog_tabel_count = con.execute(katalog_tabel_count_sql).df()
         katalog_tabel_sum = con.execute(katalog_tabel_sum_sql).df()
