@@ -123,9 +123,7 @@ with tab1:
         unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
         unduh_df_parquet(bucket, DatasetPRODUKKATALOG, DatasetPRODUKKATALOG_Temp)
         df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
-        df_katalog_clean = con.execute(f"SELEct * FROM df_katalog WHERE nama_satker IS NOT NULL").df()
         df_produk_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetPRODUKKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
-        df_produk_katalog_clean = con.execute(f"SELECT * FROM df_produk_katalog WHERE nama_satker IS NOT NULL").df()
 
         # Query E-KATALOG
         df_katalog_lokal = con.execute(
@@ -140,8 +138,10 @@ with tab1:
 
         # Tab E-Katalog
         # Header dan Download Data Button
+        df_katalog_clean = con.execute(f"SELEct * FROM df_katalog_lokal WHERE nama_satker IS NOT NULL").df()
+        #df_produk_katalog_clean = con.execute(f"SELECT * FROM df_produk_katalog WHERE nama_satker IS NOT NULL").df()
         download_katalog = unduh_data(df_katalog_clean)
-        download_produk_katalog = unduh_data(df_produk_katalog_clean)
+        download_produk_katalog = unduh_data(df_produk_katalog)
 
         d1, d2, d3 = st.columns((6,2,2))
         with d1:
