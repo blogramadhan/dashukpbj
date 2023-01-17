@@ -104,194 +104,215 @@ bucket = "dashukpbj"
 ### File path dan unduh file parquet dan simpan di memory
 DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
 DatasetSIRUPDP_Temp = f"sirupdp{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
 
 DatasetSIRUPSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
 DatasetSIRUPSW_Temp = f"sirupdsw{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPSW, DatasetSIRUPSW_Temp)
 
 DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
-### Query dataframe parquet penting 
-df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
-df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
-df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+try:
+    unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+    unduh_df_parquet(bucket, DatasetSIRUPSW, DatasetSIRUPSW_Temp)
+    unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+
+    ### Query dataframe parquet penting 
+    df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+    df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
+    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+
+    ### Query Data RUP paket penyedia
+    df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
+    df_pp_belum_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
+    df_pp_umumkan_umk = con.execute("SELECT * FROM df_pp_umumkan WHERE statususahakecil = 'UsahaKecil'").df()
+    df_pp_umumkan_pdn = con.execute("SELECT * FROM df_pp_umumkan WHERE statuspdn = 'PDN'").df()
+
+    df_pp_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Tender','Tender Cepat','Seleksi')").df()
+    df_pp_tender = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender'").df()
+    df_pp_tender_cepat = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender Cepat'").df()
+    df_pp_seleksi = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Seleksi'").df()
+
+    df_pp_non_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Pengadaan Langsung','Penunjukan Langsung')").df()
+    df_pp_pengadaan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Pengadaan Langsung'").df()
+    df_pp_penunjukan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Penunjukan Langsung'").df()
+
+    df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
+
+    ### Data RUP paket swakelola
+    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terumumkan'").df()
+    df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terinisiasi'").df()
+
+    ### Data struktur anggaran RUP
+    df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
+
+    ### Buat variabel nama satker unik
+    #namaopd = df_rsap['nama_satker'].unique()
+    namaopd = df_SIRUPDP['namasatker'].unique()
+
+
+except Exception:
+    st.error("Data SIRUP tidak ada atau gagal ditarik ...")
 
 ##########
-
-### Query Data RUP paket penyedia
-df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
-df_pp_belum_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
-df_pp_umumkan_umk = con.execute("SELECT * FROM df_pp_umumkan WHERE statususahakecil = 'UsahaKecil'").df()
-df_pp_umumkan_pdn = con.execute("SELECT * FROM df_pp_umumkan WHERE statuspdn = 'PDN'").df()
-
-df_pp_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Tender','Tender Cepat','Seleksi')").df()
-df_pp_tender = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender'").df()
-df_pp_tender_cepat = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender Cepat'").df()
-df_pp_seleksi = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Seleksi'").df()
-
-df_pp_non_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Pengadaan Langsung','Penunjukan Langsung')").df()
-df_pp_pengadaan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Pengadaan Langsung'").df()
-df_pp_penunjukan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Penunjukan Langsung'").df()
-
-df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
-
-### Data RUP paket swakelola
-df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terumumkan'").df()
-df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terinisiasi'").df()
-
-### Data struktur anggaran RUP
-df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
-
-### Buat variabel nama satker unik
-#namaopd = df_rsap['nama_satker'].unique()
-namaopd = df_SIRUPDP['namasatker'].unique()
-
-#########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["| RUP DAERAH |", "| STRUKTUR ANGGARAN |", "| RUP PERANGKAT DAERAH |", "| RUP PAKET PENYEDIA |", "| RUP PAKET SWAKELOLA |"])
 
+## Buat Tab Pemanfaatan SIRUP
 with tab1:
-    # Tab pemanfaatan SIRUP
 
-    # Dataset
-    df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
-    df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
-    df_jp_hitung = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, COUNT(jenispengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
-    df_jp_nilai = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
+    ### Gunakan Try dan Except untuk pilihan logika
+    try:        
 
-    ### Tampilan pemanfaatan SIRUP
-    unduh_rupdp = unduh_data(df_pp_umumkan)
-    unduh_rupsw = unduh_data(df_sw_umumkan)
+        # Dataset
+        df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
+        df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
+        df_jp_hitung = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, COUNT(jenispengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
+        df_jp_nilai = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
 
-    d1, d2, d3 = st.columns((6,2,2))
-    with d1:
-        st.markdown(f"## **RUP - {pilih} - {tahun}**")
-    with d2:
-        st.download_button(
-            label = "📥 Download RUP Penyedia",
-            data = unduh_rupdp,
-            file_name = f"ruppenyedia-{kodeFolder}.csv",
-            mime = "text/csv"            
-        )
-    with d3:
-         st.download_button(
-            label = "📥 Download RUP Swakelola",
-            data = unduh_rupsw,
-            file_name = f"rupswakelola-{kodeFolder}.csv",
-            mime = "text/csv"            
-        )       
+        ### Tampilan pemanfaatan SIRUP
+        unduh_rupdp = unduh_data(df_pp_umumkan)
+        unduh_rupsw = unduh_data(df_sw_umumkan)
 
-    ### RUP struktur anggaran
-    st.markdown("### Struktur Anggaran")
-    belanja_pengadaan = df_rsap['belanja_pengadaan'].sum()
-    belanja_pengadaan_print = format_currency(belanja_pengadaan, 'Rp. ', locale='id_ID')
-    belanja_operasional = df_rsap['belanja_operasi'].sum()
-    belanja_operasional_print = format_currency(belanja_operasional, 'Rp. ', locale='id_ID')
-    belanja_modal = df_rsap['belanja_modal'].sum()
-    belanja_modal_print = format_currency(belanja_modal, 'Rp. ', locale='id_ID')
-    belanja_total = df_rsap['total_belanja'].sum()
-    belanja_total_print = format_currency(belanja_total, 'Rp. ', locale='id_ID')
+        d1, d2, d3 = st.columns((6,2,2))
+        with d1:
+            st.markdown(f"## **RUP - {pilih} - {tahun}**")
+        with d2:
+            st.download_button(
+                label = "📥 Download RUP Penyedia",
+                data = unduh_rupdp,
+                file_name = f"ruppenyedia-{kodeFolder}.csv",
+                mime = "text/csv"            
+            )
+        with d3:
+            st.download_button(
+                label = "📥 Download RUP Swakelola",
+                data = unduh_rupsw,
+                file_name = f"rupswakelola-{kodeFolder}.csv",
+                mime = "text/csv"            
+            )       
 
-    sa1, sa2, sa3, sa4 = st.columns(4)
-    sa1.metric("Belanja Pengadaan", belanja_pengadaan_print)
-    sa2.metric("Belanja Operasional", belanja_operasional_print)
-    sa3.metric("Belanja Modal", belanja_modal_print)
-    sa4.metric("Belanja Total", belanja_total_print)
+        ### RUP struktur anggaran
+        st.markdown("### Struktur Anggaran")
+        belanja_pengadaan = df_rsap['belanja_pengadaan'].sum()
+        belanja_pengadaan_print = format_currency(belanja_pengadaan, 'Rp. ', locale='id_ID')
+        belanja_operasional = df_rsap['belanja_operasi'].sum()
+        belanja_operasional_print = format_currency(belanja_operasional, 'Rp. ', locale='id_ID')
+        belanja_modal = df_rsap['belanja_modal'].sum()
+        belanja_modal_print = format_currency(belanja_modal, 'Rp. ', locale='id_ID')
+        belanja_total = df_rsap['total_belanja'].sum()
+        belanja_total_print = format_currency(belanja_total, 'Rp. ', locale='id_ID')
 
-    ### Posisi input RUP
-    st.markdown("### Posisi Input RUP")
-    jumlah_total_rup = df_pp_umumkan.shape[0] + df_sw_umumkan.shape[0]
-    nilai_total_rup = df_pp_umumkan['jumlahpagu'].sum() + df_sw_umumkan['jumlahpagu'].sum()
-    nilai_total_rup_print = format_currency(nilai_total_rup, 'Rp. ', locale='id_ID')
+        sa1, sa2, sa3, sa4 = st.columns(4)
+        sa1.metric("Belanja Pengadaan", belanja_pengadaan_print)
+        sa2.metric("Belanja Operasional", belanja_operasional_print)
+        sa3.metric("Belanja Modal", belanja_modal_print)
+        sa4.metric("Belanja Total", belanja_total_print)
 
-    pir1, pir2, pir3 = st.columns(3)
-    pir1.metric("", "Jumlah Total")
-    pir2.metric("Jumlah Total Paket RUP", jumlah_total_rup)
-    pir3.metric("Nilai Total Paket RUP", nilai_total_rup_print)
+        ### Posisi input RUP
+        st.markdown("### Posisi Input RUP")
+        jumlah_total_rup = df_pp_umumkan.shape[0] + df_sw_umumkan.shape[0]
+        nilai_total_rup = df_pp_umumkan['jumlahpagu'].sum() + df_sw_umumkan['jumlahpagu'].sum()
+        nilai_total_rup_print = format_currency(nilai_total_rup, 'Rp. ', locale='id_ID')
 
-    jumlah_rup_umumkan = df_pp_umumkan.shape[0]
-    nilai_rup_umumkan = df_pp_umumkan['jumlahpagu'].sum()
-    nilai_rup_umumkan_print = format_currency(nilai_rup_umumkan, 'Rp. ', locale='id_ID')
+        pir1, pir2, pir3 = st.columns(3)
+        pir1.metric("", "Jumlah Total")
+        pir2.metric("Jumlah Total Paket RUP", jumlah_total_rup)
+        pir3.metric("Nilai Total Paket RUP", nilai_total_rup_print)
 
-    pirpp1, pirpp2, pirpp3 = st.columns(3)
-    pirpp1.metric("","Paket Penyedia")
-    pirpp2.metric("Jumlah Total Paket RUP", jumlah_rup_umumkan)
-    pirpp3.metric("Nilai Total Paket RUP", nilai_rup_umumkan_print)
+        jumlah_rup_umumkan = df_pp_umumkan.shape[0]
+        nilai_rup_umumkan = df_pp_umumkan['jumlahpagu'].sum()
+        nilai_rup_umumkan_print = format_currency(nilai_rup_umumkan, 'Rp. ', locale='id_ID')
 
-    jumlah_rup_sw_umumkan = df_sw_umumkan.shape[0]
-    nilai_rup_sw_umumkan = df_sw_umumkan['jumlahpagu'].sum()
-    nilai_rup_sw_umumkan_print = format_currency(nilai_rup_sw_umumkan, 'Rp. ', locale='id_ID')
+        pirpp1, pirpp2, pirpp3 = st.columns(3)
+        pirpp1.metric("","Paket Penyedia")
+        pirpp2.metric("Jumlah Total Paket RUP", jumlah_rup_umumkan)
+        pirpp3.metric("Nilai Total Paket RUP", nilai_rup_umumkan_print)
 
-    pirsw1, pirsw2, pirsw3 = st.columns(3)
-    pirsw1.metric("", "Paket Swakelola")
-    pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
-    pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_print)
+        jumlah_rup_sw_umumkan = df_sw_umumkan.shape[0]
+        nilai_rup_sw_umumkan = df_sw_umumkan['jumlahpagu'].sum()
+        nilai_rup_sw_umumkan_print = format_currency(nilai_rup_sw_umumkan, 'Rp. ', locale='id_ID')
 
-    ### Persentase input RUP
-    persen_capaian_rup = (nilai_total_rup / belanja_pengadaan)
-    persen_capaian_rup_print = "{:.2%}".format(persen_capaian_rup)
+        pirsw1, pirsw2, pirsw3 = st.columns(3)
+        pirsw1.metric("", "Paket Swakelola")
+        pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
+        pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_print)
 
-    pr1, pr2, pr3 = st.columns(3)
-    pr1.metric("", "")
-    pr2.metric("", "Persentase Capaian RUP")
-    pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
+        ### Persentase input RUP
+        persen_capaian_rup = (nilai_total_rup / belanja_pengadaan)
+        persen_capaian_rup_print = "{:.2%}".format(persen_capaian_rup)
 
-    ### Metode dan Jenis Pengadaan
-    st.markdown("### Metode Pengadaan")
-    mph1, mph2 = st.columns((5,5))
-    with mph1:
-        st.markdown("#### Berdasarkan Jumlah Paket")
-        AgGrid(df_mp_hitung)
-    with mph2:
-        st.markdown("#### Berdasarkan Nilai Paket")
+        pr1, pr2, pr3 = st.columns(3)
+        pr1.metric("", "")
+        pr2.metric("", "Persentase Capaian RUP")
+        pr3.metric("Persentase Capaian RUP", persen_capaian_rup_print)
 
-        gd = GridOptionsBuilder.from_dataframe(df_mp_nilai)
-        gd.configure_pagination()
-        gd.configure_side_bar()
-        gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-        gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+        ### Metode dan Jenis Pengadaan
+        st.markdown("### Metode Pengadaan")
+        mph1, mph2 = st.columns((5,5))
+        with mph1:
+            st.markdown("#### Berdasarkan Jumlah Paket")
 
-        gridOptions = gd.build()
-        AgGrid(df_mp_nilai, gridOptions=gridOptions, enable_enterprise_modules=True)
- 
-    mpn1, mpn2 = st.columns((5,5))
-    with mpn1:
-        figmph = px.pie(df_mp_hitung, values='JUMLAH_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
-        st.plotly_chart(figmph, theme="streamlit", use_conatiner_width=True)
-    with mpn2:
-        figmpn = px.pie(df_mp_nilai, values='NILAI_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
-        st.plotly_chart(figmpn, theme='streamlit', use_container_width=True)
+            gd = GridOptionsBuilder.from_dataframe(df_mp_hitung)
+            gd.configure_side_bar()
+            gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
 
-    ##########
+            gridOptions = gd.build()
+            AgGrid(df_mp_hitung)
+        with mph2:
+            st.markdown("#### Berdasarkan Nilai Paket")
 
-    st.markdown("### Jenis Pengadaan")
-    jph1, jph2 = st.columns((5,5))
-    with jph1:
-        st.markdown("#### Berdasarkan Jumlah Paket")
-        AgGrid(df_jp_hitung)
-    with jph2:
-        st.markdown("#### Berdasarkan Nilai Paket")
+            gd = GridOptionsBuilder.from_dataframe(df_mp_nilai)
+            gd.configure_side_bar()
+            gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+            gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
 
-        gd = GridOptionsBuilder.from_dataframe(df_jp_nilai)
-        gd.configure_pagination()
-        gd.configure_side_bar()
-        gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-        gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+            gridOptions = gd.build()
+            AgGrid(df_mp_nilai, gridOptions=gridOptions, enable_enterprise_modules=True)
+    
+        mpn1, mpn2 = st.columns((5,5))
+        with mpn1:
+            figmph = px.pie(df_mp_hitung, values='JUMLAH_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
+            st.plotly_chart(figmph, theme="streamlit", use_conatiner_width=True)
+        with mpn2:
+            figmpn = px.pie(df_mp_nilai, values='NILAI_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
+            st.plotly_chart(figmpn, theme='streamlit', use_container_width=True)
 
-        gridOptions = gd.build()
-        AgGrid(df_jp_nilai, gridOptions=gridOptions, enable_enterprise_modules=True)
+        ##########
 
-    jpn1, jpn2 = st.columns((5,5))
-    with jpn1:
-        figjph = px.pie(df_jp_hitung, values='JUMLAH_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
-        st.plotly_chart(figjph, theme="streamlit", use_conatiner_width=True)
-    with jpn2:
-        figjpn = px.pie(df_jp_nilai, values='NILAI_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
-        st.plotly_chart(figjpn, theme='streamlit', use_container_width=True)
+        st.markdown("### Jenis Pengadaan")
+        jph1, jph2 = st.columns((5,5))
+        with jph1:
+            st.markdown("#### Berdasarkan Jumlah Paket")
+
+            gd = GridOptionsBuilder.from_dataframe(df_jp_hitung)
+            gd.configure_side_bar()
+            gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+
+            gridOptions = gd.build()
+            AgGrid(df_jp_hitung)
+        with jph2:
+            st.markdown("#### Berdasarkan Nilai Paket")
+
+            gd = GridOptionsBuilder.from_dataframe(df_jp_nilai)
+            gd.configure_pagination()
+            gd.configure_side_bar()
+            gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+            gd.configure_column("NILAI_PAKET", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.NILAI_PAKET.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})") 
+
+            gridOptions = gd.build()
+            AgGrid(df_jp_nilai, gridOptions=gridOptions, enable_enterprise_modules=True)
+
+        jpn1, jpn2 = st.columns((5,5))
+        with jpn1:
+            figjph = px.pie(df_jp_hitung, values='JUMLAH_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
+            st.plotly_chart(figjph, theme="streamlit", use_conatiner_width=True)
+        with jpn2:
+            figjpn = px.pie(df_jp_nilai, values='NILAI_PAKET', names='JENIS_PENGADAAN', title='Grafik Jenis Pengadaan - Nilai Paket', hole=.3, width=800, height=800)
+            st.plotly_chart(figjpn, theme='streamlit', use_container_width=True)
+
+    except Exception:
+        st.error("Data SIRUP tidak ditampilkan, ada error ...")
 
 with tab2:
     # Tab Struktur Anggaran Perangkat Daerah
