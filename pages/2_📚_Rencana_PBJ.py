@@ -313,33 +313,39 @@ with tab1:
     except Exception:
         st.error("Data SIRUP tidak ditampilkan, ada error ...")
 
+## Buat Tab Struktur Anggaran Perangkat Daerah
 with tab2:
-    # Tab Struktur Anggaran Perangkat Daerah
 
-    ### Tampilan Struktur Anggaran Perangkat Daerah
-    st.markdown(f"## **STRUKTUR ANGGARAN - {pilih} - PERANGKAT DAERAH - {tahun}**")
+    ### Gunakan Try dan Except untuk pilihan logika
+    try:
 
-    sql_sa = """
-        SELECT nama_satker AS NAMA_SATKER, SUM(belanja_operasi) AS BELANJA_OPERASI, SUM(belanja_modal) AS BELANJA_MODAL, SUM(belanja_pengadaan) AS BELANJA_PENGADAAN, SUM(total_belanja) AS TOTAL_BELANJA 
-        FROM df_rsap 
-        GROUP BY nama_satker
-        ORDER BY total_belanja DESC;
-    """
-    posisi_sa = con.execute(sql_sa).df()
+        ### Tampilan Struktur Anggaran Perangkat Daerah
+        st.markdown(f"## **STRUKTUR ANGGARAN - {pilih} - PERANGKAT DAERAH - {tahun}**")
 
-    ### Tabulasi data dan pagination AgGrid
-    gd = GridOptionsBuilder.from_dataframe(posisi_sa)
-    gd.configure_pagination()
-    gd.configure_side_bar()
-    gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-    gd.configure_column("BELANJA_OPERASI", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.BELANJA_OPERASI.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
-    gd.configure_column("BELANJA_MODAL", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.BELANJA_MODAL.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
-    gd.configure_column("BELANJA_PENGADAAN", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.BELANJA_PENGADAAN.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
-    gd.configure_column("TOTAL_BELANJA", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.TOTAL_BELANJA.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+        sql_sa = """
+            SELECT nama_satker AS NAMA_SATKER, SUM(belanja_operasi) AS BELANJA_OPERASI, SUM(belanja_modal) AS BELANJA_MODAL, SUM(belanja_pengadaan) AS BELANJA_PENGADAAN, SUM(total_belanja) AS TOTAL_BELANJA 
+            FROM df_rsap 
+            GROUP BY nama_satker
+            ORDER BY total_belanja DESC;
+        """
+        posisi_sa = con.execute(sql_sa).df()
 
-    gridOptions = gd.build()
+        ### Tabulasi data dan pagination AgGrid
+        gd = GridOptionsBuilder.from_dataframe(posisi_sa)
+        gd.configure_pagination()
+        gd.configure_side_bar()
+        gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+        gd.configure_column("BELANJA_OPERASI", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.BELANJA_OPERASI.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+        gd.configure_column("BELANJA_MODAL", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.BELANJA_MODAL.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+        gd.configure_column("BELANJA_PENGADAAN", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.BELANJA_PENGADAAN.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+        gd.configure_column("TOTAL_BELANJA", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.TOTAL_BELANJA.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
 
-    AgGrid(posisi_sa, gridOptions=gridOptions, enable_enterprise_modules=True)
+        gridOptions = gd.build()
+
+        AgGrid(posisi_sa, gridOptions=gridOptions, enable_enterprise_modules=True)
+
+    except Exception:
+        st.error("Data Struktur Anggaran tidak ditampilkan, ada error ...")
 
 with tab3:
     # Tab RUP PERANGKAT DAERAH
