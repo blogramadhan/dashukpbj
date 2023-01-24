@@ -375,7 +375,8 @@ with tab3:
     belanja_modal_pd = belanja_modal_pdsql['belanja_modal'].sum()
     belanja_modal_pd_print = format_currency(belanja_modal_pd, 'Rp. ', locale='id_ID')
 
-    belanja_total_pd = belanja_total_pdsql['total_belanja'].sum()
+    #belanja_total_pd = belanja_total_pdsql['total_belanja'].sum()
+    belanja_total_pd = belanja_pengadaan_pd + belanja_operasional_pd + belanja_modal_pd
     belanja_total_pd_print = format_currency(belanja_total_pd, 'Rp. ', locale='id_ID')
 
     sa1, sa2, sa3, sa4 = st.columns(4)
