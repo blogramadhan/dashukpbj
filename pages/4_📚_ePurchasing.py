@@ -122,8 +122,19 @@ with tab1:
         # Unduh data parquet E-Katalog
         unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
         unduh_df_parquet(bucket, DatasetPRODUKKATALOG, DatasetPRODUKKATALOG_Temp)
-        df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+        df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
         df_produk_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetPRODUKKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+
+        # Query E-KATALOG
+        df_katalog_lokal = con.execute(
+            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Lokal'"
+        ).df()
+        df_katalog_sektoral = con.execute(
+            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Sektoral'"
+        ).df()
+        df_katalog_nasional = con.execute(
+            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Nasional'"
+        ).df()
 
         # Tab E-Katalog
         # Header dan Download Data Button
@@ -147,17 +158,6 @@ with tab1:
                 file_name = 'prodkatalog-' + kodeRUP + '.csv',
                 mime = 'text/csv'
             )
-
-        # Query E-KATALOG
-        df_katalog_lokal = con.execute(
-            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Lokal'"
-        ).df()
-        df_katalog_sektoral = con.execute(
-            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Sektoral'"
-        ).df()
-        df_katalog_nasional = con.execute(
-            "SELECT * FROM df_katalog WHERE jenis_katalog = 'Nasional'"
-        ).df()
 
         jumlah_produk = df_produk_katalog['nama_produk'].count()
         jumlah_penyedia = df_produk_katalog['nama_penyedia'].value_counts().shape
@@ -195,14 +195,14 @@ with tab1:
             FROM df_katalog_lokal
             WHERE NAMA_SATKER IS NOT NULL
             GROUP BY NAMA_SATKER
-            ORDER BY JUMLAH_TRANSAKSI DESC LIMIT 10
+            ORDER BY JUMLAH_TRANSAKSI DESC
         """
         katalog_tabel_sum_sql = """
             SELECT nama_satker AS NAMA_SATKER, SUM(total_harga) AS NILAI_TRANSAKSI
             FROM df_katalog_lokal
             WHERE NAMA_SATKER IS NOT NULL
             GROUP BY NAMA_SATKER
-            ORDER BY NILAI_TRANSAKSI DESC LIMIT 10
+            ORDER BY NILAI_TRANSAKSI DESC
         """
         katalog_tabel_count = con.execute(katalog_tabel_count_sql).df()
         katalog_tabel_sum = con.execute(katalog_tabel_sum_sql).df()

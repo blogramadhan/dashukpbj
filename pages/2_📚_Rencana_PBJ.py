@@ -193,8 +193,7 @@ with tab1:
     belanja_operasional_print = format_currency(belanja_operasional, 'Rp. ', locale='id_ID')
     belanja_modal = df_rsap['belanja_modal'].sum()
     belanja_modal_print = format_currency(belanja_modal, 'Rp. ', locale='id_ID')
-    #belanja_total = df_rsap['total_belanja'].sum()
-    belanja_total = belanja_pengadaan + belanja_operasional + belanja_modal
+    belanja_total = df_rsap['total_belanja'].sum()
     belanja_total_print = format_currency(belanja_total, 'Rp. ', locale='id_ID')
 
     sa1, sa2, sa3, sa4 = st.columns(4)
