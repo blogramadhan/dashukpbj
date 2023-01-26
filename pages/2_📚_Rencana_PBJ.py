@@ -102,26 +102,29 @@ con = duckdb.connect(database=':memory:')
 bucket = "dashukpbj"
 
 ### File path dan unduh file parquet dan simpan di memory
-DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPDP_Temp = f"sirupdp{kodeFolder}{str(tahun)}_temp.parquet"
+#DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+#DatasetSIRUPDP_Temp = f"sirupdp_{kodeFolder}_{str(tahun)}_temp.parquet"
+DatasetSIRUPDP_URL = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdp{tahun}.parquet"
 
-DatasetSIRUPDSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPDSW_Temp = f"sirupdsw{kodeFolder}{str(tahun)}_temp.parquet"
+#DatasetSIRUPDSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+#DatasetSIRUPDSW_Temp = f"sirupdsw_{kodeFolder}_{str(tahun)}_temp.parquet"
+DatasetSIRUPDSW_URL = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsw{tahun}.parquet"
 
-DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
+#DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+#DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parquet"
+DatasetSIRUPDSARSAP_URL = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsa_rsap{tahun}.parquet"
 
 ### Gunakan Try dan Except untuk pilihan logika
 try:
     # Unduh data parquet SIRUP
-    unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
-    unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
-    unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+    #unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+    #unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
+    #unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
     ### Query dataframe parquet penting 
-    df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
-    df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
-    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+    df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_URL}')").df()
+    df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_URL}')").df()
+    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_URL}')").df()
 
     ### Query Data RUP paket penyedia
     df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
