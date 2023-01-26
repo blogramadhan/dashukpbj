@@ -102,32 +102,26 @@ con = duckdb.connect(database=':memory:')
 bucket = "dashukpbj"
 
 ### File path dan unduh file parquet dan simpan di memory
-#DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-#DatasetSIRUPDP_Temp = f"sirupdp_{kodeFolder}_{str(tahun)}_temp.parquet"
-DatasetSIRUPDP_URL = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdp{tahun}.parquet"
-df_SIRUPDP = pd.read_parquet(DatasetSIRUPDP_URL)
+DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPDP_Temp = f"sirupdp_{kodeFolder}_{str(tahun)}_temp.parquet"
 
-#DatasetSIRUPDSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-#DatasetSIRUPDSW_Temp = f"sirupdsw_{kodeFolder}_{str(tahun)}_temp.parquet"
-DatasetSIRUPDSW_URL = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsw{tahun}.parquet"
-df_SIRUPDSW = pd.read_parquet(DatasetSIRUPDSW_URL)
+DatasetSIRUPDSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPDSW_Temp = f"sirupdsw_{kodeFolder}_{str(tahun)}_temp.parquet"
 
-#DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-#DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parquet"
-DatasetSIRUPDSARSAP_URL = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsa_rsap{tahun}.parquet"
-df_SIRUPDSARSAP = pd.read_parquet(DatasetSIRUPDSARSAP_URL)
+DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parquet"
 
 ### Gunakan Try dan Except untuk pilihan logika
 try:
     # Unduh data parquet SIRUP
-    #unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
-    #unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
-    #unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+    unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+    unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
+    unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
     ### Query dataframe parquet penting 
-    #df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_URL}')").df()
-    #df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_URL}')").df()
-    #df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_URL}')").df()
+    df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+    df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
+    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
     ### Query Data RUP paket penyedia
     df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
@@ -147,8 +141,8 @@ try:
     df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
     ### Data RUP paket swakelola
-    #df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan IN ('Terumumkan')").df()
-    #df_sw_final_draft = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Final Draft'").df()
+    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terumumkan'").df()
+    df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terinisiasi'").df()
 
     ### Data struktur anggaran RUP
     df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
@@ -158,8 +152,8 @@ try:
     namaopd = df_SIRUPDP['namasatker'].unique()
 
 except Exception:
-    st.error(f"Data SIRUP belum ada atau gagal download ... ")
-    
+    st.error("Data SIRUP belum ada atau gagal download ...")
+
 #########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
@@ -176,25 +170,25 @@ with tab1:
 
     ### Tampilan pemanfaatan SIRUP
     unduh_rupdp = unduh_data(df_pp_umumkan)
-    #unduh_rupsw = unduh_data(df_sw_umumkan)
+    unduh_rupsw = unduh_data(df_sw_umumkan)
 
-    #d1, d2, d3 = st.columns((6,2,2))
-    #with d1:
-    #    st.markdown(f"## **RUP - {pilih} - {tahun}**")
-    #with d2:
-    #    st.download_button(
-    #        label = "📥 Download RUP Penyedia",
-    #        data = unduh_rupdp,
-    #        file_name = f"ruppenyedia-{kodeFolder}.csv",
-    #        mime = "text/csv"            
-    #    )
-    #with d3:
-    #    st.download_button(
-    #        label = "📥 Download RUP Swakelola",
-    #        data = unduh_rupsw,
-    #        file_name = f"rupswakelola-{kodeFolder}.csv",
-    #        mime = "text/csv"            
-    #    )       
+    d1, d2, d3 = st.columns((6,2,2))
+    with d1:
+        st.markdown(f"## **RUP - {pilih} - {tahun}**")
+    with d2:
+        st.download_button(
+            label = "📥 Download RUP Penyedia",
+            data = unduh_rupdp,
+            file_name = f"ruppenyedia-{kodeFolder}.csv",
+            mime = "text/csv"            
+        )
+    with d3:
+        st.download_button(
+            label = "📥 Download RUP Swakelola",
+            data = unduh_rupsw,
+            file_name = f"rupswakelola-{kodeFolder}.csv",
+            mime = "text/csv"            
+        )       
 
     ### RUP struktur anggaran
     st.markdown("### Struktur Anggaran")
@@ -234,14 +228,14 @@ with tab1:
     pirpp2.metric("Jumlah Total Paket RUP", jumlah_rup_umumkan)
     pirpp3.metric("Nilai Total Paket RUP", nilai_rup_umumkan_print)
 
-    #jumlah_rup_sw_umumkan = df_sw_umumkan.shape[0]
-    #nilai_rup_sw_umumkan = df_sw_umumkan['jumlahpagu'].sum()
-    #nilai_rup_sw_umumkan_print = format_currency(nilai_rup_sw_umumkan, 'Rp. ', locale='id_ID')
+    jumlah_rup_sw_umumkan = df_sw_umumkan.shape[0]
+    nilai_rup_sw_umumkan = df_sw_umumkan['jumlahpagu'].sum()
+    nilai_rup_sw_umumkan_print = format_currency(nilai_rup_sw_umumkan, 'Rp. ', locale='id_ID')
 
-    #pirsw1, pirsw2, pirsw3 = st.columns(3)
-    #pirsw1.metric("", "Paket Swakelola")
-    #pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
-    #pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_print)
+    pirsw1, pirsw2, pirsw3 = st.columns(3)
+    pirsw1.metric("", "Paket Swakelola")
+    pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
+    pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_print)
 
     ### Persentase input RUP
     persen_capaian_rup = (nilai_total_rup / belanja_pengadaan)
