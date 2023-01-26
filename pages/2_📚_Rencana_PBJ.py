@@ -147,7 +147,7 @@ try:
     df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
     ### Data RUP paket swakelola
-    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan IN ('Terumumkan')").df()
+    #df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan IN ('Terumumkan')").df()
     #df_sw_final_draft = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Final Draft'").df()
 
     ### Data struktur anggaran RUP
@@ -158,9 +158,8 @@ try:
     namaopd = df_SIRUPDP['namasatker'].unique()
 
 except Exception:
-    #st.error(f"Data SIRUP belum ada atau gagal download ... ")
-    st.table(df_SIRUPDSW)
-
+    st.error(f"Data SIRUP belum ada atau gagal download ... ")
+    
 #########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
@@ -177,7 +176,7 @@ with tab1:
 
     ### Tampilan pemanfaatan SIRUP
     unduh_rupdp = unduh_data(df_pp_umumkan)
-    unduh_rupsw = unduh_data(df_sw_umumkan)
+    #unduh_rupsw = unduh_data(df_sw_umumkan)
 
     d1, d2, d3 = st.columns((6,2,2))
     with d1:
@@ -235,14 +234,14 @@ with tab1:
     pirpp2.metric("Jumlah Total Paket RUP", jumlah_rup_umumkan)
     pirpp3.metric("Nilai Total Paket RUP", nilai_rup_umumkan_print)
 
-    jumlah_rup_sw_umumkan = df_sw_umumkan.shape[0]
-    nilai_rup_sw_umumkan = df_sw_umumkan['jumlahpagu'].sum()
-    nilai_rup_sw_umumkan_print = format_currency(nilai_rup_sw_umumkan, 'Rp. ', locale='id_ID')
+    #jumlah_rup_sw_umumkan = df_sw_umumkan.shape[0]
+    #nilai_rup_sw_umumkan = df_sw_umumkan['jumlahpagu'].sum()
+    #nilai_rup_sw_umumkan_print = format_currency(nilai_rup_sw_umumkan, 'Rp. ', locale='id_ID')
 
-    pirsw1, pirsw2, pirsw3 = st.columns(3)
-    pirsw1.metric("", "Paket Swakelola")
-    pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
-    pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_print)
+    #pirsw1, pirsw2, pirsw3 = st.columns(3)
+    #pirsw1.metric("", "Paket Swakelola")
+    #pirsw2.metric("Jumlah Total Paket RUP", jumlah_rup_sw_umumkan)
+    #pirsw3.metric("Nilai Total paket RUP", nilai_rup_sw_umumkan_print)
 
     ### Persentase input RUP
     persen_capaian_rup = (nilai_total_rup / belanja_pengadaan)
