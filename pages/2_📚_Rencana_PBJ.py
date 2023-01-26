@@ -114,14 +114,17 @@ DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parque
 # Unduh data parquet SIRUP
 try:
     unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+    df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
 except Exception:
     st.error("Gagal unduh Dataset SIRUP Data Penyedia.")
 try:
     unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
+    df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
 except Exception:
     st.error("Gagal unduh Dataset SIRUP Swakelola.")
 try:
     unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 except Exception:
     st.error("Gagal unduh Dataset SIRUP Struktur Anggaran")
 
@@ -129,9 +132,9 @@ except Exception:
 try:
 
     ### Query dataframe parquet penting 
-    df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
-    df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
-    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+    #df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+    #df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
+    #df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
     ### Query Data RUP paket penyedia
     df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
