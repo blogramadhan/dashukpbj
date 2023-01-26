@@ -105,14 +105,17 @@ bucket = "dashukpbj"
 #DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
 #DatasetSIRUPDP_Temp = f"sirupdp_{kodeFolder}_{str(tahun)}_temp.parquet"
 DatasetSIRUPDP_URL = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdp{tahun}.parquet"
+df_SIRUPDP = pd.read_parquet(DatasetSIRUPDP_URL)
 
 #DatasetSIRUPDSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
 #DatasetSIRUPDSW_Temp = f"sirupdsw_{kodeFolder}_{str(tahun)}_temp.parquet"
 DatasetSIRUPDSW_URL = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsw{tahun}.parquet"
+df_SIRUPDSW = pd.read_parquet(DatasetSIRUPDSW_URL)
 
 #DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 #DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parquet"
 DatasetSIRUPDSARSAP_URL = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsa_rsap{tahun}.parquet"
+df_SIRUPDSARSAP = pd.read_parquet(DatasetSIRUPDSARSAP_URL)
 
 ### Gunakan Try dan Except untuk pilihan logika
 try:
@@ -122,9 +125,9 @@ try:
     #unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
     ### Query dataframe parquet penting 
-    df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_URL}')").df()
-    df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_URL}')").df()
-    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_URL}')").df()
+    #df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_URL}')").df()
+    #df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_URL}')").df()
+    #df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_URL}')").df()
 
     ### Query Data RUP paket penyedia
     df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
@@ -144,8 +147,8 @@ try:
     df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
     ### Data RUP paket swakelola
-    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terumumkan'").df()
-    df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terinisiasi'").df()
+    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terumumkan'").df()
+    df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terinisiasi'").df()
 
     ### Data struktur anggaran RUP
     df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
