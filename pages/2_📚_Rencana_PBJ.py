@@ -178,23 +178,23 @@ with tab1:
     unduh_rupdp = unduh_data(df_pp_umumkan)
     #unduh_rupsw = unduh_data(df_sw_umumkan)
 
-    d1, d2, d3 = st.columns((6,2,2))
-    with d1:
-        st.markdown(f"## **RUP - {pilih} - {tahun}**")
-    with d2:
-        st.download_button(
-            label = "📥 Download RUP Penyedia",
-            data = unduh_rupdp,
-            file_name = f"ruppenyedia-{kodeFolder}.csv",
-            mime = "text/csv"            
-        )
-    with d3:
-        st.download_button(
-            label = "📥 Download RUP Swakelola",
-            data = unduh_rupsw,
-            file_name = f"rupswakelola-{kodeFolder}.csv",
-            mime = "text/csv"            
-        )       
+    #d1, d2, d3 = st.columns((6,2,2))
+    #with d1:
+    #    st.markdown(f"## **RUP - {pilih} - {tahun}**")
+    #with d2:
+    #    st.download_button(
+    #        label = "📥 Download RUP Penyedia",
+    #        data = unduh_rupdp,
+    #        file_name = f"ruppenyedia-{kodeFolder}.csv",
+    #        mime = "text/csv"            
+    #    )
+    #with d3:
+    #    st.download_button(
+    #        label = "📥 Download RUP Swakelola",
+    #        data = unduh_rupsw,
+    #        file_name = f"rupswakelola-{kodeFolder}.csv",
+    #        mime = "text/csv"            
+    #    )       
 
     ### RUP struktur anggaran
     st.markdown("### Struktur Anggaran")
