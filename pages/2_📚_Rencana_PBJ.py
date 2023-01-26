@@ -145,7 +145,7 @@ try:
     df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
 
     ### Data RUP paket swakelola
-    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terumumkan'").df()
+    #df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terumumkan'").df()
     df_sw_final_draft = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Final Draft'").df()
 
 except Exception:
