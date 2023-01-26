@@ -147,8 +147,8 @@ try:
     df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
     ### Data RUP paket swakelola
-    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terumumkan'").df()
-    df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terinisiasi'").df()
+    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan IN ('Terumumkan')").df()
+    #df_sw_final_draft = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Final Draft'").df()
 
     ### Data struktur anggaran RUP
     df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
