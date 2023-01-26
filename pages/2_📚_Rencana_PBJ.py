@@ -111,21 +111,22 @@ DatasetSIRUPDSW_Temp = f"sirupdsw_{kodeFolder}_{str(tahun)}_temp.parquet"
 DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parquet"
 
+# Unduh data parquet SIRUP
+try:
+    unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+except Exception:
+    st.error("Gagal unduh Dataset SIRUP Data Penyedia.")
+try:
+    unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
+except Exception:
+    st.error("Gagal unduh Dataset SIRUP Swakelola.")
+try:
+    unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+except Exception:
+    st.error("Gagal unduh Dataset SIRUP Struktur Anggaran")
+
 ### Gunakan Try dan Except untuk pilihan logika
 try:
-    # Unduh data parquet SIRUP
-    try:
-        unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
-    except Exception:
-        st.error("Gagal unduh Dataset SIRUP Data Penyedia.")
-    try:
-        unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
-    except Exception:
-        st.error("Gagal unduh Dataset SIRUP Swakelola.")
-    try:
-        unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
-    except Exception:
-        st.error("Gagal unduh Dataset SIRUP Struktur Anggaran")
 
     ### Query dataframe parquet penting 
     df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
