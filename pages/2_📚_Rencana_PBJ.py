@@ -115,26 +115,6 @@ DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parque
 try:
     unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
     df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
-except Exception:
-    st.error("Gagal unduh Dataset SIRUP Data Penyedia.")
-try:
-    unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
-    df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
-except Exception:
-    st.error("Gagal unduh Dataset SIRUP Swakelola.")
-try:
-    unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
-    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
-except Exception:
-    st.error("Gagal unduh Dataset SIRUP Struktur Anggaran")
-
-### Gunakan Try dan Except untuk pilihan logika
-try:
-
-    ### Query dataframe parquet penting 
-    #df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
-    #df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
-    #df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
     ### Query Data RUP paket penyedia
     df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
@@ -153,19 +133,33 @@ try:
 
     df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
-    ### Data RUP paket swakelola
-    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terumumkan'").df()
-    df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terinisiasi'").df()
-
-    ### Data struktur anggaran RUP
-    df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
-
     ### Buat variabel nama satker unik
     #namaopd = df_rsap['nama_satker'].unique()
     namaopd = df_SIRUPDP['namasatker'].unique()
 
 except Exception:
-    st.error("Data SIRUP belum ada atau gagal download ...")
+    st.error("Gagal unduh Dataset SIRUP Data Penyedia.")
+
+try:
+    unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
+    df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
+
+    ### Data RUP paket swakelola
+    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terumumkan'").df()
+    df_sw_final_draft = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Final Draft'").df()
+
+except Exception:
+    st.error("Gagal unduh Dataset SIRUP Swakelola.")
+
+try:
+    unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+
+    ### Data struktur anggaran RUP
+    df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
+
+except Exception:
+    st.error("Gagal unduh Dataset SIRUP Struktur Anggaran")
 
 #########
 
