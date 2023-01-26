@@ -104,60 +104,65 @@ bucket = "dashukpbj"
 ### File path dan unduh file parquet dan simpan di memory
 DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
 DatasetSIRUPDP_Temp = f"sirupdp{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
 
-DatasetSIRUPSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPSW_Temp = f"sirupdsw{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPSW, DatasetSIRUPSW_Temp)
+DatasetSIRUPDSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPDSW_Temp = f"sirupdsw{kodeFolder}{str(tahun)}_temp.parquet"
 
 DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
-### Query dataframe parquet penting 
-df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
-df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
-df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+### Gunakan Try dan Except untuk pilihan logika
+try:
+    # Unduh data parquet SIRUP
+    unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+    unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
+    unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
-##########
+    ### Query dataframe parquet penting 
+    df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+    df_SIRUPSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
+    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
 
-### Query Data RUP paket penyedia
-df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
-df_pp_belum_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
-df_pp_umumkan_umk = con.execute("SELECT * FROM df_pp_umumkan WHERE statususahakecil = 'UsahaKecil'").df()
-df_pp_umumkan_pdn = con.execute("SELECT * FROM df_pp_umumkan WHERE statuspdn = 'PDN'").df()
+    ### Query Data RUP paket penyedia
+    df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
+    df_pp_belum_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan IN ('Draf','Draf Lengkap','Final Draft')").df()
+    df_pp_umumkan_umk = con.execute("SELECT * FROM df_pp_umumkan WHERE statususahakecil = 'UsahaKecil'").df()
+    df_pp_umumkan_pdn = con.execute("SELECT * FROM df_pp_umumkan WHERE statuspdn = 'PDN'").df()
 
-df_pp_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Tender','Tender Cepat','Seleksi')").df()
-df_pp_tender = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender'").df()
-df_pp_tender_cepat = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender Cepat'").df()
-df_pp_seleksi = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Seleksi'").df()
+    df_pp_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Tender','Tender Cepat','Seleksi')").df()
+    df_pp_tender = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender'").df()
+    df_pp_tender_cepat = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Tender Cepat'").df()
+    df_pp_seleksi = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Seleksi'").df()
 
-df_pp_non_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Pengadaan Langsung','Penunjukan Langsung')").df()
-df_pp_pengadaan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Pengadaan Langsung'").df()
-df_pp_penunjukan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Penunjukan Langsung'").df()
+    df_pp_non_etendering = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan IN ('Pengadaan Langsung','Penunjukan Langsung')").df()
+    df_pp_pengadaan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Pengadaan Langsung'").df()
+    df_pp_penunjukan_langsung = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'Penunjukan Langsung'").df()
 
-df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
+    df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
-### Data RUP paket swakelola
-df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terumumkan'").df()
-df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terinisiasi'").df()
+    ### Data RUP paket swakelola
+    df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terumumkan'").df()
+    df_sw_inisiasi = con.execute("SELECT * FROM df_SIRUPSW WHERE statusumumkan = 'Terinisiasi'").df()
 
-### Data struktur anggaran RUP
-df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
+    ### Data struktur anggaran RUP
+    df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
 
-### Buat variabel nama satker unik
-#namaopd = df_rsap['nama_satker'].unique()
-namaopd = df_SIRUPDP['namasatker'].unique()
+    ### Buat variabel nama satker unik
+    #namaopd = df_rsap['nama_satker'].unique()
+    namaopd = df_SIRUPDP['namasatker'].unique()
+
+except Exception:
+    st.error("Data SIRUP belum ada atau gagal download ...")
 
 #########
 
 # Buat tab ITKP UKPBJ dan ITKP Perangkat Daerah
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["| RUP DAERAH |", "| STRUKTUR ANGGARAN |", "| RUP PERANGKAT DAERAH |", "| RUP PAKET PENYEDIA |", "| RUP PAKET SWAKELOLA |"])
 
+# Tab pemanfaatan SIRUP
 with tab1:
-    # Tab pemanfaatan SIRUP
 
-    # Dataset
+    # Dataset Hitung
     df_mp_hitung = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, COUNT(metodepengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
     df_mp_nilai = con.execute(f"SELECT metodepengadaan AS METODE_PENGADAAN, SUM(jumlahpagu) AS NILAI_PAKET FROM df_pp_umumkan WHERE metodepengadaan IS NOT NULL GROUP BY metodepengadaan").df()
     df_jp_hitung = con.execute(f"SELECT jenispengadaan AS JENIS_PENGADAAN, COUNT(jenispengadaan) AS JUMLAH_PAKET FROM df_pp_umumkan WHERE jenispengadaan IS NOT NULL GROUP BY jenispengadaan").df()
@@ -178,7 +183,7 @@ with tab1:
             mime = "text/csv"            
         )
     with d3:
-         st.download_button(
+        st.download_button(
             label = "📥 Download RUP Swakelola",
             data = unduh_rupsw,
             file_name = f"rupswakelola-{kodeFolder}.csv",
@@ -258,7 +263,7 @@ with tab1:
 
         gridOptions = gd.build()
         AgGrid(df_mp_nilai, gridOptions=gridOptions, enable_enterprise_modules=True)
- 
+
     mpn1, mpn2 = st.columns((5,5))
     with mpn1:
         figmph = px.pie(df_mp_hitung, values='JUMLAH_PAKET', names='METODE_PENGADAAN', title='Grafik Metode Pengadaan - Jumlah Paket', hole=.3, width=800, height=800)
