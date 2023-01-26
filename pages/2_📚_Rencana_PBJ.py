@@ -158,7 +158,7 @@ try:
     namaopd = df_SIRUPDP['namasatker'].unique()
 
 except Exception:
-    st.error("Data SIRUP belum ada atau gagal download ...")
+    st.error(f"Data SIRUP belum ada atau gagal download ... {DatasetSIRUPDSW_URL} ")
 
 #########
 
