@@ -114,9 +114,18 @@ DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parque
 ### Gunakan Try dan Except untuk pilihan logika
 try:
     # Unduh data parquet SIRUP
-    unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
-    unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
-    unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+    try:
+        unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+    except Exception:
+        st.error("Gagal unduh Dataset SIRUP Data Penyedia.")
+    try:
+        unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
+    except Exception:
+        st.error("Gagal unduh Dataset SIRUP Swakelola.")
+    try:
+        unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+    except Exception:
+        st.error("Gagal unduh Dataset SIRUP Struktur Anggaran")
 
     ### Query dataframe parquet penting 
     df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
