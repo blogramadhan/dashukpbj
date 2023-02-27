@@ -83,72 +83,98 @@ elif pilih == "PROV. KALBAR":
 # Persiapan Dataset
 ## Google Cloud Storage
 ## Create API client.
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"]
-)
-client = storage.Client(credentials=credentials)
+#redentials = service_account.Credentials.from_service_account_info(
+#    st.secrets["gcp_service_account"]
+#)
+#client = storage.Client(credentials=credentials)
 
 # Ambil file dari Google Cloud Storage.
 # Uses st.experimental_memo to only rerun when the query changes or after 10 min.
-@st.experimental_memo(ttl=600)
-def unduh_df_parquet(bucket_name, file_path, destination):
-    bucket = client.bucket(bucket_name)
-    return bucket.blob(file_path).download_to_filename(destination)
+#@st.experimental_memo(ttl=600)
+#def unduh_df_parquet(bucket_name, file_path, destination):
+#    bucket = client.bucket(bucket_name)
+#    return bucket.blob(file_path).download_to_filename(destination)
 ##
 
 ## Dataset ITKP UKPBJ
 con = duckdb.connect(database=':memory:')
 
-bucket = "dashukpbj"
+#bucket = "dashukpbj"
 
-### File path dan unduh file parquet untuk disimpan di memory
-DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPDP_Temp = f"sirupdp{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage
+#DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+#DatasetSIRUPDP_Temp = f"sirupdp{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
 
-DatasetSIRUPSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPSW_Temp = f"sirupdsw{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPSW, DatasetSIRUPSW_Temp)
+#DatasetSIRUPSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+#DatasetSIRUPSW_Temp = f"sirupdsw{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetSIRUPSW, DatasetSIRUPSW_Temp)
 
-DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+#DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+#DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
-DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-DatasetTENDERDTS_Temp = f"dtender_dts{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
+#DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+#DatasetTENDERDTS_Temp = f"dtender_dts{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
 
-DatasetTENDERDTKS = f"itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
-DatasetTENDERDTKS_Temp = f"dtender_dtks{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetTENDERDTKS, DatasetTENDERDTKS_Temp)
+#DatasetTENDERDTKS = f"itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
+#atasetTENDERDTKS_Temp = f"dtender_dtks{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetTENDERDTKS, DatasetTENDERDTKS_Temp)
 
-DatasetNTENDERDNTS = f"itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
-DatasetNTENDERDNTS_Temp = f"dntenter_dnts{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetNTENDERDNTS, DatasetNTENDERDNTS_Temp)
+#DatasetNTENDERDNTS = f"itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
+#DatasetNTENDERDNTS_Temp = f"dntenter_dnts{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetNTENDERDNTS, DatasetNTENDERDNTS_Temp)
 
-DatasetKATALOG = f"epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
-DatasetKATALOG_Temp = f"trxkatalog{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
+#DatasetKATALOG = f"epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
+#DatasetKATALOG_Temp = f"trxkatalog{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
 
-DatasetDARING = f"epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
-DatasetDARING_Temp = f"daring{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetDARING, DatasetDARING_Temp)
+#DatasetDARING = f"epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
+#DatasetDARING_Temp = f"daring{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetDARING, DatasetDARING_Temp)
+
+### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage via URL Public
+DatasetSIRUPDP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPDSW = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+DatasetTENDERDTKS= f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
+DatasetNTENDERDNTS = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
+DatasetKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
+DatasetDARING = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
 
 ### Query dataframe parquet penting
 #### Data Paket Penyedia dan Swakelola
-df_pp = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
-df_sw = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
+df_DatasetSIRUPDP = pd.read_parquet(DatasetSIRUPDP)
+df_DatasetSIRUPDSW = pd.read_parquet(DatasetSIRUPDSW)
+#df_pp = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+#df_sw = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPSW_Temp}')").df()
+df_pp = con.execute(f"SELECT * FROM df_DatasetSIRUPDP").df()
+df_sw = con.execute(f"SELECT * FROM df_DatasetSIRUPDSW").df()
 #### Data Struktur Anggaran
-df_rsap = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+df_DatasetSIRUPDSARSAP = pd.read_parquet(DatasetSIRUPDSARSAP)
+#df_rsap = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+df_rsap = con.execute(f"SELECT * FROM df_DatasetSIRUPDSARSAP").df()
 #### Data Tender
-df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
-df_dtks = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTKS_Temp}')").df()
+df_DatasetTENDERDTS = pd.read_parquet(DatasetTENDERDTS)
+df_DatasetTENDERDTKS = pd.read_parquet(DatasetTENDERDTKS)
+#df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
+#df_dtks = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTKS_Temp}')").df()
+df_dts = con.execute(f"SELECT * FROM df_DatasetTENDERDTS").df()
+df_dtks = con.execute(f"SELECT * FROM df_DatasetTENDERDTKS").df()
 #### Data Non Tender
-df_dnts = con.execute(f"SELECT * FROM read_parquet('{DatasetNTENDERDNTS_Temp}')").df()
+df_DatasetNTENDERDNTS = pd.read_parquet(DatasetNTENDERDNTS)
+#df_dnts = con.execute(f"SELECT * FROM read_parquet('{DatasetNTENDERDNTS_Temp}')").df()
+df_dnts = con.execute(f"SELECT * FROM df_DatasetNTENDERDNTS").df()
 #### Data Katalog
-df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}')").df()
+df_DatasetKATALOG = pd.read_parquet(DatasetKATALOG)
+#df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}')").df()
+df_katalog = con.execute(f"SELECT * FROM df_DatasetKATALOG").df()
 #### Data Daring
-df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetDARING_Temp}')").df()
+df_DatasetDARING = pd.read_parquet(DatasetDARING)
+#df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetDARING_Temp}')").df()
+df_daring = con.execute(f"SELECT * FROM df_DatasetDARING").df()
 
 ### Query Data RUP paket penyedia
 df_pp_umumkan = df_pp[df_pp['statusumumkan'].isin(['Terumumkan'])]

@@ -99,7 +99,7 @@ elif pilih == "PROV. KALBAR":
 ## Dataset SIRUP
 con = duckdb.connect(database=':memory:')
 
-bucket = "dashukpbj"
+#bucket = "dashukpbj"
 
 ### File path dan unduh file parquet untuk disimpan di memory - Lewat Google Cloud Storage
 #DatasetTENDERDTP = f"itkp/{kodeFolder}/dtender_dtp{str((tahun))}.parquet"
@@ -118,6 +118,7 @@ bucket = "dashukpbj"
 #DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
 #unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
+### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage via URL Public
 #DatasetTENDERDTP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dtp{str(tahun)}.parquet"
 #DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
 DatasetSIRUPDP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"

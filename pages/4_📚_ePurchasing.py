@@ -83,33 +83,38 @@ elif pilih == "PROV. KALBAR":
 # Persiapan Dataset
 ## Google Cloud Storage
 ## Create API client.
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"]
-)
-client = storage.Client(credentials=credentials)
+#credentials = service_account.Credentials.from_service_account_info(
+#    st.secrets["gcp_service_account"]
+#)
+#client = storage.Client(credentials=credentials)
 
 # Ambil file dari Google Cloud Storage.
 # Uses st.experimental_memo to only rerun when the query changes or after 10 min.
-@st.experimental_memo(ttl=600)
-def unduh_df_parquet(bucket_name, file_path, destination):
-    bucket = client.bucket(bucket_name)
-    return bucket.blob(file_path).download_to_filename(destination)
+#@st.experimental_memo(ttl=600)
+#def unduh_df_parquet(bucket_name, file_path, destination):
+#    bucket = client.bucket(bucket_name)
+#    return bucket.blob(file_path).download_to_filename(destination)
 ##
 
 ## Dataset ePurchasing
 con = duckdb.connect(database=':memory:')
 
-bucket = "dashukpbj"
+#bucket = "dashukpbj"
 
-### File path dan unduh file parquet dan simpan di memory
-DatasetKATALOG = f"epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
-DatasetKATALOG_Temp = f"katalogdetail{str(tahun)}_temp.parquet"
+### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage
+#DatasetKATALOG = f"epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
+#DatasetKATALOG_Temp = f"katalogdetail{str(tahun)}_temp.parquet"
 
-DatasetPRODUKKATALOG = f"epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
-DatasetPRODUKKATALOG_Temp = f"prodkatalog{str(tahun)}_temp.parquet"
+#DatasetPRODUKKATALOG = f"epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
+#DatasetPRODUKKATALOG_Temp = f"prodkatalog{str(tahun)}_temp.parquet"
 
-DatasetTOKODARING = f"epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
-DatasetTOKODARING_Temp = f"daring{str(tahun)}_temp.parquet"
+#DatasetTOKODARING = f"epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
+#DatasetTOKODARING_Temp = f"daring{str(tahun)}_temp.parquet"
+
+### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage via URL Public
+DatasetKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
+DatasetPRODUKKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
+DatasetTOKODARING = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
 
 # Buat Tab e-Katalog dan Toko Daring
 tab1, tab2, tab3, tab4 = st.tabs(["| E-KATALOG |", "| TOKO DARING |", "| DETAIL E-KATALOG |", "| DETAIL TOKO DARING |"])
@@ -120,10 +125,14 @@ with tab1:
     ### Gunakan Try dan Except untuk pilihan logika
     try:
         # Unduh data parquet E-Katalog
-        unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
-        unduh_df_parquet(bucket, DatasetPRODUKKATALOG, DatasetPRODUKKATALOG_Temp)
-        df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
-        df_produk_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetPRODUKKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+        #unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
+        #unduh_df_parquet(bucket, DatasetPRODUKKATALOG, DatasetPRODUKKATALOG_Temp)
+        df_DatasetKATALOG = pd.read_parquet(DatasetKATALOG)
+        df_DatasetPRODUKKATALOG = pd.read_parquet(DatasetPRODUKKATALOG)
+        #df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
+        #df_produk_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetPRODUKKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+        df_katalog = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
+        df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
 
         # Query E-KATALOG
         df_katalog_lokal = con.execute(
@@ -265,8 +274,10 @@ with tab2:
     ### Gunakan Try dan Except untuk pilihan logika
     try:
         # Unduh data parquet Toko Daring
-        unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
-        df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
+        #unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
+        df_DatasetTOKODARING = pd.read_parquet(DatasetTOKODARING)
+        #df_daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
+        df_daring = con.execute(f"SELECT * FROM df_DatasetTOKODARING WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
 
         # Tab Toko Daring
         st.markdown(f"## **TRANSAKSI TOKO DARING - {pilih}**")
@@ -362,8 +373,10 @@ with tab3:
     ### Gunakan Try dan Except untuk pilihan logika
     try:
         # Unduh data parquet Detail Katalog
-        unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
-        katalog_tab3 = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()        
+        #unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
+        df_DatasetKATALOG = pd.read_parquet(DatasetKATALOG)
+        #katalog_tab3 = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()        
+        katalog_tab3 = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
         katalog_tabel_sql_tab3 = """
             SELECT nama_satker AS NAMA_SATKER, no_paket AS NOMOR_PAKET, nama_paket AS NAMA_PAKET, kd_rup AS KODE_RUP, nama_sumber_dana AS SUMBER_DANA, total_harga AS TOTAL_HARGA, paket_status_str AS STATUS_PAKET, nama_komoditas AS NAMA_KOMODITAS, jenis_katalog AS JENIS_KATALOG
             FROM katalog_tab3
@@ -390,8 +403,10 @@ with tab4:
     ### Gunakan Try dan Except untuk pilihan logika
     try:
         # Unduh data parquet Detail Toko Daring
-        unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
-        daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+        #unduh_df_parquet(bucket, DatasetTOKODARING, DatasetTOKODARING_Temp)
+        df_DatasetTOKODARING = pd.read_parquet(DatasetTOKODARING)
+        #daring = con.execute(f"SELECT * FROM read_parquet('{DatasetTOKODARING_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
+        daring = con.execute(f"SELECT * FROM df_DatasetTOKODARING WHERE kd_klpd = '{kodeRUP}'").df()
 
         # Tab Detail Katalog OPD
         st.markdown(f"## **DETAIL TOKO DARING TAHUN {tahun}**")
