@@ -101,20 +101,26 @@ con = duckdb.connect(database=':memory:')
 
 bucket = "dashukpbj"
 
-### File path dan unduh file parquet dan simpan di memory
-DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPDP_Temp = f"sirupdp_{kodeFolder}_{str(tahun)}_temp.parquet"
+### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage
+#DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+#DatasetSIRUPDP_Temp = f"sirupdp_{kodeFolder}_{str(tahun)}_temp.parquet"
 
-DatasetSIRUPDSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPDSW_Temp = f"sirupdsw_{kodeFolder}_{str(tahun)}_temp.parquet"
+#DatasetSIRUPDSW = f"itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+#DatasetSIRUPDSW_Temp = f"sirupdsw_{kodeFolder}_{str(tahun)}_temp.parquet"
 
-DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parquet"
+#DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+#DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap_{kodeFolder}_{str(tahun)}_temp.parquet"
+
+### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage via URL Public
+DatasetSIRUPDP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPDSW = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 
 # Unduh data parquet SIRUP
 try:
-    unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
-    df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+    #unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+    #df_SIRUPDP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+    df_SIRUPDP = pd.read_parquet(DatasetSIRUPDP)
 
     ### Query Data RUP paket penyedia
     df_pp_umumkan = con.execute("SELECT * FROM df_SIRUPDP WHERE statusumumkan = 'Terumumkan'").df()
@@ -141,8 +147,9 @@ except Exception:
     st.error("Gagal unduh Dataset SIRUP Data Penyedia.")
 
 try:
-    unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
-    df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
+    #unduh_df_parquet(bucket, DatasetSIRUPDSW, DatasetSIRUPDSW_Temp)
+    #df_SIRUPDSW = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSW_Temp}')").df()
+    df_SIRUPDSW = pd.read_parquet(DatasetSIRUPDSW)
 
     ### Data RUP paket swakelola
     df_sw_umumkan = df_SIRUPDSW[df_SIRUPDSW['statusumumkan'] == 'Terumumkan']
@@ -153,8 +160,9 @@ except Exception:
     st.error("Gagal unduh Dataset SIRUP Swakelola.")
 
 try:
-    unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
-    df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+    #unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+    #df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+    df_SIRUPDSARSAP = pd.read_parquet(DatasetSIRUPDSARSAP)
 
     ### Data struktur anggaran RUP
     df_rsap = con.execute("SELECT * FROM df_SIRUPDSARSAP").df()
