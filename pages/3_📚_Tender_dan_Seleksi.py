@@ -83,17 +83,17 @@ elif pilih == "PROV. KALBAR":
 # Persiapan Dataset
 ## Google Cloud Storage
 ## Create API Client
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"]
-)
-client = storage.Client(credentials=credentials)
+#credentials = service_account.Credentials.from_service_account_info(
+#    st.secrets["gcp_service_account"]
+#)
+#client = storage.Client(credentials=credentials)
 
 # Ambil file dari Google Cloud Storage.
 # Uses st.experimental_memo to only rerun when the query changes or after 10 menit
-@st.experimental_memo(ttl=600)
-def unduh_df_parquet(bucket_name, file_path, destination):
-    bucket = client.bucket(bucket_name)
-    return bucket.blob(file_path).download_to_filename(destination)
+#@st.experimental_memo(ttl=600)
+#def unduh_df_parquet(bucket_name, file_path, destination):
+#    bucket = client.bucket(bucket_name)
+#    return bucket.blob(file_path).download_to_filename(destination)
 ##
 
 ## Dataset SIRUP
@@ -101,28 +101,35 @@ con = duckdb.connect(database=':memory:')
 
 bucket = "dashukpbj"
 
-### File path dan unduh file parquet untuk disimpan di memory
-DatasetTENDERDTP = f"itkp/{kodeFolder}/dtender_dtp{str((tahun))}.parquet"
-DatasetTENDERDTP_Temp = f"dtender_dtp{kodeFolder}{str(tahun)}_temp.parquet"
+### File path dan unduh file parquet untuk disimpan di memory - Lewat Google Cloud Storage
+#DatasetTENDERDTP = f"itkp/{kodeFolder}/dtender_dtp{str((tahun))}.parquet"
+#DatasetTENDERDTP_Temp = f"dtender_dtp{kodeFolder}{str(tahun)}_temp.parquet"
 #unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
 
-DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-DatasetTENDERDTS_Temp = f"dtender_dts{kodeFolder}{str(tahun)}_temp.parquet"
+#DatasetTENDERDTS = f"itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+#DatasetTENDERDTS_Temp = f"dtender_dts{kodeFolder}{str(tahun)}_temp.parquet"
 #unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
 
-DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPDP_Temp = f"sirupdp{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
+#DatasetSIRUPDP = f"itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+#DatasetSIRUPDP_Temp = f"sirupdp{kodeFolder}{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetSIRUPDP, DatasetSIRUPDP_Temp)
 
-DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
-unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+#DatasetSIRUPDSARSAP = f"itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+#DatasetSIRUPDSARSAP_Temp = f"sirupdsa_rsap{kodeFolder}{str(tahun)}_temp.parquet"
+#unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
+
+#DatasetTENDERDTP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dtp{str(tahun)}.parquet"
+#DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+DatasetSIRUPDP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 
 ### Query dataframe parquet penting
 #df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
 #df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
-df_SIRUPDP = con.execute(f"SELECT namasatker FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
-df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+#df_SIRUPDP = con.execute(f"SELECT namasatker FROM read_parquet('{DatasetSIRUPDP_Temp}')").df()
+#df_SIRUPDSARSAP = con.execute(f"SELECT * FROM read_parquet('{DatasetSIRUPDSARSAP_Temp}')").df()
+df_SIRUPDP = pd.read_parquet(DatasetSIRUPDP)
+df_SIRUPDSARSAP = pd.read_parquet(DatasetSIRUPDSARSAP)
 
 ### Query Data Tender dan Non Tender
 
@@ -141,8 +148,10 @@ with tab1:
     ### Gunakan Try dan Except untuk pilihan logika
     try:
         # Unduh data parquet Tender Berjalan
-        unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
-        df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
+        #unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
+        DatasetTENDERDTP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dtp{str(tahun)}.parquet"
+        #df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
+        df_dtp = pd.read_parquet(DatasetTENDERDTP)
 
         # Tab TENDER/SELEKSI DIUMUMKAN
         st.markdown(f"## **TENDER/SELEKSI DIUMUMKAN TAHUN {tahun}**")
@@ -188,8 +197,10 @@ with tab2:
     ### Gunakan Try dan Except untuk pilihan logika
     try:
         # Unduh data parquet Tender Selesai
-        unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
-        df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
+        #unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
+        DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+        #df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
+        df_dts = pd.read_parquet(DatasetTENDERDTS)
 
         # Tab TENDER/SELEKSI DIUMUMKAN
         st.markdown(f"## **TENDER/SELEKSI SELESAI TAHUN {tahun}**")
