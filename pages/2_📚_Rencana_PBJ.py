@@ -90,10 +90,10 @@ client = storage.Client(credentials=credentials)
 
 # Ambil file dari Google Cloud Storage.
 # Uses st.experimental_memo to only rerun when the query changes or after 10 min.
-@st.experimental_memo(ttl=600)
-def unduh_df_parquet(bucket_name, file_path, destination):
-    bucket = client.bucket(bucket_name)
-    return bucket.blob(file_path).download_to_filename(destination)
+#@st.experimental_memo(ttl=600)
+#def unduh_df_parquet(bucket_name, file_path, destination):
+#    bucket = client.bucket(bucket_name)
+#    return bucket.blob(file_path).download_to_filename(destination)
 ##
 
 ## Dataset SIRUP
