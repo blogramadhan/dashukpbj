@@ -388,7 +388,7 @@ with tab3:
     try:
         # Unduh data parquet Detail Katalog
         #unduh_df_parquet(bucket, DatasetKATALOG, DatasetKATALOG_Temp)
-        df_DatasetKATALOG = pd.read_parquet(DatasetKATALOG)
+        #df_DatasetKATALOG = pd.read_parquet(DatasetKATALOG)
         #katalog_tab3 = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()        
         katalog_tab3 = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
         katalog_tabel_sql_tab3 = """
