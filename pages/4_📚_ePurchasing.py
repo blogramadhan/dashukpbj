@@ -119,13 +119,15 @@ DatasetTOKODARING = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/e
 # Unduh data Katalog dan Toko Daring
 try:
     df_DatasetKATALOG = pd.read_parquet(DatasetKATALOG)
-    df_DatasetPRODUKKATALOG = pd.read_parquet(DatasetPRODUKKATALOG)
-
     df_katalog = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
-    df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
-
 except Exception:
     st.error("Gagal unduh Dataset Katalog.")
+
+try:
+    df_DatasetPRODUKKATALOG = pd.read_parquet(DatasetPRODUKKATALOG)
+    df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
+except Exception:
+    st.error("Gagal unduh Dataset Produk Katalog")
 
 # Buat Tab e-Katalog dan Toko Daring
 tab1, tab2, tab3, tab4 = st.tabs(["| E-KATALOG |", "| TOKO DARING |", "| DETAIL E-KATALOG |", "| DETAIL TOKO DARING |"])
