@@ -119,7 +119,8 @@ DatasetTOKODARING = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/e
 # Unduh data Katalog dan Toko Daring
 try:
     df_DatasetKATALOG = pd.read_parquet(DatasetKATALOG)
-    df_katalog = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
+    #df_katalog = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
+    df_katalog = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
 except Exception:
     st.error("Gagal unduh Dataset Katalog.")
 
