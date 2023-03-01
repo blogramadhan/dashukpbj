@@ -125,7 +125,7 @@ except Exception:
 
 try:
     df_DatasetPRODUKKATALOG = pd.read_parquet(DatasetPRODUKKATALOG)
-    df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
+    #df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
 except Exception:
     st.error("Dataset Produk Katalog Tidak Ada")
 
