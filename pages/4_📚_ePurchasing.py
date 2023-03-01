@@ -119,11 +119,13 @@ DatasetTOKODARING = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/e
 ### Unduh data parquet KATALOG dan DARING
 try:
     df_DatasetKATALOG = pd.read_parquet(DatasetKATALOG)
+    df_katalog = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
 except Exception:
     st.error("Dataset Transaksi Katalog Tidak Ada")
 
 try:
     df_DatasetPRODUKKATALOG = pd.read_parquet(DatasetPRODUKKATALOG)
+    df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
 except Exception:
     st.error("Dataset Produk Katalog Tidak Ada")
 
@@ -142,8 +144,8 @@ with tab1:
         #df_DatasetPRODUKKATALOG = pd.read_parquet(DatasetPRODUKKATALOG)
         #df_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
         #df_produk_katalog = con.execute(f"SELECT * FROM read_parquet('{DatasetPRODUKKATALOG_Temp}') WHERE kd_klpd = '{kodeRUP}'").df()
-        df_katalog = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
-        df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
+        #df_katalog = con.execute(f"SELECT * FROM df_DatasetKATALOG WHERE kd_klpd = '{kodeRUP}' AND nama_satker IS NOT NULL").df()
+        #df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
 
         # Query E-KATALOG
         df_katalog_lokal = con.execute(
