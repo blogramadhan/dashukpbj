@@ -51,34 +51,49 @@ tahun = st.sidebar.selectbox("Pilih Tahun :", tahuns)
 
 if pilih == "KAB. BENGKAYANG":
     kodeRUP = "D206"
+    kodeFolder = "bky"
 elif pilih == "KAB. KAPUAS HULU":
     kodeRUP = "D209"
+    kodeFolder = "kph"
 elif pilih == "KAB. KAYONG UTARA":
     kodeRUP = "D207"
+    kodeFolder = "kku"
 elif pilih == "KAB. KETAPANG":
     kodeRUP = "D201"
+    kodeFolder = "ktp"
 elif pilih == "KAB. KUBU RAYA":
     kodeRUP = "D202"
+    kodeFolder = "kkr"
 elif pilih == "KAB. LANDAK":
     kodeRUP = "D205"
+    kodeFolder = "ldk"
 elif pilih == "KAB. MELAWI":
     kodeRUP = "D210"
+    kodeFolder = "mlw"
 elif pilih == "KAB. MEMPAWAH":
     kodeRUP = "D552"
+    kodeFolder = "mpw"
 elif pilih == "KAB. SAMBAS":
     kodeRUP = "D208"
+    kodeFolder = "sbs"
 elif pilih == "KAB. SANGGAU":
     kodeRUP = "D204"
+    kodeFolder = "sgu"
 elif pilih == "KAB. SEKADAU":
     kodeRUP = "D198"
+    kodeFolder = "skd"
 elif pilih == "KAB. SINTANG":
     kodeRUP = "D211"
+    kodeFolder = "stg"
 elif pilih == "KOTA PONTIANAK":
     kodeRUP = "D199"
+    kodeFolder = "ptk"
 elif pilih == "KOTA SINGKAWANG":
     kodeRUP = "D200"
+    kodeFolder = "skw"
 elif pilih == "PROV. KALBAR":
-    kodeRUP = "D197"    
+    kodeRUP = "D197" 
+    kodeFolder = "prov"
 
 # Persiapan Dataset
 ## Google Cloud Storage
@@ -113,7 +128,8 @@ con = duckdb.connect(database=':memory:')
 
 ### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage via URL Public
 DatasetKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
-DatasetPRODUKKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
+#DatasetPRODUKKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
+DatasetPRODUKKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/{kodeFolder}/prodkatalog{str(tahun)}.parquet"
 DatasetTOKODARING = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
 
 ### Unduh data parquet KATALOG dan DARING
@@ -125,7 +141,8 @@ except Exception:
 
 try:
     df_DatasetPRODUKKATALOG = pd.read_parquet(DatasetPRODUKKATALOG)
-    df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
+    #df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG WHERE kd_klpd = '{kodeRUP}'").df()
+    df_produk_katalog = con.execute(f"SELECT * FROM df_DatasetPRODUKKATALOG").df()
 except Exception:
     st.error("Dataset Produk Katalog Tidak Ada")
 
