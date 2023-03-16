@@ -565,13 +565,12 @@ with tab6:
     tb_persenrup = con.execute("SELECT tb_datapenyedia.nama_satker AS nama_satker, tb_datapenyedia.jumlah_pagu_penyedia AS penyedia, tb_dataswakelola.jumlah_pagu_swakelola AS swakelola FROM tb_datapenyedia FULL OUTER JOIN JOIN tb_dataswakelola ON tb_datapenyedia.nama_satker = tb_dataswakelola.nama_satker")
 
     ### Tabulasi data dan pagination AgGrid
-    gd = GridOptionsBuilder.from_dataframe(tb_persenrup)
+    gd = GridOptionsBuilder.from_dataframe(tb_strukturanggaran)
     gd.configure_pagination()
     gd.configure_side_bar()
     gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-    gd.configure_column("penyedia", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.penyedia.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
-    gd.configure_column("swakelola", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.swakelola.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+    gd.configure_column("belanja_pengadaan", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.belanja_pengadaan.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
  
     gridOptions = gd.build()
 
-    AgGrid(tb_persenrup, gridOptions=gridOptions, enable_enterprise_modules=True)
+    AgGrid(tb_strukturanggaran, gridOptions=gridOptions, enable_enterprise_modules=True)
