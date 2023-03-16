@@ -568,7 +568,7 @@ with tab6:
     #tb_persenrup = con.execute("SELECT tb_datapenyedia.nama_satker AS nama_satker, tb_datapenyedia.jumlah_pagu_penyedia AS penyedia, tb_dataswakelola.jumlah_pagu_swakelola AS swakelola FROM tb_datapenyedia FULL OUTER JOIN JOIN tb_dataswakelola ON tb_datapenyedia.nama_satker = tb_dataswakelola.nama_satker").df()
 
     ### Tabulasi data dan pagination AgGrid
-    gd = GridOptionsBuilder.from_dataframe(tb_gabung_hitung)
+    gd = GridOptionsBuilder.from_dataframe(tb_gabung)
     gd.configure_pagination()
     gd.configure_side_bar()
     gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
@@ -578,4 +578,4 @@ with tab6:
 
     gridOptions = gd.build()
 
-    AgGrid(tb_gabung_hitung, gridOptions=gridOptions, enable_enterprise_modules=True)
+    AgGrid(tb_gabung, gridOptions=gridOptions, enable_enterprise_modules=True)
