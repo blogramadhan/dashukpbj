@@ -562,7 +562,7 @@ with tab6:
     tb_datapenyedia = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS jumlah_pagu_penyedia FROM df_pp_umumkan GROUP BY nama_satker").df()
     tb_dataswakelola = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS jumlah_pagu_swakelola FROM df_sw_umumkan GROUP BY nama_satker").df()
 
-    tb_persenrup = con.execute("SELECT tb_datapenyedia.nama_satker AS nama_satker, tb_datapenyedia.jumlah_pagu_penyedia AS penyedia, tb_dataswakelola.jumlah_pagu_swakelola AS swakelola FROM tb_datapenyedia FULL OUTER JOIN JOIN tb_dataswakelola ON tb_datapenyedia.nama_satker = tb_dataswakelola.nama_satker").df()
+    #tb_persenrup = con.execute("SELECT tb_datapenyedia.nama_satker AS nama_satker, tb_datapenyedia.jumlah_pagu_penyedia AS penyedia, tb_dataswakelola.jumlah_pagu_swakelola AS swakelola FROM tb_datapenyedia FULL OUTER JOIN JOIN tb_dataswakelola ON tb_datapenyedia.nama_satker = tb_dataswakelola.nama_satker").df()
 
     ### Tabulasi data dan pagination AgGrid
     gd = GridOptionsBuilder.from_dataframe(tb_datapenyedia)
