@@ -567,6 +567,15 @@ with tab6:
     tb_gabung_selisih = tb_gabung_totalrup.assign(SELISIH=lambda x: x.STRUKTUR_ANGGARAN - x.RUP_PENYEDIA - x.RUP_SWAKELOLA)
     tb_gabung_final = tb_gabung_selisih.assign(PERSEN=lambda x: round(((x.RUP_PENYEDIA + x.RUP_SWAKELOLA) / x.STRUKTUR_ANGGARAN * 100),2))
 
+    ### Download Data % INPUT RUP
+    unduh_persenrup = unduh_data(tb_gabung_final)
+    st.download_button(
+        label = "📥 Download % Input RUP",
+        data = unduh_rupdp,
+        file_name = f"perseninputrup-{pilih}.csv",
+        mime = "text/csv"            
+    )
+
     ### Tabulasi data dan pagination AgGrid
     gd = GridOptionsBuilder.from_dataframe(tb_gabung_final)
     gd.configure_pagination()
