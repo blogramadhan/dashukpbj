@@ -572,9 +572,8 @@ with tab6:
     gd.configure_pagination()
     gd.configure_side_bar()
     gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-    #gd.configure_column("penyedia", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.penyedia.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+    gd.configure_column("Struktur Anggaran", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.belanja_pengadaan.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
     #gd.configure_column("swakelola", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.swakelola.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
-
 
     gridOptions = gd.build()
 
