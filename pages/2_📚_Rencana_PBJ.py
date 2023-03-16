@@ -563,7 +563,8 @@ with tab6:
     tb_dataswakelola = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_SWAKELOLA FROM df_sw_umumkan GROUP BY nama_satker").df()
 
     tb_gabung = pd.merge(pd.merge(tb_strukturanggaran,tb_datapenyedia,on='NAMA_SATKER'),tb_dataswakelola,on='NAMA_SATKER')
-    tb_gabung_selisih = tb_gabung.assign(SELISIH=lambda x: x.STRUKTUR_ANGGARAN - x.RUP_PENYEDIA - x.RUP_SWAKELOLA)
+    tb_gabung_totalrup = tb_gabung.assign(TOTAL_RUP=lambda x: x.RUP_PENYEDIA + x.RUP_SWAKELOLA)
+    tb_gabung_selisih = tb_gabung_totalrup.assign(SELISIH=lambda x: x.STRUKTUR_ANGGARAN - x.RUP_PENYEDIA - x.RUP_SWAKELOLA)
     tb_gabung_final = tb_gabung_selisih.assign(PERSEN=lambda x: round(((x.RUP_PENYEDIA + x.RUP_SWAKELOLA) / x.STRUKTUR_ANGGARAN * 100),2))
 
     #tb_persenrup = con.execute("SELECT tb_datapenyedia.nama_satker AS nama_satker, tb_datapenyedia.jumlah_pagu_penyedia AS penyedia, tb_dataswakelola.jumlah_pagu_swakelola AS swakelola FROM tb_datapenyedia FULL OUTER JOIN JOIN tb_dataswakelola ON tb_datapenyedia.nama_satker = tb_dataswakelola.nama_satker").df()
@@ -576,6 +577,7 @@ with tab6:
     gd.configure_column("STRUKTUR_ANGGARAN", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.STRUKTUR_ANGGARAN.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
     gd.configure_column("RUP_PENYEDIA", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.RUP_PENYEDIA.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
     gd.configure_column("RUP_SWAKELOLA", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.RUP_SWAKELOLA.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+    gd.configure_column("TOTAL_RUP", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.TOTAL_RUP.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
     gd.configure_column("SELISIH", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.SELISIH.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
 
     gridOptions = gd.build()
