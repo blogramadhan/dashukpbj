@@ -558,12 +558,12 @@ with tab6:
     ### Tampilan % INPUT RUP
     st.markdown(f"## **PERSENTASE INPUT RUP - {pilih} - PERANGKAT DAERAH - {tahun}**")
 
-    tb_strukturanggaran = con.execute("SELECT nama_satker, belanja_pengadaan FROM df_rsap WHERE belanja_pengadaan > 0").df()
-    tb_datapenyedia = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS jumlah_pagu_penyedia FROM df_pp_umumkan GROUP BY nama_satker").df()
-    tb_dataswakelola = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS jumlah_pagu_swakelola FROM df_sw_umumkan GROUP BY nama_satker").df()
+    tb_strukturanggaran = con.execute("SELECT nama_satker, belanja_pengadaan AS STRUKTUR_ANGGARAN FROM df_rsap WHERE STRUKTUR_ANGGARAN > 0").df()
+    tb_datapenyedia = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS RUP_PENYEDIA FROM df_pp_umumkan GROUP BY nama_satker").df()
+    tb_dataswakelola = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS RUP_SWAKELOLA FROM df_sw_umumkan GROUP BY nama_satker").df()
 
     tb_gabung = pd.merge(pd.merge(tb_strukturanggaran,tb_datapenyedia,on='nama_satker'),tb_dataswakelola,on='nama_satker')
-    tb_gabung_hitung = tb_gabung.assign(Persen=lambda x: (x.jumlah_pagu_penyedia + x.jumlah_pagu_swakelola) / x.belanja_pengadaan * 100)
+    tb_gabung_hitung = tb_gabung.assign(Persen=lambda x: (x.RUP_PENYEDIA + x.RUP_SWAKELOLA) / x.STRUKTUR_ANGGARAN * 100)
 
     #tb_persenrup = con.execute("SELECT tb_datapenyedia.nama_satker AS nama_satker, tb_datapenyedia.jumlah_pagu_penyedia AS penyedia, tb_dataswakelola.jumlah_pagu_swakelola AS swakelola FROM tb_datapenyedia FULL OUTER JOIN JOIN tb_dataswakelola ON tb_datapenyedia.nama_satker = tb_dataswakelola.nama_satker").df()
 
@@ -572,7 +572,7 @@ with tab6:
     gd.configure_pagination()
     gd.configure_side_bar()
     gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-    gd.configure_column("belanja_pengadaan", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.belanja_pengadaan.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+    gd.configure_column("STRUKTUR_ANGGARAN", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.STRUKTUR_ANGGARAN.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
     #gd.configure_column("RUP Penyedia", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.jumlah_pagu_penyedia.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
     #gd.configure_column("RUP Swakelola", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.jumlah_pagu_swakelola.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
 
