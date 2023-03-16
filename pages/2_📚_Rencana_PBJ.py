@@ -556,7 +556,7 @@ with tab6:
     # Tab % INPUT RUP
 
     ### Tampilan % INPUT RUP
-    st.markdown(f"## **PERSENTASE INPUT RUP - {pilih} - PERANGKAT DAERAH - {tahun}")
+    st.markdown(f"## **PERSENTASE INPUT RUP - {pilih} - PERANGKAT DAERAH - {tahun}**")
 
     tb_strukturanggaran = con.execute("SELECT nama_satker AS nama_satker, SUM(belanja_pengadaan) AS belanja_pengadaan FROM df_rsap WHERE belanja_pengadaan > 0")
     tb_datapenyedia = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS jumlah_pagu_penyedia FROM df_pp_umumkan GROUP BY nama_satker")
