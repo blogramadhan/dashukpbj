@@ -558,11 +558,11 @@ with tab6:
     ### Tampilan % INPUT RUP
     st.markdown(f"## **PERSENTASE INPUT RUP - {pilih} - PERANGKAT DAERAH - {tahun}**")
 
-    tb_strukturanggaran = con.execute("SELECT nama_satker, belanja_pengadaan AS STRUKTUR_ANGGARAN FROM df_rsap WHERE STRUKTUR_ANGGARAN > 0").df()
-    tb_datapenyedia = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS RUP_PENYEDIA FROM df_pp_umumkan GROUP BY nama_satker").df()
-    tb_dataswakelola = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS RUP_SWAKELOLA FROM df_sw_umumkan GROUP BY nama_satker").df()
+    tb_strukturanggaran = con.execute("SELECT nama_satker AS NAMA_SATKER, belanja_pengadaan AS STRUKTUR_ANGGARAN FROM df_rsap WHERE STRUKTUR_ANGGARAN > 0").df()
+    tb_datapenyedia = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_PENYEDIA FROM df_pp_umumkan GROUP BY nama_satker").df()
+    tb_dataswakelola = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_SWAKELOLA FROM df_sw_umumkan GROUP BY nama_satker").df()
 
-    tb_gabung = pd.merge(pd.merge(tb_strukturanggaran,tb_datapenyedia,on='nama_satker'),tb_dataswakelola,on='nama_satker')
+    tb_gabung = pd.merge(pd.merge(tb_strukturanggaran,tb_datapenyedia,on='NAMA_SATKER'),tb_dataswakelola,on='NAMA_SATKER')
     tb_gabung_hitung = tb_gabung.assign(Persen=lambda x: (x.RUP_PENYEDIA + x.RUP_SWAKELOLA) / x.STRUKTUR_ANGGARAN * 100)
 
     #tb_persenrup = con.execute("SELECT tb_datapenyedia.nama_satker AS nama_satker, tb_datapenyedia.jumlah_pagu_penyedia AS penyedia, tb_dataswakelola.jumlah_pagu_swakelola AS swakelola FROM tb_datapenyedia FULL OUTER JOIN JOIN tb_dataswakelola ON tb_datapenyedia.nama_satker = tb_dataswakelola.nama_satker").df()
