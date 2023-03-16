@@ -558,11 +558,11 @@ with tab6:
     ### Tampilan % INPUT RUP
     st.markdown(f"## **PERSENTASE INPUT RUP - {pilih} - PERANGKAT DAERAH - {tahun}**")
 
-    tb_strukturanggaran = con.execute("SELECT nama_satker AS nama_satker, SUM(belanja_pengadaan) AS belanja_pengadaan FROM df_rsap WHERE belanja_pengadaan > 0")
-    tb_datapenyedia = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS jumlah_pagu_penyedia FROM df_pp_umumkan GROUP BY nama_satker")
-    tb_dataswakelola = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS jumlah_pagu_swakelola FROM df_sw_umumkan GROUP BY nama_satker")
+    tb_strukturanggaran = con.execute("SELECT nama_satker, belanja_pengadaan FROM df_rsap WHERE belanja_pengadaan > 0")
+    #tb_datapenyedia = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS jumlah_pagu_penyedia FROM df_pp_umumkan GROUP BY nama_satker")
+    #tb_dataswakelola = con.execute("SELECT namasatker AS nama_satker, SUM(jumlahpagu) AS jumlah_pagu_swakelola FROM df_sw_umumkan GROUP BY nama_satker")
 
-    tb_persenrup = con.execute("SELECT tb_datapenyedia.nama_satker AS nama_satker, tb_datapenyedia.jumlah_pagu_penyedia AS penyedia, tb_dataswakelola.jumlah_pagu_swakelola AS swakelola FROM tb_datapenyedia FULL OUTER JOIN JOIN tb_dataswakelola ON tb_datapenyedia.nama_satker = tb_dataswakelola.nama_satker")
+    #tb_persenrup = con.execute("SELECT tb_datapenyedia.nama_satker AS nama_satker, tb_datapenyedia.jumlah_pagu_penyedia AS penyedia, tb_dataswakelola.jumlah_pagu_swakelola AS swakelola FROM tb_datapenyedia FULL OUTER JOIN JOIN tb_dataswakelola ON tb_datapenyedia.nama_satker = tb_dataswakelola.nama_satker")
 
     ### Tabulasi data dan pagination AgGrid
     gd = GridOptionsBuilder.from_dataframe(tb_strukturanggaran)
