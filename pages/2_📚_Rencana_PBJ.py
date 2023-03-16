@@ -558,7 +558,7 @@ with tab6:
     ### Tampilan % INPUT RUP
     st.markdown(f"## **PERSENTASE INPUT RUP - {pilih} - PERANGKAT DAERAH - {tahun}**")
 
-    tb_strukturanggaran = con.execute("SELECT nama_satker AS NAMA_SATKER, belanja_pengadaan AS STRUKTUR_ANGGARAN FROM df_rsap").df()
+    tb_strukturanggaran = con.execute("SELECT nama_satker AS NAMA_SATKER, belanja_pengadaan AS STRUKTUR_ANGGARAN FROM df_rsap WHERE STRUKTUR_ANGGARAN > 0").df()
     tb_datapenyedia = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_PENYEDIA FROM df_pp_umumkan GROUP BY nama_satker").df()
     tb_dataswakelola = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_SWAKELOLA FROM df_sw_umumkan GROUP BY nama_satker").df()
 
