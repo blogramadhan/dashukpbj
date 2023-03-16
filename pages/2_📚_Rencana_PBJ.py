@@ -574,8 +574,8 @@ with tab6:
     gd.configure_side_bar()
     gd.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
     gd.configure_column("STRUKTUR_ANGGARAN", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.STRUKTUR_ANGGARAN.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
-    #gd.configure_column("RUP Penyedia", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.jumlah_pagu_penyedia.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
-    #gd.configure_column("RUP Swakelola", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.jumlah_pagu_swakelola.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+    gd.configure_column("RUP_PENYEDIA", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.RUP_PENYEDIA.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
+    gd.configure_column("RUP_SWAKELOLA", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], valueGetter = "data.RUP_SWAKELOLA.toLocaleString('id-ID', {style: 'currency', currency: 'IDR', maximumFractionDigits:2})")
 
     gridOptions = gd.build()
 
