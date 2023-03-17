@@ -571,7 +571,7 @@ with tab6:
     unduh_persenrup = unduh_data(tb_gabung_final)
     st.download_button(
         label = "📥 Download Data % Input RUP",
-        data = unduh_rupdp,
+        data = unduh_persenrup,
         file_name = f"perseninputrup-{pilih}.csv",
         mime = "text/csv"            
     )
