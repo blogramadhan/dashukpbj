@@ -1,5 +1,6 @@
 duckdb
 pandas
+polars
 streamlit
 babel
 plotly.express
