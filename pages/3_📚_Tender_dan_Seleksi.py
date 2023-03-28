@@ -30,8 +30,8 @@ from babel.numbers import format_currency
 from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 # Import library Google Cloud Storage
-from google.oauth2 import service_account
-from google.cloud import storage
+##from google.oauth2 import service_account
+##from google.cloud import storage
 # Import fungsi pribadi
 from fungsi import *
 
@@ -119,10 +119,10 @@ con = duckdb.connect(database=':memory:')
 #unduh_df_parquet(bucket, DatasetSIRUPDSARSAP, DatasetSIRUPDSARSAP_Temp)
 
 ### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage via URL Public
-#DatasetTENDERDTP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dtp{str(tahun)}.parquet"
-#DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-DatasetSIRUPDP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+#DatasetTENDERDTP = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/dtender_dtp{str(tahun)}.parquet"
+#DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+DatasetSIRUPDP = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
 
 ### Query dataframe parquet penting
 #df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
@@ -150,7 +150,7 @@ with tab1:
     try:
         # Unduh data parquet Tender Berjalan
         #unduh_df_parquet(bucket, DatasetTENDERDTP, DatasetTENDERDTP_Temp)
-        DatasetTENDERDTP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dtp{str(tahun)}.parquet"
+        DatasetTENDERDTP = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/dtender_dtp{str(tahun)}.parquet"
         #df_dtp = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTP_Temp}')").df()
         df_dtp = pd.read_parquet(DatasetTENDERDTP)
 
@@ -199,7 +199,7 @@ with tab2:
     try:
         # Unduh data parquet Tender Selesai
         #unduh_df_parquet(bucket, DatasetTENDERDTS, DatasetTENDERDTS_Temp)
-        DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+        DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
         #df_dts = con.execute(f"SELECT * FROM read_parquet('{DatasetTENDERDTS_Temp}')").df()
         df_dts = pd.read_parquet(DatasetTENDERDTS)
 

@@ -30,8 +30,8 @@ from babel.numbers import format_currency
 from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 # Import library Google Cloud Storage
-from google.oauth2 import service_account
-from google.cloud import storage
+##from google.oauth2 import service_account
+##from google.cloud import storage
 # Import fungsi pribadi
 from fungsi import *
 
@@ -127,10 +127,10 @@ con = duckdb.connect(database=':memory:')
 #DatasetTOKODARING_Temp = f"daring{str(tahun)}_temp.parquet"
 
 ### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage via URL Public
-DatasetKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
-#DatasetPRODUKKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
-DatasetPRODUKKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/{kodeFolder}/prodkatalog{str(tahun)}.parquet"
-DatasetTOKODARING = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
+DatasetKATALOG = f"https://storage.googleapis.com/dashukpbj_asia/epurchasing/epurchasing_gabung/katalogdetail{str(tahun)}.parquet"
+#DatasetPRODUKKATALOG = f"https://storage.googleapis.com/dashukpbj_asia/epurchasing/epurchasing_gabung/prodkatalog{str(tahun)}.parquet"
+DatasetPRODUKKATALOG = f"https://storage.googleapis.com/dashukpbj_asia/epurchasing/{kodeFolder}/prodkatalog{str(tahun)}.parquet"
+DatasetTOKODARING = f"https://storage.googleapis.com/dashukpbj_asia/epurchasing/epurchasing_gabung/daring{str(tahun)}.parquet"
 
 ### Unduh data parquet KATALOG dan DARING
 try:

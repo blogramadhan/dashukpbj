@@ -30,8 +30,8 @@ from babel.numbers import format_currency
 from st_aggrid import AgGrid, JsCode
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 # Import library Google Cloud Storage
-from google.oauth2 import service_account
-from google.cloud import storage
+##from google.oauth2 import service_account
+##from google.cloud import storage
 # Import fungsi pribadi
 from fungsi import *
 
@@ -135,14 +135,14 @@ con = duckdb.connect(database=':memory:')
 #unduh_df_parquet(bucket, DatasetDARING, DatasetDARING_Temp)
 
 ### File path dan unduh file parquet dan simpan di memory - Lewat Google Cloud Storage via URL Public
-DatasetSIRUPDP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
-DatasetSIRUPDSW = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
-DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
-DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
-DatasetTENDERDTKS= f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
-DatasetNTENDERDNTS = f"https://storage.googleapis.com/dashukpbj_pub/itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
-DatasetKATALOG = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
-DatasetDARING = f"https://storage.googleapis.com/dashukpbj_pub/epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
+DatasetSIRUPDP = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/sirupdp{str(tahun)}.parquet"
+DatasetSIRUPDSW = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/sirupdsw{str(tahun)}.parquet"
+DatasetSIRUPDSARSAP = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/sirupdsa_rsap{str(tahun)}.parquet"
+DatasetTENDERDTS = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/dtender_dts{str(tahun)}.parquet"
+DatasetTENDERDTKS= f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/dtender_dtks{str(tahun)}.parquet"
+DatasetNTENDERDNTS = f"https://storage.googleapis.com/dashukpbj_asia/itkp/{kodeFolder}/dntender_dnts{str(tahun)}.parquet"
+DatasetKATALOG = f"https://storage.googleapis.com/dashukpbj_asia/epurchasing/{kodeFolder}/trxkatalog{str(tahun)}.parquet"
+DatasetDARING = f"https://storage.googleapis.com/dashukpbj_asia/epurchasing/{kodeFolder}/daring{str(tahun)}.parquet"
 
 ### Query dataframe parquet penting
 #### Data Paket Penyedia dan Swakelola
