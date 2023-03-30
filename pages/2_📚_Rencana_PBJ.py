@@ -140,8 +140,6 @@ try:
 
     df_pp_epurchasing = con.execute("SELECT * FROM df_pp_umumkan WHERE metodepengadaan = 'e-Purchasing'").df()
 
-    df_pp_umumkan_clean = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker IS NOT NULL AND jumlahpagu IS NOT NULL").df()
-
     ### Buat variabel nama satker unik
     #namaopd = df_rsap['nama_satker'].unique()
     namaopd = df_SIRUPDP['namasatker'].unique()
@@ -156,7 +154,6 @@ try:
 
     ### Data RUP paket swakelola
     df_sw_umumkan = df_SIRUPDSW[df_SIRUPDSW['statusumumkan'] == 'Terumumkan']
-    df_sw_umumkan_clean = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker IS NOT NULL AND jumlahpagu IS NOT NULL").df()
     #df_sw_umumkan = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Terumumkan'").df()
     #df_sw_final_draft = con.execute("SELECT * FROM df_SIRUPDSW WHERE statusumumkan = 'Final Draft'").df()
 
@@ -354,8 +351,8 @@ with tab3:
     ### Tampilan pilihan menu nama opd
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab3')
     
-    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}' AND jumlahpagu IS NOT NULL").df()
-    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan_clean WHERE namasatker = '{opd}' AND jumlahpagu IS NOT NULL").df()
+    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
+    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
     
     belanja_pengadaan_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
     belanja_operasional_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
@@ -493,7 +490,7 @@ with tab4:
     ### Tampilan pilihan menu nama OPD
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab4')
 
-    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}' AND jumlahpagu IS NOT NULL").df()
+    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
     rup_pdppsql_tampil = con.execute(f"SELECT idrup AS KODE_RUP, namapaket AS NAMA_PAKET, jumlahpagu AS JUMLAH_PAGU, metodepengadaan AS METODE_PENGADAAN, jenispengadaan AS JENIS_PENGADAAN, statuspdn AS STATUS_PDN, statususahakecil AS STATUS_USAHA_KECIL FROM rup_pdppsql").df()
 
     ### Tampilan RUP Perangkat Daerah (Data Penyedia)
@@ -528,7 +525,7 @@ with tab5:
     ### Tampilan pilihan menu nama OPD
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab5')
 
-    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan_clean WHERE namasatker = '{opd}' AND jumlahpagu IS NOT NULL").df()
+    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
     rup_pdswsql_tampil = con.execute(f"SELECT idrup AS KODE_RUP, namapaket AS NAMA_PAKET, jumlahpagu AS NILAI_PAGU, tipe_swakelola AS TIPE, ppk AS PPK, volume AS VOLUME FROM rup_pdswsql ").df()
 
     ### Tampilan RUP Perangkat Daerah (Data Swakelola)
@@ -563,8 +560,8 @@ with tab6:
     st.markdown(f"## **PERSENTASE INPUT RUP - {pilih} - PERANGKAT DAERAH - {tahun}**")
 
     tb_strukturanggaran = con.execute("SELECT nama_satker AS NAMA_SATKER, belanja_pengadaan AS STRUKTUR_ANGGARAN FROM df_rsap WHERE STRUKTUR_ANGGARAN > 0").df()
-    tb_datapenyedia = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_PENYEDIA FROM df_pp_umumkan WHERE jumlahpagu IS NOT NULL GROUP BY NAMA_SATKER").df()
-    tb_dataswakelola = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_SWAKELOLA FROM df_sw_umumkan_clean WHERE jumlahpagu IS NOT NULL GROUP BY NAMA_SATKER").df()
+    tb_datapenyedia = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_PENYEDIA FROM df_pp_umumkan GROUP BY NAMA_SATKER").df()
+    tb_dataswakelola = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_SWAKELOLA FROM df_sw_umumkan_clean GROUP BY NAMA_SATKER").df()
 
     tb_gabung = pd.merge(pd.merge(tb_strukturanggaran,tb_datapenyedia,on='NAMA_SATKER'),tb_dataswakelola,on='NAMA_SATKER')
     tb_gabung_totalrup = tb_gabung.assign(TOTAL_RUP=lambda x: x.RUP_PENYEDIA + x.RUP_SWAKELOLA)
