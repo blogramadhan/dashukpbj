@@ -351,8 +351,8 @@ with tab3:
     ### Tampilan pilihan menu nama opd
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab3')
     
-    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
-    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
+    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}' AND jumlahpagu IS NOT NULL").df()
+    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}' AND jumlahpagu IS NOT NULL").df()
     
     belanja_pengadaan_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
     belanja_operasional_pdsql = con.execute(f"SELECT * FROM df_rsap WHERE nama_satker = '{opd}'").df()
@@ -490,7 +490,7 @@ with tab4:
     ### Tampilan pilihan menu nama OPD
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab4')
 
-    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}'").df()
+    rup_pdppsql = con.execute(f"SELECT * FROM df_pp_umumkan WHERE namasatker = '{opd}' AND jumlahpagu IS NOT NULL").df()
     rup_pdppsql_tampil = con.execute(f"SELECT idrup AS KODE_RUP, namapaket AS NAMA_PAKET, jumlahpagu AS JUMLAH_PAGU, metodepengadaan AS METODE_PENGADAAN, jenispengadaan AS JENIS_PENGADAAN, statuspdn AS STATUS_PDN, statususahakecil AS STATUS_USAHA_KECIL FROM rup_pdppsql").df()
 
     ### Tampilan RUP Perangkat Daerah (Data Penyedia)
@@ -525,7 +525,7 @@ with tab5:
     ### Tampilan pilihan menu nama OPD
     opd = st.selectbox("Pilih Perangkat Daerah :", namaopd, key='tab5')
 
-    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}'").df()
+    rup_pdswsql = con.execute(f"SELECT * FROM df_sw_umumkan WHERE namasatker = '{opd}' AND jumlahpagu IS NOT NULL").df()
     rup_pdswsql_tampil = con.execute(f"SELECT idrup AS KODE_RUP, namapaket AS NAMA_PAKET, jumlahpagu AS NILAI_PAGU, tipe_swakelola AS TIPE, ppk AS PPK, volume AS VOLUME FROM rup_pdswsql ").df()
 
     ### Tampilan RUP Perangkat Daerah (Data Swakelola)
