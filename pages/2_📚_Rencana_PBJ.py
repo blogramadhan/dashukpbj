@@ -561,7 +561,7 @@ with tab6:
 
     tb_strukturanggaran = con.execute("SELECT nama_satker AS NAMA_SATKER, belanja_pengadaan AS STRUKTUR_ANGGARAN FROM df_rsap WHERE STRUKTUR_ANGGARAN > 0").df()
     tb_datapenyedia = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_PENYEDIA FROM df_pp_umumkan GROUP BY NAMA_SATKER").df()
-    tb_dataswakelola = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_SWAKELOLA FROM df_sw_umumkan_clean GROUP BY NAMA_SATKER").df()
+    tb_dataswakelola = con.execute("SELECT namasatker AS NAMA_SATKER, SUM(jumlahpagu) AS RUP_SWAKELOLA FROM df_sw_umumkan GROUP BY NAMA_SATKER").df()
 
     tb_gabung = pd.merge(pd.merge(tb_strukturanggaran,tb_datapenyedia,on='NAMA_SATKER'),tb_dataswakelola,on='NAMA_SATKER')
     tb_gabung_totalrup = tb_gabung.assign(TOTAL_RUP=lambda x: x.RUP_PENYEDIA + x.RUP_SWAKELOLA)
