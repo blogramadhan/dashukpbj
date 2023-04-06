@@ -232,14 +232,14 @@ with tab1:
         katalog_tabel_count_sql = """
             SELECT nama_satker AS NAMA_SATKER, COUNT(DISTINCT(no_paket)) AS JUMLAH_TRANSAKSI
             FROM df_katalog_lokal
-            WHERE NAMA_SATKER IS NOT NULL
+            WHERE nama_sumber_dana = 'APBD' AND NAMA_SATKER IS NOT NULL
             GROUP BY NAMA_SATKER
             ORDER BY JUMLAH_TRANSAKSI DESC
         """
         katalog_tabel_sum_sql = """
             SELECT nama_satker AS NAMA_SATKER, SUM(total_harga) AS NILAI_TRANSAKSI
             FROM df_katalog_lokal
-            WHERE NAMA_SATKER IS NOT NULL
+            WHERE nama_sumber_dana = 'APBD' AND NAMA_SATKER IS NOT NULL
             GROUP BY NAMA_SATKER
             ORDER BY NILAI_TRANSAKSI DESC
         """
